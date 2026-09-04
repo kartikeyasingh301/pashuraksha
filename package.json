@@ -1,0 +1,10 @@
+{
+  "name": "pashusuraksha-root",
+  "private": true,
+  "scripts": {
+    "build": "cd server && npm install"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
