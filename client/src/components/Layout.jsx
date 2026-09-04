@@ -1,4 +1,4 @@
-﻿import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import StatusBar from './StatusBar.jsx';
 import SyncBadge from './SyncBadge.jsx';
@@ -54,7 +54,7 @@ export default function Layout({ children, title, showBack = false }) {
 
       <nav className="bottom-nav" role="navigation" aria-label="Main navigation">
         {navItems.map((item) => (
-          <Link
+          <NavLink
             key={item.to}
             to={item.to}
             className="bottom-nav-item"
@@ -64,7 +64,7 @@ export default function Layout({ children, title, showBack = false }) {
           >
             <span className="nav-icon">{item.icon}</span>
             <span className="nav-label">{item.label}</span>
-          </Link>
+          </NavLink>
         ))}
       </nav>
 
