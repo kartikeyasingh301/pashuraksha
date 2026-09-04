@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+.npm
+
+# Build output
+client/dist/
+
+# SQLite database (generated at runtime)
+server/db/*.db
+server/db/*.db-shm
+server/db/*.db-wal
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Temp / generated
+copy_to_server.js
