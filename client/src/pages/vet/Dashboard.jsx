@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
@@ -64,7 +64,7 @@ export default function VetDashboard() {
               <div className="summary-num">{summary.activeCases}</div>
               <div className="summary-label">Active Cases</div>
             </div>
-            <div className={summary-card }>
+            <div className="summary-card">
               <div className="summary-num">{summary.suspectedOutbreaks}</div>
               <div className="summary-label">Suspected Outbreaks</div>
             </div>

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout.jsx';
 import PipelineTag from '../../components/PipelineTag.jsx';
@@ -43,7 +43,7 @@ export default function FarmerDashboard() {
             <div className="stat-number">{reports.length}</div>
             <div className="stat-label">My Reports</div>
           </div>
-          <div className={stat-card }>
+          <div className="stat-card">
             <div className="stat-number">{pendingCount}</div>
             <div className="stat-label">Pending Sync</div>
           </div>
