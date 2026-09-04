@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
-// Ping backend directly (bypasses Vite proxy)
-// Backend has CORS origin:* so direct cross-port fetch works
-const BACKEND_HEALTH = 'http://localhost:3001/api/health';
+const BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const BACKEND_HEALTH = `${BASE_URL}/health`;
 
 async function pingBackend() {
   try {
