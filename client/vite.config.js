@@ -35,11 +35,11 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        navigateFallback: '/offline.html',
+        navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
           {
-            urlPattern: /^https?:\/\/localhost:3001\/api\/.*/i,
+            urlPattern: /\/api\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',
