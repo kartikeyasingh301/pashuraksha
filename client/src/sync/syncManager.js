@@ -1,4 +1,4 @@
-﻿import db from '../db/dexie.js';
+import db from '../db/dexie.js';
 import { apiBatch } from '../api/client.js';
 
 export async function addToQueue(report) {
@@ -24,10 +24,10 @@ export async function syncQueue() {
   try {
     const result = await apiBatch(pending);
     const succeededIds = result.succeeded || pending.map((p) => p.id);
-    const failedIds = result.failed || [];
+    const failedIds = result.failed ? result.failed.map(f => f.local_id || f.localId) : [];
 
     for (const item of pending) {
-      if (failedIds.includes(item.id)) {
+      if (failedIds.includes(item.localId || item.local_id)) {
         const newCount = (item.retryCount || 0) + 1;
         if (newCount >= 5) {
           await db.offlineQueue.update(item.id, { status: 'failed', retryCount: newCount });

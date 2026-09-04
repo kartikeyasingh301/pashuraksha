@@ -1,4 +1,4 @@
-﻿import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useOnlineStatus } from '../hooks/useOnlineStatus.js';
 import { usePendingSync } from '../hooks/usePendingSync.js';
 import { syncQueue } from '../sync/syncManager.js';
@@ -30,7 +30,15 @@ export function SyncProvider({ children }) {
       triggerSync();
     }
     prevOnline.current = isOnline;
-  }, [isOnline, triggerSync]);
+
+    let interval;
+    if (isOnline) {
+      interval = setInterval(() => {
+        if (pendingCount > 0) triggerSync();
+      }, 10000); // Retry every 10 seconds if there are pending items
+    }
+    return () => clearInterval(interval);
+  }, [isOnline, pendingCount, triggerSync]);
 
   return (
     <SyncContext.Provider value={{ pendingCount, isOnline, isSyncing, triggerSync, lastSyncAt, refresh }}>
