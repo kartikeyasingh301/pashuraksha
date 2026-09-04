@@ -1,10 +1,6 @@
 {
   "version": 2,
-  "name": "pashusuraksha",
-  "buildCommand": "cd client && npm install && npm run build",
-  "outputDirectory": "client/dist",
-  "installCommand": "cd client && npm install",
-  "framework": null,
+  "framework": "vite",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
@@ -23,8 +19,5 @@
         { "key": "X-Frame-Options", "value": "DENY" }
       ]
     }
-  ],
-  "env": {
-    "VITE_API_URL": "@pashusuraksha_api_url"
-  }
+  ]
 }
