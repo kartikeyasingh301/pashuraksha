@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout.jsx';
 import PipelineTag from '../../components/PipelineTag.jsx';
 import { apiGet, apiPost } from '../../api/client.js';
@@ -58,7 +58,7 @@ function AlertCard({ alert, onConfirm, confirmLoading }) {
 }
 
 export default function CriticalAlerts() {
-  const [alerts, setAlerts] = useState([]);
+  const [alerts, setAlerts] = useState({ criticalCases: [], outbreaks: [], zoonotic: [] });
   const [loading, setLoading] = useState(true);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [error, setError] = useState('');
@@ -67,7 +67,11 @@ export default function CriticalAlerts() {
     async function fetchAlerts() {
       try {
         const data = await apiGet('/alerts');
-        setAlerts(data.alerts || data || []);
+        setAlerts({
+          criticalCases: data.critical?.cases || [],
+          outbreaks: data.critical?.outbreaks || [],
+          zoonotic: data.zoonotic || []
+        });
       } catch (err) {
         setError(err.message || 'Failed to load alerts');
       } finally {
@@ -81,7 +85,10 @@ export default function CriticalAlerts() {
     setConfirmLoading(true);
     try {
       await apiPost('/outbreaks/' + id + '/confirm', {});
-      setAlerts((prev) => prev.map((a) => a.id === id ? { ...a, confirmed: true, status: 'CONFIRMED' } : a));
+      setAlerts((prev) => ({
+        ...prev,
+        outbreaks: prev.outbreaks.map((a) => a.id === id ? { ...a, confirmed: true, status: 'CONFIRMED' } : a)
+      }));
     } catch (err) {
       setError('Failed to confirm: ' + err.message);
     } finally {
@@ -89,9 +96,9 @@ export default function CriticalAlerts() {
     }
   }
 
-  const critical = alerts.filter((a) => a.severity === 'CRITICAL');
-  const outbreaks = alerts.filter((a) => a.type === 'SUSPECTED_OUTBREAK' || a.status === 'SUSPECTED_OUTBREAK');
-  const zoonotic = alerts.filter((a) => a.zoonotic || ['Rabies', 'Anthrax', 'Brucellosis'].includes(a.syndrome));
+  const critical = alerts.criticalCases;
+  const outbreaks = alerts.outbreaks;
+  const zoonotic = alerts.zoonotic;
 
   return (
     <Layout title="Critical Alerts" showBack>

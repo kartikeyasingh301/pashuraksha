@@ -24,17 +24,18 @@ export default function VetDashboard() {
     async function fetchSummary() {
       try {
         const [alertsData, casesData] = await Promise.all([
-          apiGet('/alerts').catch(() => ({ alerts: [] })),
+          apiGet('/alerts').catch(() => ({ critical: { cases: [], outbreaks: [] } })),
           apiGet('/cases').catch(() => ({ cases: [] })),
         ]);
-        const alerts = alertsData.alerts || alertsData || [];
         const cases = casesData.cases || casesData || [];
+        const criticalCount = (alertsData.critical?.cases?.length || 0) + (alertsData.critical?.outbreaks?.length || 0);
+        
         setSummary({
-          totalReports: cases.length,
+          totalReports: cases.reduce((acc, c) => acc + (c.report_count || 0), 0),
           activeCases: cases.filter((c) => c.status === 'ACTIVE' || c.status === 'CASE').length,
-          suspectedOutbreaks: alerts.filter((a) => a.severity === 'CRITICAL' || a.type === 'SUSPECTED_OUTBREAK').length,
-          pendingLab: cases.filter((c) => c.labStatus === 'PENDING').length,
-          criticalAlerts: alerts.filter((a) => a.severity === 'CRITICAL').length,
+          suspectedOutbreaks: alertsData.critical?.outbreaks?.length || 0,
+          pendingLab: cases.filter((c) => c.lab_status === 'PENDING').length,
+          criticalAlerts: criticalCount,
         });
       } catch (_) {}
       finally { setLoading(false); }

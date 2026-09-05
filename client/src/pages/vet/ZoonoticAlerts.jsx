@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout.jsx';
 import { apiGet } from '../../api/client.js';
 
@@ -31,8 +31,7 @@ export default function ZoonoticAlerts() {
     async function fetchAlerts() {
       try {
         const data = await apiGet('/alerts');
-        const all = data.alerts || data || [];
-        setAlerts(all.filter((a) => ZOONOTIC_DISEASES.includes(a.syndrome || a.disease)));
+        setAlerts(data.zoonotic || []);
       } catch (err) { setError(err.message || 'Failed to load zoonotic alerts'); }
       finally { setLoading(false); }
     }
