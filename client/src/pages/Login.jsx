@@ -1,5 +1,6 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Shield } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 export default function Login() {
@@ -36,7 +37,7 @@ export default function Login() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <span className="login-logo-icon">🐄</span>
+          <span className="login-logo-icon"><Shield size={48} color="#2E7D32" /></span>
         </div>
         <h1 className="login-app-name">PashuSuraksha</h1>
         <p className="login-tagline">Pashu Swasthya Rakshak</p>

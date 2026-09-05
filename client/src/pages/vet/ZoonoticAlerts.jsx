@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout.jsx';
 import { apiGet } from '../../api/client.js';
+import { PawPrint, AlertTriangle, Dna } from 'lucide-react';
 
 const ZOONOTIC_DISEASES = ['Rabies', 'Anthrax', 'Brucellosis'];
 

@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout.jsx';
 import { apiGet } from '../../api/client.js';
+import { Microscope } from 'lucide-react';
 
 const STATUS_META = {
   PENDING:   { color: '#757575', label: 'Pending' },

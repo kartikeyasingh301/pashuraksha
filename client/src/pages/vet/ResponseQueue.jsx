@@ -2,6 +2,7 @@
 import Layout from '../../components/Layout.jsx';
 import PipelineTag from '../../components/PipelineTag.jsx';
 import { apiGet, apiPost } from '../../api/client.js';
+import { CheckCircle, MapPin } from 'lucide-react';
 
 const ACTION_TYPES = ['field_visit', 'quarantine', 'vaccination', 'sample_collection'];
 

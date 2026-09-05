@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AlertTriangle, Activity, ClipboardList, Map as MapIcon, Syringe, Dna, Microscope } from 'lucide-react';
 import Layout from '../../components/Layout.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { apiGet } from '../../api/client.js';
 
 const NAV_CARDS = [
-  { to: '/vet/alerts', icon: '🚨', label: 'Critical Alerts', color: '#C62828', desc: 'View critical cases and outbreaks' },
-  { to: '/vet/clusters', icon: '🔴', label: 'Emerging Clusters', color: '#E65100', desc: 'Spatiotemporal disease clusters' },
-  { to: '/vet/queue', icon: '📋', label: 'Response Queue', color: '#1565C0', desc: 'Pending field responses' },
-  { to: '/vet/map', icon: '🗺️', label: 'Map View', color: '#2E7D32', desc: 'Geographic incident overview' },
-  { to: '/vet/vaccination', icon: '💉', label: 'Vaccination Gaps', color: '#6A1B9A', desc: 'Coverage analysis by village' },
-  { to: '/vet/zoonotic', icon: '🧬', label: 'Zoonotic Alerts', color: '#AD1457', desc: 'Human health risk notifications' },
-  { to: '/vet/lab', icon: '🔬', label: 'Lab Status', color: '#00695C', desc: 'Sample results and pending tests' },
+  { to: '/vet/alerts', icon: <AlertTriangle size={32} />, label: 'Critical Alerts', color: '#C62828', desc: 'View critical cases and outbreaks' },
+  { to: '/vet/clusters', icon: <Activity size={32} />, label: 'Emerging Clusters', color: '#E65100', desc: 'Spatiotemporal disease clusters' },
+  { to: '/vet/queue', icon: <ClipboardList size={32} />, label: 'Response Queue', color: '#1565C0', desc: 'Pending field responses' },
+  { to: '/vet/map', icon: <MapIcon size={32} />, label: 'Map View', color: '#2E7D32', desc: 'Geographic incident overview' },
+  { to: '/vet/vaccination', icon: <Syringe size={32} />, label: 'Vaccination Gaps', color: '#6A1B9A', desc: 'Coverage analysis by village' },
+  { to: '/vet/zoonotic', icon: <Dna size={32} />, label: 'Zoonotic Alerts', color: '#AD1457', desc: 'Human health risk notifications' },
+  { to: '/vet/lab', icon: <Microscope size={32} />, label: 'Lab Status', color: '#00695C', desc: 'Sample results and pending tests' },
 ];
 
 export default function VetDashboard() {
@@ -49,7 +50,7 @@ export default function VetDashboard() {
     <Layout title="Vet Dashboard">
       <div className="page-content">
         <div className="greeting-section">
-          <h2 className="greeting-text">{greeting}, Dr. {user?.name || user?.username} 🩺</h2>
+          <h2 className="greeting-text">{greeting}, Dr. {user?.name || user?.username}</h2>
           <p className="greeting-sub">Animal Health Surveillance Overview</p>
         </div>
 

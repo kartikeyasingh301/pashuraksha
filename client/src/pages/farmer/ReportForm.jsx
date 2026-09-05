@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { WifiOff, CheckCircle, Save, AlertTriangle, Loader, MapPin, Send } from 'lucide-react';
 import Layout from '../../components/Layout.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { useSyncContext } from '../../contexts/SyncContext.jsx';

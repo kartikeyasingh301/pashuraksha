@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout.jsx';
 import PipelineTag from '../../components/PipelineTag.jsx';
 import { apiGet, apiPost } from '../../api/client.js';
+import { MapPin, AlertTriangle, Activity, Dna } from 'lucide-react';
 
 function AlertCard({ alert, onConfirm, confirmLoading }) {
   const [showConfirm, setShowConfirm] = useState(false);

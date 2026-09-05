@@ -1,4 +1,5 @@
 ﻿import Layout from '../../components/Layout.jsx';
+import { Shield, Target, AlertTriangle, Skull, Activity, PhoneCall } from 'lucide-react';
 
 const ADVISORIES = [
   {

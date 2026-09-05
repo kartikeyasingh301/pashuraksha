@@ -2,6 +2,7 @@
 import Layout from '../../components/Layout.jsx';
 import PipelineTag from '../../components/PipelineTag.jsx';
 import { apiGet } from '../../api/client.js';
+import { Activity, MapPin, Calendar, Link as LinkIcon } from 'lucide-react';
 
 export default function EmergingClusters() {
   const [clusters, setClusters] = useState([]);
