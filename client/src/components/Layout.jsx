@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 import StatusBar from './StatusBar.jsx';
 import SyncBadge from './SyncBadge.jsx';
 import { useSyncContext } from '../contexts/SyncContext.jsx';
+import Chatbot from './Chatbot.jsx';
 
 const FARMER_NAV = [
   { to: '/farmer', icon: <Home size={24} />, label: 'Home' },
@@ -70,6 +71,7 @@ export default function Layout({ children, title, showBack = false }) {
       </nav>
 
       <StatusBar />
+      {role !== 'vet' && <Chatbot />}
     </div>
   );
 }

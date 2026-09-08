@@ -53,8 +53,8 @@ export default function ReportForm() {
     const localId = `${uid}_${Date.now()}_${form.species}_${form.village.trim()}`;
     return {
       localId,
-      local_id:           localId,                          // snake_case for backend
-      captured_at:        capturedAt,                       // snake_case for backend
+      local_id:           localId,
+      captured_at:        capturedAt,
       capturedAt,
       species:            form.species,
       syndrome:           form.syndrome,
@@ -103,19 +103,20 @@ export default function ReportForm() {
     }
     setSubmitting(false);
   }
+
   return (
     <Layout title="Report Health Issue" showBack>
       <div className="page-content">
         {!isOnline && (
-          <div className="alert alert-info">
-            <span>📡</span> You are offline. Report will be saved locally and synced when you reconnect.
+          <div className="alert alert-info" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <WifiOff size={18} /> You are offline. Report will be saved locally and synced when you reconnect.
           </div>
         )}
         {success && (
           <div className="alert alert-success">
-            {success.type === 'online' && <span>✅ Report submitted! ID: <strong>{success.id}</strong></span>}
-            {success.type === 'offline' && <span>💾 Saved offline — will sync when connected.</span>}
-            {success.type === 'offline_fallback' && <span>⚠️ Saved offline (error: {success.message})</span>}
+            {success.type === 'online' && <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle size={18} /> Report submitted! ID: <strong>{success.id}</strong></span>}
+            {success.type === 'offline' && <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Save size={18} /> Saved offline — will sync when connected.</span>}
+            {success.type === 'offline_fallback' && <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><AlertTriangle size={18} /> Saved offline (error: {success.message})</span>}
           </div>
         )}
         {errors.submit && <div className="alert alert-error">{errors.submit}</div>}
@@ -169,12 +170,15 @@ export default function ReportForm() {
 
           <div className="form-group">
             <label className="form-label">GPS Location</label>
-            <button type="button" className="btn btn-outline" onClick={getLocation} disabled={locLoading}>
-              {locLoading ? '⏳ Getting location...' : '📍 Get GPS Location'}
+            <button type="button" className="btn btn-outline" onClick={getLocation} disabled={locLoading} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              {locLoading ? <Loader size={18} /> : <MapPin size={18} />}
+              {locLoading ? 'Getting location...' : 'Get GPS Location'}
             </button>
             {locError && <span className="form-error">{locError}</span>}
             {location.lat && location.lng && (
-              <div className="location-display">✅ Lat: {location.lat}, Lng: {location.lng}</div>
+              <div className="location-display" style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', color: '#2E7D32' }}>
+                <CheckCircle size={16} /> Lat: {location.lat.toFixed(4)}, Lng: {location.lng.toFixed(4)}
+              </div>
             )}
           </div>
 
@@ -195,8 +199,11 @@ export default function ReportForm() {
             <textarea id="notes" name="notes" className="form-control" rows={3} value={form.notes} onChange={handleChange} placeholder="Any additional observations..." />
           </div>
 
-          <button type="submit" className="btn btn-primary btn-large" disabled={submitting}>
-            {submitting ? 'Submitting...' : isOnline ? '📤 Submit Report' : '💾 Save Offline'}
+          <button type="submit" className="btn btn-primary btn-block btn-lg" disabled={submitting}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              {submitting ? <Loader size={20} /> : (isOnline ? <Send size={20} /> : <Save size={20} />)}
+              {submitting ? 'Submitting...' : isOnline ? 'Submit Report' : 'Save Offline'}
+            </div>
           </button>
         </form>
       </div>
