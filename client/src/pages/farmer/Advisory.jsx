@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import Layout from '../../components/Layout.jsx';
 import { Target, Skull, Activity, PhoneCall, Languages, AlertTriangle } from 'lucide-react';
 
-// Real YouTube video IDs from ICAR/Government channels about livestock diseases
+// YouTube search-based embeds — always show real available videos
 const VIDEOS = {
-  fmd: 'WyNNSJ4MVCA',       // FMD awareness video (ICAR IVRI channel)
-  lumpy: 'GnVXiJlVXY8',     // Lumpy Skin Disease awareness
-  anthrax: 'zODL5WJXQ9s',   // Biosecurity / Anthrax awareness
+  fmd: 'https://www.youtube.com/embed?listType=search&list=FMD+foot+mouth+disease+cattle+India+prevention',
+  lumpy: 'https://www.youtube.com/embed?listType=search&list=lumpy+skin+disease+cattle+India+LSD+2023',
+  ppr: 'https://www.youtube.com/embed?listType=search&list=PPR+disease+goat+sheep+India+vaccination',
+  anthrax: 'https://www.youtube.com/embed?listType=search&list=anthrax+livestock+India+biosecurity',
 };
 
 const ADVISORIES = {
@@ -209,7 +210,7 @@ export default function Advisory() {
               <div style={{ position: 'relative', paddingTop: '56.25%', background: '#000' }}>
                 <iframe
                   style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
-                  src={`https://www.youtube.com/embed/${adv.videoId}?rel=0&modestbranding=1`}
+                  src={adv.videoId}
                   title={adv.title}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
