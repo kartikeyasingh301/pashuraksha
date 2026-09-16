@@ -1,4 +1,4 @@
-﻿import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
 import { SyncProvider } from './contexts/SyncContext.jsx';
 import Login from './pages/Login.jsx';
@@ -13,6 +13,7 @@ import MapView from './pages/vet/MapView.jsx';
 import VaccinationGap from './pages/vet/VaccinationGap.jsx';
 import ZoonoticAlerts from './pages/vet/ZoonoticAlerts.jsx';
 import LabStatus from './pages/vet/LabStatus.jsx';
+import DistrictDashboard from './pages/vet/DistrictDashboard.jsx';
 
 function PrivateRoute({ children, role }) {
   const { isAuthenticated, user, loading } = useAuth();
@@ -47,6 +48,7 @@ function AppRoutes() {
       <Route path='/vet/vaccination' element={<PrivateRoute role='vet'><VaccinationGap /></PrivateRoute>} />
       <Route path='/vet/zoonotic' element={<PrivateRoute role='vet'><ZoonoticAlerts /></PrivateRoute>} />
       <Route path='/vet/lab' element={<PrivateRoute role='vet'><LabStatus /></PrivateRoute>} />
+      <Route path='/vet/district' element={<PrivateRoute role='vet'><DistrictDashboard /></PrivateRoute>} />
       <Route path='*' element={<Navigate to='/' replace />} />
     </Routes>
   );
@@ -63,3 +65,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
