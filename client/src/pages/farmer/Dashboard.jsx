@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone } from "lucide-react";
+import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone, FileText } from "lucide-react";
 import Layout from "../../components/Layout.jsx";
 import PipelineTag from "../../components/PipelineTag.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
@@ -120,7 +120,7 @@ export default function FarmerDashboard() {
 
       <p style={{ color:"#A5D6A7", margin:"0 0 4px 0", fontSize:"12px", fontWeight:"600", textTransform:"uppercase", letterSpacing:"1.5px", position:"relative", zIndex:1 }}>PashuSuraksha</p>
       <h2 style={{ color:"white", margin:"0 0 4px 0", fontSize:"24px", fontWeight:"800", position:"relative", zIndex:1 }}>{greeting},</h2>
-      <h2 style={{ color:"#C8E6C9", margin:"0 0 10px 0", fontSize:"20px", fontWeight:"700", position:"relative", zIndex:1 }}>{user?.name || user?.username} &#127806;</h2>
+      <h2 style={{ color:"#C8E6C9", margin:"0 0 10px 0", fontSize:"20px", fontWeight:"700", position:"relative", zIndex:1 }}>{user?.name || user?.username}</h2>
       <p style={{ color:"#E8F5E9", margin:0, fontSize:"14px", position:"relative", zIndex:1 }}>{t.sub}</p>
     </div>
   );
@@ -148,7 +148,7 @@ export default function FarmerDashboard() {
             display:"flex", flexDirection:"column", alignItems:"center", gap:"8px",
             boxShadow:"0 2px 8px rgba(0,0,0,0.06)", cursor:"pointer"
           }}>
-            <span style={{ fontSize:"28px" }}>&#128004;</span>
+            <FileText size={28} color="#1B5E20" />
             My Herd Ledger
           </button>
           <button onClick={() => navigate("/farmer/passbook")} style={{
@@ -157,7 +157,7 @@ export default function FarmerDashboard() {
             display:"flex", flexDirection:"column", alignItems:"center", gap:"8px",
             boxShadow:"0 2px 8px rgba(0,0,0,0.06)", cursor:"pointer"
           }}>
-            <span style={{ fontSize:"28px" }}>&#128137;</span>
+            <Syringe size={28} color="#1565C0" />
             Vaccine Passbook
           </button>
         </div>
