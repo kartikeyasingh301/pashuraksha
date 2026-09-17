@@ -6,11 +6,11 @@ import { registerSW } from 'virtual:pwa-register';
 
 registerSW({
   onNeedRefresh() {
-    const ok = confirm('A new version of PashuSuraksha is available. Update now?');
+    const ok = confirm('A new version of Pashuraksha is available. Update now?');
     if (ok) window.location.reload();
   },
   onOfflineReady() {
-    console.log('PashuSuraksha is ready to work offline.');
+    console.log('Pashuraksha is ready to work offline.');
   },
 });
 

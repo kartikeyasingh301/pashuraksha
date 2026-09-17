@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+﻿import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/*.png', 'icons/*.svg', 'offline.html'],
       manifest: {
-        name: 'PashuSuraksha',
-        short_name: 'PashuSuraksha',
+        name: 'Pashuraksha',
+        short_name: 'Pashuraksha',
         description: 'Animal Health Surveillance System for India',
         theme_color: '#2E7D32',
         background_color: '#F5F5F5',

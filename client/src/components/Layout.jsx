@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+﻿import { NavLink, useNavigate } from 'react-router-dom';
 import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, Stethoscope, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import StatusBar from './StatusBar.jsx';
@@ -39,7 +39,7 @@ export default function Layout({ children, title, hero, showBack = false }) {
           <div className="header-brand">
             <span className="header-logo"><Stethoscope size={28} color="#2E7D32" /></span>
             <div>
-              <div className="header-app-name">PashuSuraksha</div>
+              <div className="header-app-name">Pashuraksha</div>
               {title && <div className="header-title">{title}</div>}
             </div>
           </div>

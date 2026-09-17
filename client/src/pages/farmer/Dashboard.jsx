@@ -118,7 +118,7 @@ export default function FarmerDashboard() {
         </div>
       </div>
 
-      <p style={{ color:"#A5D6A7", margin:"0 0 4px 0", fontSize:"12px", fontWeight:"600", textTransform:"uppercase", letterSpacing:"1.5px", position:"relative", zIndex:1 }}>PashuSuraksha</p>
+      <p style={{ color:"#A5D6A7", margin:"0 0 4px 0", fontSize:"12px", fontWeight:"600", textTransform:"uppercase", letterSpacing:"1.5px", position:"relative", zIndex:1 }}>Pashuraksha</p>
       <h2 style={{ color:"white", margin:"0 0 4px 0", fontSize:"24px", fontWeight:"800", position:"relative", zIndex:1 }}>{greeting},</h2>
       <h2 style={{ color:"#C8E6C9", margin:"0 0 10px 0", fontSize:"20px", fontWeight:"700", position:"relative", zIndex:1 }}>{user?.name || user?.username}</h2>
       <p style={{ color:"#E8F5E9", margin:0, fontSize:"14px", position:"relative", zIndex:1 }}>{t.sub}</p>
