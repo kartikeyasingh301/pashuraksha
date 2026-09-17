@@ -5,6 +5,8 @@ import Login from './pages/Login.jsx';
 import FarmerDashboard from './pages/farmer/Dashboard.jsx';
 import ReportForm from './pages/farmer/ReportForm.jsx';
 import Advisory from './pages/farmer/Advisory.jsx';
+import HerdLedger from './pages/farmer/HerdLedger.jsx';
+import VaccinationPassbook from './pages/farmer/VaccinationPassbook.jsx';
 import VetDashboard from './pages/vet/Dashboard.jsx';
 import CriticalAlerts from './pages/vet/CriticalAlerts.jsx';
 import EmergingClusters from './pages/vet/EmergingClusters.jsx';
@@ -14,6 +16,9 @@ import VaccinationGap from './pages/vet/VaccinationGap.jsx';
 import ZoonoticAlerts from './pages/vet/ZoonoticAlerts.jsx';
 import LabStatus from './pages/vet/LabStatus.jsx';
 import DistrictDashboard from './pages/vet/DistrictDashboard.jsx';
+import AdvisoryBroadcast from './pages/vet/AdvisoryBroadcast.jsx';
+import ParaVetDashboard from './pages/paravet/ParaVetDashboard.jsx';
+import GovtCommandCenter from './pages/govt/GovtCommandCenter.jsx';
 
 function PrivateRoute({ children, role }) {
   const { isAuthenticated, user, loading } = useAuth();
@@ -37,9 +42,18 @@ function AppRoutes() {
     <Routes>
       <Route path='/' element={<RootRedirect />} />
       <Route path='/login' element={<Login />} />
+
+      {/* Farmer Routes */}
       <Route path='/farmer' element={<PrivateRoute role='farmer'><FarmerDashboard /></PrivateRoute>} />
       <Route path='/farmer/report' element={<PrivateRoute role='farmer'><ReportForm /></PrivateRoute>} />
       <Route path='/farmer/advisory' element={<PrivateRoute role='farmer'><Advisory /></PrivateRoute>} />
+      <Route path='/farmer/herd' element={<PrivateRoute role='farmer'><HerdLedger /></PrivateRoute>} />
+      <Route path='/farmer/passbook' element={<PrivateRoute role='farmer'><VaccinationPassbook /></PrivateRoute>} />
+
+      {/* Para-Vet Routes */}
+      <Route path='/paravet' element={<ParaVetDashboard />} />
+
+      {/* Vet Officer Routes */}
       <Route path='/vet' element={<PrivateRoute role='vet'><VetDashboard /></PrivateRoute>} />
       <Route path='/vet/alerts' element={<PrivateRoute role='vet'><CriticalAlerts /></PrivateRoute>} />
       <Route path='/vet/clusters' element={<PrivateRoute role='vet'><EmergingClusters /></PrivateRoute>} />
@@ -49,6 +63,11 @@ function AppRoutes() {
       <Route path='/vet/zoonotic' element={<PrivateRoute role='vet'><ZoonoticAlerts /></PrivateRoute>} />
       <Route path='/vet/lab' element={<PrivateRoute role='vet'><LabStatus /></PrivateRoute>} />
       <Route path='/vet/district' element={<PrivateRoute role='vet'><DistrictDashboard /></PrivateRoute>} />
+      <Route path='/vet/broadcast' element={<PrivateRoute role='vet'><AdvisoryBroadcast /></PrivateRoute>} />
+
+      {/* Govt Admin Routes */}
+      <Route path='/govt' element={<GovtCommandCenter />} />
+
       <Route path='*' element={<Navigate to='/' replace />} />
     </Routes>
   );
@@ -65,4 +84,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-
