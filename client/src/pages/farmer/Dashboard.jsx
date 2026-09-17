@@ -103,45 +103,40 @@ export default function FarmerDashboard() {
     fetchReports();
   }, [pendingCount]);
 
+  const heroBanner = (
+    <div style={{
+      background: 'linear-gradient(135deg, #1B5E20 0%, #388E3C 60%, #66BB6A 100%)',
+      padding: '28px 20px 24px',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      <div style={{ position: 'absolute', top: -30, right: -30, width: 160, height: 160, background: 'rgba(255,255,255,0.07)', borderRadius: '50%' }} />
+      <div style={{ position: 'absolute', bottom: -40, right: 40, width: 110, height: 110, background: 'rgba(255,255,255,0.05)', borderRadius: '50%' }} />
+
+      {/* Language Switcher */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '14px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.18)', padding: '5px 12px', borderRadius: '20px', gap: '6px', border: '1px solid rgba(255,255,255,0.25)' }}>
+          <Languages size={14} color="#fff" />
+          <select value={lang} onChange={(e) => setLang(e.target.value)}
+            style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '13px', fontWeight: '700', color: '#fff' }}>
+            <option value="en" style={{ color: '#000' }}>English</option>
+            <option value="hi" style={{ color: '#000' }}>हिंदी</option>
+            <option value="mr" style={{ color: '#000' }}>मराठी</option>
+          </select>
+        </div>
+      </div>
+
+      <p style={{ color: '#A5D6A7', margin: '0 0 4px 0', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1.5px', position: 'relative', zIndex: 1 }}>PashuSuraksha</p>
+      <h2 style={{ color: 'white', margin: '0 0 4px 0', fontSize: '24px', fontWeight: '800', position: 'relative', zIndex: 1 }}>{greeting},</h2>
+      <h2 style={{ color: '#C8E6C9', margin: '0 0 10px 0', fontSize: '20px', fontWeight: '700', position: 'relative', zIndex: 1 }}>{user?.name || user?.username} 🌾</h2>
+      <p style={{ color: '#E8F5E9', margin: 0, fontSize: '14px', position: 'relative', zIndex: 1 }}>{t.sub}</p>
+    </div>
+  );
+
   return (
-    <Layout title="Farmer Dashboard">
+    <Layout title="Farmer Dashboard" hero={heroBanner}>
       <div className="page-content" style={{ paddingBottom: '100px' }}>
 
-        {/* Hero Banner — full bleed, breaks out of page-content padding */}
-        <div style={{
-          background: 'linear-gradient(135deg, #1B5E20 0%, #388E3C 60%, #66BB6A 100%)',
-          borderRadius: '0',
-          padding: '32px 20px 28px',
-          marginBottom: '20px',
-          marginLeft: '-16px',
-          marginRight: '-16px',
-          marginTop: '-16px',
-          boxShadow: '0 6px 20px rgba(46,125,50,0.25)',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          {/* Decorative circles */}
-          <div style={{ position: 'absolute', top: -30, right: -30, width: 160, height: 160, background: 'rgba(255,255,255,0.07)', borderRadius: '50%' }} />
-          <div style={{ position: 'absolute', bottom: -40, right: 40, width: 110, height: 110, background: 'rgba(255,255,255,0.05)', borderRadius: '50%' }} />
-
-          {/* Language Switcher inside banner */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px', position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.18)', padding: '5px 12px', borderRadius: '20px', gap: '6px', border: '1px solid rgba(255,255,255,0.25)' }}>
-              <Languages size={14} color="#fff" />
-              <select value={lang} onChange={(e) => setLang(e.target.value)}
-                style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '13px', fontWeight: '700', color: '#fff' }}>
-                <option value="en" style={{ color: '#000' }}>English</option>
-                <option value="hi" style={{ color: '#000' }}>हिंदी</option>
-                <option value="mr" style={{ color: '#000' }}>मराठी</option>
-              </select>
-            </div>
-          </div>
-
-          <p style={{ color: '#A5D6A7', margin: '0 0 4px 0', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1.5px', position: 'relative', zIndex: 1 }}>PashuSuraksha</p>
-          <h2 style={{ color: 'white', margin: '0 0 4px 0', fontSize: '24px', fontWeight: '800', position: 'relative', zIndex: 1 }}>{greeting},</h2>
-          <h2 style={{ color: '#C8E6C9', margin: '0 0 10px 0', fontSize: '20px', fontWeight: '700', position: 'relative', zIndex: 1 }}>{user?.name || user?.username} 🌾</h2>
-          <p style={{ color: '#E8F5E9', margin: 0, fontSize: '14px', position: 'relative', zIndex: 1 }}>{t.sub}</p>
-        </div>
 
         {/* Big Report Button */}
         <button onClick={() => navigate('/farmer/report')}

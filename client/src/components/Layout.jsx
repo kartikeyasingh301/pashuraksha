@@ -19,7 +19,7 @@ const VET_NAV = [
   { to: '/vet/queue', icon: <ClipboardList size={24} />, label: 'Queue' },
 ];
 
-export default function Layout({ children, title, showBack = false }) {
+export default function Layout({ children, title, hero, showBack = false }) {
   const { user, logout } = useAuth();
   const { pendingCount } = useSyncContext();
   const navigate = useNavigate();
@@ -52,7 +52,11 @@ export default function Layout({ children, title, showBack = false }) {
         </div>
       </header>
 
-      <main className="app-main">{children}</main>
+      <main className="app-main">
+        {/* Full-bleed hero slot — renders outside page-content constraints */}
+        {hero && <div className="layout-hero">{hero}</div>}
+        {children}
+      </main>
 
       <nav className="bottom-nav" role="navigation" aria-label="Main navigation">
         {navItems.map((item) => (
