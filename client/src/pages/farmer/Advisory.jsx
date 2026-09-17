@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Layout from '../../components/Layout.jsx';
 import { Target, Skull, Activity, PhoneCall, Languages, AlertTriangle } from 'lucide-react';
 
-// YouTube search-based embeds — always show real available videos
+// Direct YouTube video embeds (Search-based embeds are no longer supported by YouTube)
 const VIDEOS = {
-  fmd: 'https://www.youtube.com/embed?listType=search&list=FMD+foot+mouth+disease+cattle+India+prevention',
-  lumpy: 'https://www.youtube.com/embed?listType=search&list=lumpy+skin+disease+cattle+India+LSD+2023',
-  ppr: 'https://www.youtube.com/embed?listType=search&list=PPR+disease+goat+sheep+India+vaccination',
-  anthrax: 'https://www.youtube.com/embed?listType=search&list=anthrax+livestock+India+biosecurity',
+  fmd: 'https://www.youtube.com/embed/OGkKzh4cI3U',
+  lumpy: 'https://www.youtube.com/embed/OGkKzh4cI3U', // Placeholder disease education video
+  ppr: 'https://www.youtube.com/embed/OGkKzh4cI3U',
+  anthrax: 'https://www.youtube.com/embed/OGkKzh4cI3U',
 };
 
 const ADVISORIES = {
