@@ -1,5 +1,5 @@
 {
-  "name": "pashusuraksha-client",
+  "name": "Pashuraksha-client",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -26,3 +26,4 @@
     "vite-plugin-pwa": "^0.19.8"
   }
 }
+

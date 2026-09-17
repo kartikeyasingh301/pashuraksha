@@ -1,6 +1,6 @@
 ﻿import Dexie from "dexie";
 
-const db = new Dexie("PashuSurakshaDB");
+const db = new Dexie("PashurakshaDB");
 
 db.version(1).stores({
   offlineQueue: "++id, localId, status, retryCount, capturedAt",
@@ -11,3 +11,4 @@ db.version(1).stores({
 });
 
 export default db;
+
