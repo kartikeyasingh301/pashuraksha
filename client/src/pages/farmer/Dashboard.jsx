@@ -149,6 +149,29 @@ export default function FarmerDashboard() {
           }}>
           <ClipboardList size={22} /> {t.report}
         </button>
+        {/* Herd & Passbook Quick Actions */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+          <button onClick={() => navigate('/farmer/herd')}
+            style={{
+              padding: '16px 12px', borderRadius: '14px', border: '2px solid #E8F5E9',
+              background: 'white', color: '#1B5E20', fontSize: '14px', fontWeight: '700',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.06)', cursor: 'pointer'
+            }}>
+            <span style={{ fontSize: '28px' }}>??</span>
+            My Herd Ledger
+          </button>
+          <button onClick={() => navigate('/farmer/passbook')}
+            style={{
+              padding: '16px 12px', borderRadius: '14px', border: '2px solid #E3F2FD',
+              background: 'white', color: '#1565C0', fontSize: '14px', fontWeight: '700',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.06)', cursor: 'pointer'
+            }}>
+            <span style={{ fontSize: '28px' }}>??</span>
+            Vaccine Passbook
+          </button>
+        </div>
 
         {/* Quick Tip Cards */}
         <section style={{ marginBottom: '20px' }}>

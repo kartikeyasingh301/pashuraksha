@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, Activity, ClipboardList, Map as MapIcon, Syringe, Dna, Microscope } from 'lucide-react';
+import { AlertTriangle, BarChart2, Bell, Activity, ClipboardList, Map as MapIcon, Syringe, Dna, Microscope } from 'lucide-react';
 import Layout from '../../components/Layout.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { apiGet } from '../../api/client.js';
@@ -13,6 +13,8 @@ const NAV_CARDS = [
   { to: '/vet/vaccination', icon: <Syringe size={32} />, label: 'Vaccination Gaps', color: '#6A1B9A', desc: 'Coverage analysis by village' },
   { to: '/vet/zoonotic', icon: <Dna size={32} />, label: 'Zoonotic Alerts', color: '#AD1457', desc: 'Human health risk notifications' },
   { to: '/vet/lab', icon: <Microscope size={32} />, label: 'Lab Status', color: '#00695C', desc: 'Sample results and pending tests' },
+  { to: '/vet/district', icon: <BarChart2 size={32} />, label: 'District Command', color: '#0277BD', desc: 'Heatmap, SLA monitor, epi trends' },
+  { to: '/vet/broadcast', icon: <Bell size={32} />, label: 'Advisory Broadcast', color: '#558B2F', desc: 'Send geo-fenced multilingual SMS' },
 ];
 
 export default function VetDashboard() {
