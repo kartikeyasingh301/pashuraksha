@@ -358,15 +358,30 @@ code{background:var(--border);padding:2px 6px;border-radius:4px;font-size:0.8em}
 
 /* Phase 3: Shell & Layouts */
 .layout-farmer {
-  max-width: 480px;
-  margin: 0 auto;
-  position: relative;
-  background: var(--bg);
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .farmer-desktop-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  @media (min-width: 1024px) {
+    .farmer-desktop-grid {
+      grid-template-columns: 2fr 1fr;
+      align-items: start;
+    }
+  }
 .layout-vet {
   display: flex;
   flex-direction: column;
@@ -562,4 +577,13 @@ code{background:var(--border);padding:2px 6px;border-radius:4px;font-size:0.8em}
 :focus-visible {
   outline: 2px solid var(--brand-600);
   outline-offset: 2px;
+}
+
+.layout-farmer .page-content {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+.layout-farmer .page-content.dashboard-content {
+  max-width: 1200px !important;
 }
