@@ -14,8 +14,13 @@ const MOCK_SPECIES_DATA = [
 ];
 const COLORS = ['#ef4444', '#f97316', '#22c55e'];
 
+const MAHARASHTRA_DISTRICTS = [
+  'Pune', 'Nashik', 'Ahilyanagar', 'Nagpur', 'Mumbai', 'Thane', 'Kolhapur', 'Solapur', 'Satara', 'Jalgaon', 'Amravati', 'Aurangabad'
+];
+
 export default function DistrictDashboard() {
   const [time, setTime] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('Pune');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,6 +30,10 @@ export default function DistrictDashboard() {
   }, []);
 
   const refreshData = () => {
+    setLoading(true);
+    // Randomize mock data slightly for demo
+    MOCK_CHART_DATA.forEach(d => d.cases = Math.floor(Math.random() * 40) + 5);
+    MOCK_SPECIES_DATA.forEach(d => d.value = Math.floor(Math.random() * 500) + 100);
     setLoading(true);
     setTimeout(() => setLoading(false), 1000);
   };
@@ -37,9 +46,28 @@ export default function DistrictDashboard() {
         
         {/* Header */}
         <div style={{ ...cardStyle, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-          <div>
-            <h1 style={{ margin: 0, fontSize: "20px", fontWeight: "700", color: "#333" }}>Rajkot District Analytics</h1>
-            <p style={{ margin: 0, fontSize: "13px", color: "#666" }}>Gujarat Zone 4 Command</p>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <select 
+                value={selectedDistrict}
+                onChange={(e) => {
+                  setSelectedDistrict(e.target.value);
+                  refreshData();
+                }}
+                style={{ 
+                  margin: 0, fontSize: "20px", fontWeight: "800", color: "#1B5E20", 
+                  border: "none", background: "transparent", outline: "none", cursor: "pointer",
+                  WebkitAppearance: "none", paddingRight: "16px",
+                  backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%231B5E20%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')",
+                  backgroundRepeat: "no-repeat", backgroundPosition: "right center"
+                }}
+              >
+                {MAHARASHTRA_DISTRICTS.map(d => (
+                  <option key={d} value={d}>{d} District Analytics</option>
+                ))}
+              </select>
+            </div>
+            <p style={{ margin: "2px 0 0 0", fontSize: "13px", color: "#666", fontWeight: "600" }}>Maharashtra Veterinary Command</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
