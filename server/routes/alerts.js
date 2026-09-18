@@ -81,15 +81,6 @@ router.get('/', authenticateToken, requireVet, (req, res) => {
     zoonotic: zoonotic.map(augmentWithSentinel),
     emerging: emerging.map(augmentWithSentinel)
   });
-  return;
-// old code below
-    critical: {
-      cases:    criticalCases,
-      outbreaks: suspectedOutbreaks,
-    },
-    zoonotic,
-    emerging,
-  });
 });
 
 module.exports = router;
