@@ -1,6 +1,14 @@
 ﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout.jsx';
+
+function formatSLA(hours) {
+  if (hours === undefined || hours === null) return "SLA: Not set";
+  if (hours < 0) return `SLA BREACHED (${Math.abs(hours)}h overdue)`;
+  if (hours < 12) return `SLA AT RISK (${hours}h remaining)`;
+  return `SLA ON TRACK (${hours}h remaining)`;
+}
+
 import { apiGet } from '../../api/client.js';
 import { CheckCircle, Clock, ActivitySquare, ShieldAlert, ChevronRight, CheckSquare } from 'lucide-react';
 
@@ -70,7 +78,7 @@ export default function ResponseQueue() {
                      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
                         <span style={{ fontSize: "12px", background: "#f5f5f5", padding: "4px 8px", borderRadius: "4px", color: "#444" }}>Reports: {item.report_count || 1}</span>
                         <span style={{ fontSize: "12px", background: item.sentinel?.sla_state === 'SAFE' ? "#E8F5E9" : "#FFEBEE", color: item.sentinel?.sla_state === 'SAFE' ? "#2E7D32" : "#C62828", padding: "4px 8px", borderRadius: "4px", display: "flex", alignItems: "center", gap: "4px" }}>
-                           <Clock size={12}/> SLA: {item.sentinel?.sla_hours_remaining}h ({item.sentinel?.sla_state})
+                           <Clock size={12}/> {formatSLA(item.sentinel?.sla_hours_remaining)}
                         </span>
                         <span style={{ fontSize: "12px", background: "#E3F2FD", color: "#1565C0", padding: "4px 8px", borderRadius: "4px" }}>Assignee: Unassigned</span>
                      </div>

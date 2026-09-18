@@ -4,20 +4,20 @@ import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContai
 import { Shield, TrendingUp, Users, Syringe, Truck, AlertTriangle, Activity, Globe, ChevronRight, RefreshCw } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 
-// TODO: Replace with live API calls to /api/govt/metrics, /api/clusters, /api/govt/stockpile
-const NATIONAL_CLUSTERS = [
-  { id: 1, lat: 18.84, lng: 73.9, triage: "RED", disease: "Anthrax", district: "Pune", state: "Maharashtra", count: 4, radius: 25 },
-  { id: 2, lat: 18.15, lng: 74.58, triage: "YELLOW", disease: "FMD", district: "Solapur", state: "Maharashtra", count: 12, radius: 18 },
-  { id: 3, lat: 22.3, lng: 70.8, triage: "RED", disease: "Brucellosis", district: "Rajkot", state: "Gujarat", count: 7, radius: 20 },
-  { id: 4, lat: 25.4, lng: 81.8, triage: "YELLOW", disease: "PPR", district: "Allahabad", state: "UP", count: 9, radius: 15 },
-  { id: 5, lat: 15.3, lng: 75.1, triage: "GREEN", disease: "HS", district: "Dharwad", state: "Karnataka", count: 3, radius: 10 },
+
+const MAHARASHTRA_CLUSTERS = [
+  { id: 1, lat: 20.55, lng: 74.52, triage: "RED", disease: "FMD", district: "Nashik", state: "Maharashtra", count: 12, radius: 25 },
+  { id: 2, lat: 18.15, lng: 74.58, triage: "YELLOW", disease: "BQ", district: "Pune", state: "Maharashtra", count: 4, radius: 18 },
+  { id: 3, lat: 19.57, lng: 74.20, triage: "RED", disease: "PPR", district: "Ahilyanagar", state: "Maharashtra", count: 7, radius: 20 },
+  { id: 4, lat: 17.65, lng: 75.90, triage: "YELLOW", disease: "Brucellosis", district: "Solapur", state: "Maharashtra", count: 9, radius: 15 },
+  { id: 5, lat: 19.99, lng: 73.78, triage: "GREEN", disease: "HS", district: "Nashik", state: "Maharashtra", count: 3, radius: 10 },
 ];
 
 const STOCKPILE = [
-  { vaccine: "FMD Multivalent", stock: 42000, required: 60000, unit: "doses", state: "Maharashtra" },
-  { vaccine: "PPR", stock: 28000, required: 35000, unit: "doses", state: "Gujarat" },
-  { vaccine: "HS + BQ Combined", stock: 15000, required: 15000, unit: "doses", state: "UP" },
-  { vaccine: "Anthrax Spore", stock: 800, required: 5000, unit: "doses", state: "Rajasthan" },
+  { vaccine: "FMD Multivalent", stock: 42000, required: 60000, unit: "doses", state: "Nashik District" },
+  { vaccine: "PPR", stock: 28000, required: 35000, unit: "doses", state: "Ahilyanagar District" },
+  { vaccine: "HS + BQ Combined", stock: 15000, required: 15000, unit: "doses", state: "Pune District" },
+  { vaccine: "Anthrax Spore", stock: 800, required: 5000, unit: "doses", state: "Solapur District" },
 ];
 
 const TREND_14D = [
@@ -26,8 +26,8 @@ const TREND_14D = [
   {d:"11 Sep",cases:35},{d:"12 Sep",cases:41},{d:"13 Sep",cases:38},{d:"14 Sep",cases:44},
 ];
 
-const MAHARASHTRA_BAR = [
-  {state:"MH",cases:44},{state:"GJ",cases:28},{state:"UP",cases:22},{state:"RJ",cases:17},{state:"KA",cases:12},{state:"MP",cases:9},
+const DISTRICT_BAR = [
+  {state:"Nashik",cases:44},{state:"Pune",cases:28},{state:"Ahilyanagar",cases:22},{state:"Solapur",cases:17},{state:"Satara",cases:12},{state:"Thane",cases:9},
 ];
 
 const EPI_METRICS = [
@@ -51,7 +51,7 @@ export default function GovtCommandCenter() {
 
   const refresh = () => { setLoading(true); setTimeout(() => setLoading(false), 1200); };
 
-  const critical = NATIONAL_CLUSTERS.filter(c => c.triage === "RED").length;
+  const critical = MAHARASHTRA_CLUSTERS.filter(c => c.triage === "RED").length;
   const totalAnimals = 284000;
   const mmuDeployed = 3;
 
@@ -97,7 +97,7 @@ export default function GovtCommandCenter() {
       <div className="grid grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
         {[
           { label: "Critical Clusters", val: critical, icon: AlertTriangle, color: "text-red-400" },
-          { label: "Active Districts", val: NATIONAL_CLUSTERS.length, icon: Activity, color: "text-amber-400" },
+          { label: "Active Districts", val: MAHARASHTRA_CLUSTERS.length, icon: Activity, color: "text-amber-400" },
           { label: "Animals at Risk", val: "2.84L", icon: Users, color: "text-purple-400" },
           { label: "MMU Deployed", val: mmuDeployed, icon: Truck, color: "text-blue-400" },
           { label: "Vaccine Drives", val: 7, icon: Syringe, color: "text-green-400" },
@@ -118,7 +118,7 @@ export default function GovtCommandCenter() {
           </div>
           <MapContainer center={[20.5937, 78.9629]} zoom={5} style={{ height: "100%", width: "100%", zIndex: 0 }}>
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-            {NATIONAL_CLUSTERS.map(c => (
+            {MAHARASHTRA_CLUSTERS.map(c => (
               <CircleMarker key={c.id} center={[c.lat, c.lng]} radius={c.radius}
                 pathOptions={{ color: TRIAGE_OPTS[c.triage].color, fillColor: TRIAGE_OPTS[c.triage].fill, fillOpacity: 0.35, weight: 2 }}>
                 <Popup>
@@ -181,12 +181,12 @@ export default function GovtCommandCenter() {
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
           <h3 className="font-semibold text-sm mb-4 text-slate-200 flex items-center gap-2"><Shield className="w-4 h-4 text-amber-400" /> Cases by Maharashtra</h3>
           <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={MAHARASHTRA_BAR} barSize={28}>
+            <BarChart data={DISTRICT_BAR} barSize={28}>
               <XAxis dataKey="state" fontSize={10} tick={{ fill: "#64748b" }} />
               <YAxis fontSize={9} tick={{ fill: "#64748b" }} />
               <Tooltip contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155", borderRadius: "8px", fontSize: "11px" }} />
               <Bar dataKey="cases" radius={[4, 4, 0, 0]}>
-                {MAHARASHTRA_BAR.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                {DISTRICT_BAR.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>

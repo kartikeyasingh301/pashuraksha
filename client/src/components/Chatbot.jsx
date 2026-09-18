@@ -4,7 +4,7 @@ import './Chatbot.css';
 
 const BOT_RESPONSES = {
   en: {
-    greeting: "Hello! I'm your Pashuraksha AI Assistant. Ask me about livestock diseases, symptoms, or vaccination schedules.",
+    greeting: "Hello! I'm your Pashuraksha Health Assistant. Ask me about livestock diseases, symptoms, or vaccination schedules.",
     fmd: "Symptoms like blisters and excessive salivation suggest Foot and Mouth Disease (FMD). 🔴 Isolate the animal immediately. Vaccinate every 6 months. Submit a report now.",
     lumpy: "Skin nodules and fever could indicate Lumpy Skin Disease (LSD). 🟠 Use insect repellents, apply LSD vaccine, and consult a vet. Submit a report.",
     ppr: "Fever, nasal discharge and diarrhea in goats/sheep could be PPR. 🔴 Highly contagious — isolate immediately and call your vet.",
@@ -14,7 +14,7 @@ const BOT_RESPONSES = {
     default: "I understand your concern. Please submit a health report using the Report button so our veterinarians can investigate. For urgent help, call 1962.",
   },
   hi: {
-    greeting: "नमस्ते! मैं आपका Pashuraksha AI सहायक हूँ। पशु रोग, लक्षण या टीकाकरण के बारे में पूछें।",
+    greeting: "नमस्ते! मैं आपका Pashuraksha Health Assistantसहायक हूँ। पशु रोग, लक्षण या टीकाकरण के बारे में पूछें।",
     fmd: "छाले और अत्यधिक लार खुरपका-मुँहपका (FMD) का संकेत हो सकता है। 🔴 पशु को तुरंत अलग करें। हर 6 महीने में टीका लगाएं। अभी रिपोर्ट दर्ज करें।",
     lumpy: "त्वचा पर गांठ और बुखार लंपी रोग (LSD) हो सकता है। 🟠 कीट विकर्षक लगाएं, LSD टीका लगाएं और पशु चिकित्सक से संपर्क करें।",
     ppr: "बकरी/भेड़ में बुखार, नाक से पानी और दस्त PPR हो सकता है। 🔴 बहुत संक्रामक है — तुरंत अलग करें और पशु डॉक्टर को बुलाएं।",
@@ -24,7 +24,7 @@ const BOT_RESPONSES = {
     default: "मैं समझ गया। कृपया रिपोर्ट बटन से स्वास्थ्य रिपोर्ट दर्ज करें ताकि हमारे पशु चिकित्सक जांच कर सकें। आपातकाल में 1962 पर कॉल करें।",
   },
   mr: {
-    greeting: "नमस्कार! मी तुमचा Pashuraksha AI सहायक आहे. पशु रोग, लक्षणे किंवा लसीकरणाबद्दल विचारा.",
+    greeting: "नमस्कार! मी तुमचा Pashuraksha Health Assistantसहायक आहे. पशु रोग, लक्षणे किंवा लसीकरणाबद्दल विचारा.",
     fmd: "फोड आणि जास्त लाळ हे लाळ्या-खुरकूत (FMD) चे लक्षण असू शकते. 🔴 प्राण्याला लगेच वेगळे करा. दर 6 महिन्यांनी लस द्या. आत्ताच अहवाल सबमिट करा.",
     lumpy: "त्वचेवर गाठी आणि ताप हे लंपी रोग (LSD) असू शकते. 🟠 कीटकनाशके वापरा, LSD लस द्या आणि पशुवैद्यांशी संपर्क करा.",
     ppr: "शेळी/मेंढ्यांमध्ये ताप, नाकातून पाणी आणि जुलाब PPR असू शकते. 🔴 अत्यंत संसर्गजन्य — लगेच वेगळे करा आणि पशुवैद्यांना बोलवा.",
@@ -88,7 +88,7 @@ export default function Chatbot() {
       {!isOpen && (
         <button className="chatbot-fab" onClick={() => setIsOpen(true)}>
           <MessageSquare size={24} color="white" />
-          <span className="chatbot-fab-label">AI Help</span>
+          <span className="chatbot-fab-label">Health Assistance</span>
         </button>
       )}
 
@@ -100,7 +100,7 @@ export default function Chatbot() {
                 <MessageSquare size={18} />
               </div>
               <div>
-                <strong style={{ fontSize: '15px' }}>Pashu AI</strong>
+                <strong style={{ fontSize: '15px' }}>Health Assistance</strong>
                 <div style={{ fontSize: '11px', opacity: 0.8 }}>Online · Disease Assistant</div>
               </div>
             </div>

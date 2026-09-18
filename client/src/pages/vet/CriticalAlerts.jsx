@@ -1,6 +1,14 @@
 ﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout.jsx';
+
+function formatSLA(hours) {
+  if (hours === undefined || hours === null) return "SLA: Not set";
+  if (hours < 0) return `SLA BREACHED (${Math.abs(hours)}h overdue)`;
+  if (hours < 12) return `SLA AT RISK (${hours}h remaining)`;
+  return `SLA ON TRACK (${hours}h remaining)`;
+}
+
 import { apiGet } from '../../api/client.js';
 import { ShieldAlert, Activity, Filter, MapPin, ChevronRight, ActivitySquare, Shield, Clock } from 'lucide-react';
 
