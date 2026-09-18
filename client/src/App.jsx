@@ -20,6 +20,7 @@ import DistrictDashboard from './pages/vet/DistrictDashboard.jsx';
 import AdvisoryBroadcast from './pages/vet/AdvisoryBroadcast.jsx';
 import ParaVetDashboard from './pages/paravet/ParaVetDashboard.jsx';
 import GovtCommandCenter from './pages/govt/GovtCommandCenter.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 
 function PrivateRoute({ children, role }) {
   const { isAuthenticated, user, loading } = useAuth();
