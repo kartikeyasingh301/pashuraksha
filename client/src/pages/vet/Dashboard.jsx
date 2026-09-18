@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, Activity, Map as MapIcon, Dna, Timer, ShieldAlert, ChevronRight, FileText, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Activity, Map as MapIcon, Dna, Timer, ShieldAlert, ChevronRight, FileText, CheckCircle, BarChart2 } from 'lucide-react';
 import Layout from '../../components/Layout.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { apiGet } from '../../api/client.js';
