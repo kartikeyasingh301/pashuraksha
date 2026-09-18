@@ -1,5 +1,5 @@
 {
-  "name": "pashusuraksha-root",
+  "name": "Pashuraksha-root",
   "private": true,
   "scripts": {
     "build": "echo \"Built root\""
@@ -8,3 +8,4 @@
     "node": ">=22.5.0"
   }
 }
+

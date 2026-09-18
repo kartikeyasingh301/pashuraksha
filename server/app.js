@@ -1,5 +1,5 @@
-/**
- * app.js — PashuSuraksha Express application entry point
+﻿/**
+ * app.js — Pashuraksha Express application entry point
  */
 
 'use strict';
@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ── Health check (unauthenticated) ───────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'PashuSuraksha API', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', service: 'Pashuraksha API', timestamp: new Date().toISOString() });
 });
 
 // ── Routes ────────────────────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ app.use((err, _req, res, _next) => {
 app.listen(PORT, () => {
   console.log('');
   console.log('┌─────────────────────────────────────────────────┐');
-  console.log('│       PashuSuraksha API Server                  │');
+  console.log('│       Pashuraksha API Server                  │');
   console.log(`│  Listening on  http://localhost:${PORT}            │`);
   console.log('│                                                  │');
   console.log('│  Demo credentials:                               │');
@@ -75,3 +75,4 @@ app.listen(PORT, () => {
 });
 
 module.exports = app; // for testing
+

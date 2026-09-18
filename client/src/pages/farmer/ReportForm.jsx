@@ -1,5 +1,5 @@
 ﻿import { useState, useCallback } from "react";
-import { WifiOff, CheckCircle, Save, AlertTriangle, Loader, MapPin, Send, Languages } from "lucide-react";
+import { WifiOff, CheckCircle, Save, AlertTriangle, Loader, MapPin, Send, Languages, ShieldAlert, Activity, Info } from "lucide-react";
 import Layout from "../../components/Layout.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useSyncContext } from "../../contexts/SyncContext.jsx";
@@ -9,7 +9,7 @@ import { addToQueue } from "../../sync/syncManager.js";
 
 const SPECIES_LIST = ["Cattle", "Buffalo", "Sheep", "Goat", "Pig", "Poultry", "Dog", "Other"];
 const SYNDROME_LIST = ["FMD", "PPR", "BQ", "Anthrax", "Rabies", "Brucellosis", "Theileriosis", "Lumpy Skin Disease", "HPAI", "Other"];
-const SYMPTOM_LIST = ["Fever", "Lameness", "Blisters/Ulcers", "Respiratory distress", "Neurological signs", "Diarrhea", "Sudden death", "Abortion", "Swelling", "Loss of appetite"];
+const SYMPTOM_LIST = ["Fever", "Lameness", "Blisters/Ulcers", "Respiratory distress", "Neurological signs", "Diarrhea", "Sudden death", "Abortion", "Swelling", "Loss of appetite", "Excessive Salivation", "Nasal Discharge", "Skin Lesions", "Coughing"];
 const VACCINE_LIST = ["Vaccinated", "Unvaccinated", "Unknown"];
 
 const TRANSLATIONS = {
@@ -44,7 +44,12 @@ const TRANSLATIONS = {
     species: { "Cattle":"Cattle", "Buffalo":"Buffalo", "Sheep":"Sheep", "Goat":"Goat", "Pig":"Pig", "Poultry":"Poultry", "Dog":"Dog", "Other":"Other" },
     syndrome: { "FMD":"FMD", "PPR":"PPR", "BQ":"BQ", "Anthrax":"Anthrax", "Rabies":"Rabies", "Brucellosis":"Brucellosis", "Theileriosis":"Theileriosis", "Lumpy Skin Disease":"Lumpy Skin Disease", "HPAI":"HPAI", "Other":"Other" },
     symptoms: { "Fever":"Fever", "Lameness":"Lameness", "Blisters/Ulcers":"Blisters/Ulcers", "Respiratory distress":"Respiratory distress", "Neurological signs":"Neurological signs", "Diarrhea":"Diarrhea", "Sudden death":"Sudden death", "Abortion":"Abortion", "Swelling":"Swelling", "Loss of appetite":"Loss of appetite" },
-    vaccine: { "Vaccinated":"Vaccinated", "Unvaccinated":"Unvaccinated", "Unknown":"Unknown" }
+    vaccine: { "Vaccinated":"Vaccinated", "Unvaccinated":"Unvaccinated", "Unknown":"Unknown" },
+    lblHerdSize: "Herd Size",
+    lblOnsetDate: "Onset Date",
+    lblRecentMovement: "Recent animal movement?",
+    lblNewAnimals: "New animals added recently?",
+    lblContactHerds: "Contact with other herds?"
   },
   hi: {
     title: "स्वास्थ्य समस्या रिपोर्ट करें",
@@ -114,7 +119,7 @@ const TRANSLATIONS = {
   }
 };
 
-const initialForm = { species: "", syndrome: "", symptoms: [], mortalityCount: 0, animalId: "", village: "", vaccinationStatus: "Unknown", notes: "" };
+const initialForm = { species: "", syndrome: "", symptoms: [], mortalityCount: 0, animalId: "", village: "", vaccinationStatus: "Unknown", notes: "", herdSize: "", onsetDate: "", recentMovement: false, newAnimals: false, contactHerds: false };
 
 export default function ReportForm() {
   const { user } = useAuth();
@@ -142,6 +147,17 @@ export default function ReportForm() {
     });
   }
 
+  
+  function runTriage(f) {
+    const s = f.symptoms || [];
+    let risk = "LOW"; let condition = "Under Review"; let actions = ["Isolate animal", "Observe for 24h"];
+    if (s.includes("Sudden death")) { risk = "CRITICAL"; condition = "Suspected Anthrax"; actions = ["Do not open carcass", "Contact vet immediately", "Evacuate area"]; }
+    else if ((f.species === "Cattle" || f.species === "Buffalo") && s.includes("Fever") && (s.includes("Lameness") || s.includes("Blisters/Ulcers") || s.includes("Excessive Salivation"))) { risk = "HIGH"; condition = "Suspected FMD"; actions = ["Isolate sick animals", "Stop animal movement", "Disinfect premises"]; }
+    else if ((f.species === "Goat" || f.species === "Sheep") && s.includes("Fever") && s.includes("Diarrhea") && (s.includes("Respiratory distress") || s.includes("Nasal Discharge"))) { risk = "HIGH"; condition = "Suspected PPR"; actions = ["Isolate sick animals", "Provide hydration", "Stop grazing in common areas"]; }
+    else if (f.species === "Cattle" && s.includes("Fever") && s.includes("Skin Lesions")) { risk = "HIGH"; condition = "Suspected Lumpy Skin Disease"; actions = ["Isolate sick animal", "Control flies/mosquitoes"]; }
+    return { risk, condition, actions };
+  }
+
   function validate() {
     const newErrors = {};
     if (!form.species) newErrors.species = t.reqSpecies;
@@ -164,6 +180,11 @@ export default function ReportForm() {
       mortality_count: parseInt(form.mortalityCount) || 0,
       mortalityCount: parseInt(form.mortalityCount) || 0,
       herd_id: form.animalId.trim() || null,
+      herd_size: parseInt(form.herdSize) || 0,
+      onset_date: form.onsetDate || null,
+      recent_movement: form.recentMovement,
+      new_animals: form.newAnimals,
+      contact_herds: form.contactHerds,
       animalId: form.animalId.trim() || null,
       village: form.village.trim(),
       latitude: location.lat, longitude: location.lng,
@@ -183,7 +204,7 @@ export default function ReportForm() {
     if (isOnline) {
       try {
         const result = await apiPost("/reports", report);
-        setSuccess({ type: "online", id: result.id || result.reportId || result.report?.id || "submitted" });
+        setSuccess({ type: "online", id: result.id || result.reportId || result.report?.id || "submitted", triage: runTriage(form) });
         setForm(initialForm);
         await refresh();
       } catch (err) {
@@ -195,7 +216,7 @@ export default function ReportForm() {
       try {
         await addToQueue(report);
         await refresh();
-        setSuccess({ type: "offline" });
+        setSuccess({ type: "offline", triage: runTriage(form) });
         setForm(initialForm);
       } catch (err) {
         setErrors({ submit: "Failed to save offline: " + err.message });

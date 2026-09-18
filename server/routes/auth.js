@@ -1,4 +1,4 @@
-/**
+﻿/**
  * routes/auth.js — Authentication routes
  * POST /api/auth/login
  * GET  /api/auth/me
@@ -13,7 +13,7 @@ const db      = require('../db/database');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'pashusuraksha_secret_2024';
+const JWT_SECRET = process.env.JWT_SECRET || 'Pashuraksha_secret_2024';
 
 // POST /api/auth/login
 router.post('/login', (req, res) => {
@@ -65,3 +65,4 @@ router.get('/me', authenticateToken, (req, res) => {
 });
 
 module.exports = router;
+

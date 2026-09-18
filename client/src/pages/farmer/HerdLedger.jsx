@@ -1,129 +1,190 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, Search, ChevronRight, Tag, Calendar, Syringe, Pill } from "lucide-react";
+ï»¿import { useState } from "react";
+import { Search, Plus, ChevronRight, Syringe, Heart, AlertCircle, Calendar, ArrowLeft, Activity } from "lucide-react";
+import Layout from "../../components/Layout.jsx";
 
-const MOCK_ANIMALS = [
-  { id: "A001", tagId: "MH-KL-4821", species: "Cattle", breed: "Gir", sex: "Female", age: "4 yrs", village: "Kalamb", vaccinated: true, lastVaccine: "FMD — Apr 2026", drugs: 0, healthy: true },
-  { id: "A002", tagId: "MH-KL-4822", species: "Buffalo", breed: "Murrah", sex: "Female", age: "6 yrs", village: "Kalamb", vaccinated: true, lastVaccine: "HS — Jan 2026", drugs: 1, healthy: true },
-  { id: "A003", tagId: "MH-KL-4830", species: "Goat", breed: "Osmanabadi", sex: "Male", age: "2 yrs", village: "Kalamb", vaccinated: false, lastVaccine: "None", drugs: 0, healthy: false },
-  { id: "A004", tagId: "MH-KL-4831", species: "Cattle", breed: "HF Cross", sex: "Female", age: "3 yrs", village: "Kalamb", vaccinated: true, lastVaccine: "BQ — Mar 2026", drugs: 0, healthy: true },
+const SPECIES_COLORS = {
+  Cattle:  { bg: "#FFF8E1", color: "#F57F17" },
+  Buffalo: { bg: "#ECEFF1", color: "#546E7A" },
+  Goat:    { bg: "#E8F5E9", color: "#2E7D32" },
+  Sheep:   { bg: "#E3F2FD", color: "#1565C0" },
+};
+
+const ANIMALS = [
+  { id:"C-001", tagId:"GJ-RJ-4821", species:"Cattle", breed:"Gir", sex:"Female", age:"4 yrs", village:"Gondal", status:"healthy", vaccinated:true, lastVaccine:"FMD â€” Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-441",vet:"Dr. Priya Sharma",status:"Valid"},{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-112",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"08 Apr 2026",text:"FMD Vaccination administered"},{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
+  { id:"C-002", tagId:"GJ-RJ-4822", species:"Cattle", breed:"Sahiwal", sex:"Female", age:"3 yrs", village:"Gondal", status:"healthy", vaccinated:true, lastVaccine:"FMD â€” Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-442",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[], events:[{date:"08 Apr 2026",text:"FMD Vaccination administered"}] },
+  { id:"B-001", tagId:"GJ-RJ-4830", species:"Buffalo", breed:"Murrah", sex:"Female", age:"6 yrs", village:"Gondal", status:"healthy", vaccinated:true, lastVaccine:"HS â€” Jan 2026", vaccines:[{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-112",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
+  { id:"B-002", tagId:"GJ-RJ-4831", species:"Buffalo", breed:"Jafarabadi", sex:"Female", age:"5 yrs", village:"Dhoraji", status:"under_observation", vaccinated:true, lastVaccine:"HS â€” Jan 2026", vaccines:[{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-113",vet:"Dr. R. Patil",status:"Valid"}], treatments:[{drug:"Oxytetracycline 10mg/kg IM",date:"12 Sep 2026",withdrawal:"26 Sep 2026"}], events:[{date:"18 Sep 2026",text:"Fever reported â€” under observation"},{date:"12 Sep 2026",text:"Oxytetracycline administered"},{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
+  { id:"G-001", tagId:"GJ-RJ-4840", species:"Goat", breed:"Osmanabadi", sex:"Male", age:"2 yrs", village:"Gondal", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
+  { id:"G-002", tagId:"GJ-RJ-4841", species:"Goat", breed:"Sirohi", sex:"Female", age:"1.5 yrs", village:"Upleta", status:"healthy", vaccinated:true, lastVaccine:"PPR â€” Nov 2025", vaccines:[{name:"PPR",date:"20 Nov 2025",batch:"VB-PPR-2025-204",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"20 Nov 2025",text:"PPR Vaccination administered"}] },
+  { id:"C-003", tagId:"GJ-RJ-4850", species:"Cattle", breed:"HF Cross", sex:"Female", age:"3 yrs", village:"Gondal", status:"healthy", vaccinated:true, lastVaccine:"BQ â€” Mar 2026", vaccines:[{name:"BQ",date:"05 Mar 2026",batch:"VB-BQ-2026-889",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[], events:[{date:"05 Mar 2026",text:"BQ Vaccination administered"}] },
+  { id:"S-001", tagId:"GJ-RJ-4860", species:"Sheep", breed:"Marwari", sex:"Male", age:"2 yrs", village:"Dhoraji", status:"healthy", vaccinated:true, lastVaccine:"PPR â€” Nov 2025", vaccines:[{name:"PPR",date:"20 Nov 2025",batch:"VB-PPR-2025-205",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"20 Nov 2025",text:"PPR Vaccination administered"}] },
+  { id:"C-004", tagId:"GJ-RJ-4870", species:"Cattle", breed:"Gir", sex:"Male", age:"5 yrs", village:"Upleta", status:"under_observation", vaccinated:true, lastVaccine:"FMD â€” Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-443",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[{drug:"Meloxicam 0.5mg/kg",date:"17 Sep 2026",withdrawal:"01 Oct 2026"}], events:[{date:"18 Sep 2026",text:"Lameness reported"},{date:"17 Sep 2026",text:"Meloxicam administered"},{date:"08 Apr 2026",text:"FMD Vaccination administered"}] },
+  { id:"G-003", tagId:"GJ-RJ-4880", species:"Goat", breed:"Surti", sex:"Female", age:"3 yrs", village:"Gondal", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
 ];
 
-const SPECIES_COLORS = { Cattle: "bg-amber-100 text-amber-800", Buffalo: "bg-slate-100 text-slate-800", Goat: "bg-green-100 text-green-800", Sheep: "bg-blue-100 text-blue-800" };
+const SUMMARY = { total: 27, healthy: 24, observation: 2, vacDue: 4 };
+const FILTERS = ["All", "Cattle", "Buffalo", "Goat", "Sheep"];
+
+const cardStyle = { background:"white", borderRadius:"14px", padding:"16px", boxShadow:"0 2px 8px rgba(0,0,0,0.07)", marginBottom:"12px" };
+const badgeStyle = (bg, color) => ({ display:"inline-flex", alignItems:"center", gap:"4px", padding:"3px 10px", borderRadius:"20px", fontSize:"11px", fontWeight:"700", background:bg, color });
 
 export default function HerdLedger() {
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("All");
   const [selected, setSelected] = useState(null);
 
-  const filtered = MOCK_ANIMALS.filter(a =>
-    a.tagId.toLowerCase().includes(search.toLowerCase()) ||
-    a.species.toLowerCase().includes(search.toLowerCase()) ||
-    a.breed.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = ANIMALS.filter(a => {
+    const matchSearch = !search || a.tagId.toLowerCase().includes(search.toLowerCase()) || a.species.toLowerCase().includes(search.toLowerCase()) || a.breed.toLowerCase().includes(search.toLowerCase());
+    const matchFilter = filter === "All" || a.species === filter;
+    return matchSearch && matchFilter;
+  });
 
   if (selected) {
     const a = selected;
+    const sc = SPECIES_COLORS[a.species] || { bg:"#F5F5F5", color:"#666" };
     return (
-      <div className="min-h-screen bg-gray-50 p-4">
-        <button onClick={() => setSelected(null)} className="flex items-center text-gray-600 mb-4 gap-2">
-          <ArrowLeft className="w-4 h-4" /> Back to Herd
-        </button>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-4">
-          <div className="flex justify-between items-start mb-3">
-            <div>
-              <h2 className="text-xl font-bold text-gray-800">{a.tagId}</h2>
-              <p className="text-gray-500 text-sm">{a.species} — {a.breed} — {a.sex}</p>
-            </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${a.healthy ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-              {a.healthy ? "Healthy" : "Under Observation"}
-            </span>
-          </div>
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="bg-gray-50 p-3 rounded-lg"><p className="text-gray-400 text-xs mb-1">Age</p><p className="font-medium">{a.age}</p></div>
-            <div className="bg-gray-50 p-3 rounded-lg"><p className="text-gray-400 text-xs mb-1">Village</p><p className="font-medium">{a.village}</p></div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-4">
-          <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2"><Syringe className="w-4 h-4 text-blue-500" /> Vaccination History</h3>
-          {a.vaccinated ? (
-            <div className="space-y-2">
-              <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                <div><p className="font-medium text-sm">{a.lastVaccine}</p><p className="text-xs text-gray-400">Batch: VB-2024-881 | Dr. Priya Sharma</p></div>
-                <span className="text-xs text-blue-600 font-semibold">Valid</span>
+      <Layout title={a.tagId} showBack>
+        <div className="page-content" style={{ paddingBottom:"120px" }}>
+          {/* Profile Card */}
+          <div style={cardStyle}>
+            <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"12px" }}>
+              <div style={{ width:48, height:48, borderRadius:"50%", background:sc.bg, color:sc.color, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"800", fontSize:"18px" }}>{a.species[0]}</div>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:"18px", fontWeight:"700", color:"#333" }}>{a.tagId}</div>
+                <div style={{ fontSize:"13px", color:"#888" }}>{a.species} &bull; {a.breed} &bull; {a.sex}</div>
               </div>
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                <div><p className="font-medium text-sm text-gray-500">PPR — Nov 2025</p><p className="text-xs text-gray-400">Batch: VB-2025-112 | Dr. R. Patil</p></div>
-                <span className="text-xs text-gray-400">Past</span>
-              </div>
+              {a.status === "healthy"
+                ? <span style={badgeStyle("#E8F5E9","#2E7D32")}><Heart size={12}/> Healthy</span>
+                : <span style={badgeStyle("#FFF8E1","#F57F17")}><AlertCircle size={12}/> Under Observation</span>
+              }
             </div>
-          ) : (
-            <p className="text-sm text-red-500 bg-red-50 p-3 rounded-lg">No vaccinations recorded. Contact your nearest vet.</p>
-          )}
-        </div>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px" }}>
+              <div style={{ background:"#F5F5F5", borderRadius:"10px", padding:"10px" }}><div style={{ fontSize:"11px", color:"#999" }}>Age</div><div style={{ fontSize:"14px", fontWeight:"600" }}>{a.age}</div></div>
+              <div style={{ background:"#F5F5F5", borderRadius:"10px", padding:"10px" }}><div style={{ fontSize:"11px", color:"#999" }}>Village</div><div style={{ fontSize:"14px", fontWeight:"600" }}>{a.village}</div></div>
+            </div>
+          </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-          <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2"><Pill className="w-4 h-4 text-purple-500" /> Drug Administration</h3>
-          {a.drugs > 0 ? (
-            <div className="p-3 bg-purple-50 rounded-lg">
-              <p className="font-medium text-sm">Oxytetracycline 10mg/kg IM</p>
-              <p className="text-xs text-gray-400 mt-1">Administered: 12 Sep 2026 | Withdrawal ends: 26 Sep 2026</p>
-            </div>
-          ) : (
-            <p className="text-sm text-gray-400">No drug administration recorded.</p>
-          )}
+          {/* Vaccination History */}
+          <div style={cardStyle}>
+            <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:"0 0 12px 0", display:"flex", alignItems:"center", gap:"8px" }}><Syringe size={16} color="#1565C0"/> Vaccination History</h3>
+            {a.vaccines.length === 0 ? (
+              <div style={{ padding:"16px", background:"#FFEBEE", borderRadius:"10px", fontSize:"13px", color:"#C62828" }}>No vaccinations recorded. Contact your nearest vet.</div>
+            ) : a.vaccines.map((v,i) => (
+              <div key={i} style={{ padding:"12px", background: i===0 ? "#E3F2FD" : "#F5F5F5", borderRadius:"10px", marginBottom:"8px" }}>
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                  <div style={{ fontSize:"14px", fontWeight:"600" }}>{v.name} â€” {v.date}</div>
+                  <span style={{ fontSize:"11px", fontWeight:"700", color:"#1565C0" }}>{v.status}</span>
+                </div>
+                <div style={{ fontSize:"12px", color:"#888", marginTop:"4px" }}>Batch: {v.batch} | {v.vet}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Treatment History */}
+          <div style={cardStyle}>
+            <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:"0 0 12px 0", display:"flex", alignItems:"center", gap:"8px" }}><Activity size={16} color="#7B1FA2"/> Treatment History</h3>
+            {a.treatments.length === 0 ? (
+              <div style={{ fontSize:"13px", color:"#999", padding:"12px 0" }}>No drug administration recorded.</div>
+            ) : a.treatments.map((tr,i) => (
+              <div key={i} style={{ padding:"12px", background:"#F3E5F5", borderRadius:"10px", marginBottom:"8px" }}>
+                <div style={{ fontSize:"14px", fontWeight:"600" }}>{tr.drug}</div>
+                <div style={{ fontSize:"12px", color:"#888", marginTop:"4px" }}>Administered: {tr.date} | Withdrawal ends: {tr.withdrawal}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Health Timeline */}
+          <div style={cardStyle}>
+            <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:"0 0 12px 0", display:"flex", alignItems:"center", gap:"8px" }}><Calendar size={16} color="#E65100"/> Health Timeline</h3>
+            {a.events.length === 0 ? (
+              <div style={{ fontSize:"13px", color:"#999", padding:"12px 0" }}>No health events recorded.</div>
+            ) : a.events.map((ev,i) => (
+              <div key={i} style={{ display:"flex", gap:"12px", marginBottom:"12px" }}>
+                <div style={{ width:"8px", minHeight:"100%", borderRadius:"4px", background: i===0 ? "#2E7D32" : "#E0E0E0" }}/>
+                <div>
+                  <div style={{ fontSize:"12px", fontWeight:"700", color:"#555" }}>{ev.date}</div>
+                  <div style={{ fontSize:"13px", color:"#666", marginTop:"2px" }}>{ev.text}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-100 px-4 pt-10 pb-4 sticky top-0 z-10">
-        <button onClick={() => navigate("/farmer")} className="flex items-center text-gray-500 gap-2 mb-3 text-sm">
-          <ArrowLeft className="w-4 h-4" /> Dashboard
-        </button>
-        <h1 className="text-xl font-bold text-gray-800 mb-3">My Herd Ledger</h1>
-        <div className="relative">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by tag, species or breed..."
-            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" />
-        </div>
-      </div>
-
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-3">
-          <p className="text-sm text-gray-500">{filtered.length} animals</p>
-          <button className="flex items-center gap-1.5 bg-green-600 text-white text-sm px-3 py-1.5 rounded-lg font-medium">
-            <Plus className="w-4 h-4" /> Add Animal
-          </button>
-        </div>
-
-        <div className="space-y-3">
-          {filtered.map(a => (
-            <div key={a.id} onClick={() => setSelected(a)}
-              className="bg-white rounded-xl border border-gray-100 p-4 flex items-center justify-between cursor-pointer hover:shadow-sm transition">
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${SPECIES_COLORS[a.species] || "bg-gray-100 text-gray-600"}`}>
-                  {a.species[0]}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-sm text-gray-800">{a.tagId}</p>
-                    {!a.healthy && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full font-semibold">Sick</span>}
-                  </div>
-                  <p className="text-xs text-gray-400">{a.species} · {a.breed} · {a.age}</p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-[10px] flex items-center gap-1 text-gray-400"><Syringe className="w-3 h-3" />{a.vaccinated ? a.lastVaccine : "Not vaccinated"}</span>
-                  </div>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
+    <Layout title="My Herd Ledger" showBack>
+      <div className="page-content" style={{ paddingBottom:"120px" }}>
+        {/* Summary Cards */}
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:"8px", marginBottom:"16px" }}>
+          {[
+            { label:"Total", val:SUMMARY.total, bg:"#F5F5F5", color:"#333" },
+            { label:"Healthy", val:SUMMARY.healthy, bg:"#E8F5E9", color:"#2E7D32" },
+            { label:"Observing", val:SUMMARY.observation, bg:"#FFF8E1", color:"#F57F17" },
+            { label:"Vac. Due", val:SUMMARY.vacDue, bg:"#FFEBEE", color:"#C62828" },
+          ].map(c => (
+            <div key={c.label} style={{ textAlign:"center", padding:"12px 4px", background:c.bg, borderRadius:"12px" }}>
+              <div style={{ fontSize:"22px", fontWeight:"800", color:c.color }}>{c.val}</div>
+              <div style={{ fontSize:"10px", fontWeight:"600", color:c.color, opacity:0.8 }}>{c.label}</div>
             </div>
           ))}
         </div>
+
+        {/* Search */}
+        <div style={{ position:"relative", marginBottom:"12px" }}>
+          <Search size={16} style={{ position:"absolute", left:"12px", top:"50%", transform:"translateY(-50%)", color:"#aaa" }}/>
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by tag, species or breed..."
+            style={{ width:"100%", padding:"10px 12px 10px 36px", border:"1px solid #E0E0E0", borderRadius:"12px", fontSize:"14px", outline:"none", background:"white", boxSizing:"border-box" }}/>
+        </div>
+
+        {/* Filter Tabs */}
+        <div style={{ display:"flex", gap:"6px", overflowX:"auto", marginBottom:"16px", paddingBottom:"4px" }}>
+          {FILTERS.map(f => (
+            <button key={f} onClick={() => setFilter(f)} style={{
+              padding:"6px 14px", borderRadius:"20px", border:"none", fontSize:"12px", fontWeight:"600", cursor:"pointer", whiteSpace:"nowrap",
+              background: filter === f ? "#2E7D32" : "#F0F0F0", color: filter === f ? "white" : "#666"
+            }}>{f}</button>
+          ))}
+        </div>
+
+        {/* Count + Add */}
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"12px" }}>
+          <span style={{ fontSize:"13px", color:"#888" }}>{filtered.length} animals</span>
+          <button style={{ display:"flex", alignItems:"center", gap:"6px", background:"#2E7D32", color:"white", border:"none", padding:"8px 14px", borderRadius:"10px", fontSize:"13px", fontWeight:"600", cursor:"pointer" }}>
+            <Plus size={16}/> Add Animal
+          </button>
+        </div>
+
+        {/* Animal Cards */}
+        {filtered.map(a => {
+          const sc = SPECIES_COLORS[a.species] || { bg:"#F5F5F5", color:"#666" };
+          return (
+            <div key={a.id} onClick={() => setSelected(a)} style={{
+              ...cardStyle, display:"flex", alignItems:"center", cursor:"pointer", gap:"12px",
+              transition:"box-shadow 0.2s", border:"1px solid #f0f0f0"
+            }}>
+              <div style={{ width:42, height:42, borderRadius:"50%", background:sc.bg, color:sc.color, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"800", fontSize:"15px", flexShrink:0 }}>{a.species[0]}</div>
+              <div style={{ flex:1, minWidth:0 }}>
+                <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"2px" }}>
+                  <span style={{ fontSize:"14px", fontWeight:"700", color:"#333" }}>{a.tagId}</span>
+                  {a.status !== "healthy" && <span style={{ fontSize:"10px", fontWeight:"700", background:"#FFF8E1", color:"#F57F17", padding:"2px 8px", borderRadius:"10px" }}>Under Obs.</span>}
+                </div>
+                <div style={{ fontSize:"12px", color:"#999" }}>{a.species} &bull; {a.breed} &bull; {a.age}</div>
+                <div style={{ fontSize:"11px", color:"#bbb", marginTop:"3px", display:"flex", alignItems:"center", gap:"4px" }}><Syringe size={11}/> {a.vaccinated ? a.lastVaccine : "Not vaccinated"}</div>
+              </div>
+              <ChevronRight size={18} color="#ccc"/>
+            </div>
+          );
+        })}
+
+        {filtered.length === 0 && (
+          <div style={{ textAlign:"center", padding:"40px 20px", color:"#999" }}>
+            <Search size={40} color="#ddd" style={{ marginBottom:"12px" }}/>
+            <p style={{ margin:0, fontSize:"14px" }}>No animals match your search.</p>
+          </div>
+        )}
       </div>
-    </div>
+    </Layout>
   );
 }

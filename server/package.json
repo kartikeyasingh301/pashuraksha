@@ -1,5 +1,5 @@
 {
-  "name": "pashusuraksha-server",
+  "name": "Pashuraksha-server",
   "version": "1.0.0",
   "main": "app.js",
   "engines": {
@@ -21,3 +21,4 @@
     "nodemon": "^3.1.0"
   }
 }
+

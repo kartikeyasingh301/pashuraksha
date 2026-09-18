@@ -1,87 +1,194 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Syringe, CheckCircle, AlertCircle, Clock, Download } from "lucide-react";
+import React, { useState } from 'react';
+import Layout from '../../components/Layout.jsx';
+import { Syringe, CheckCircle, AlertCircle, Clock, Download, Filter } from 'lucide-react';
 
-const RECORDS = [
-  { id: 1, vaccine: "Foot & Mouth Disease (FMD)", batch: "VB-FMD-2026-441", manufacturer: "Indian Immunologicals", animal: "MH-KL-4821", date: "15 Apr 2026", nextDue: "15 Oct 2026", vet: "Dr. Priya Sharma", status: "valid" },
-  { id: 2, vaccine: "Hemorrhagic Septicemia (HS)", batch: "VB-HS-2026-112", manufacturer: "Hester Biosciences", animal: "MH-KL-4822", date: "10 Jan 2026", nextDue: "10 Jan 2027", vet: "Dr. R. Patil", status: "valid" },
-  { id: 3, vaccine: "Black Quarter (BQ)", batch: "VB-BQ-2026-889", manufacturer: "Venkys India", animal: "MH-KL-4831", date: "5 Mar 2026", nextDue: "5 Mar 2027", vet: "Dr. Priya Sharma", status: "valid" },
-  { id: 4, vaccine: "PPR (Goat Plague)", batch: "VB-PPR-2025-204", manufacturer: "Indian Immunologicals", animal: "MH-KL-4830", date: "20 Nov 2025", nextDue: "20 Nov 2026", vet: "Dr. R. Patil", status: "due_soon" },
-  { id: 5, vaccine: "Brucellosis S19", batch: "VB-BR-2025-031", manufacturer: "IVRI Izatnagar", animal: "MH-KL-4821", date: "8 Feb 2025", nextDue: "8 Feb 2026", vet: "Dr. Priya Sharma", status: "overdue" },
-];
+const VaccinationPassbook = () => {
+  const [filter, setFilter] = useState('all');
 
-const STATUS_CONFIG = {
-  valid:     { icon: CheckCircle, color: "text-green-600",  bg: "bg-green-50",  border: "border-green-100", label: "Valid" },
-  due_soon:  { icon: Clock,       color: "text-amber-600",  bg: "bg-amber-50",  border: "border-amber-100", label: "Due Soon" },
-  overdue:   { icon: AlertCircle, color: "text-red-600",    bg: "bg-red-50",    border: "border-red-100",   label: "Overdue" },
-};
+  const records = [
+    { id: 1, vaccine: 'Foot & Mouth Disease (FMD)', batch: 'VB-FMD-2026-441', manufacturer: 'Indian Immunologicals', animal: 'GJ-RJ-4821', date: '15 Apr 2026', nextDue: '15 Oct 2026', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
+    { id: 2, vaccine: 'Hemorrhagic Septicemia (HS)', batch: 'VB-HS-2026-112', manufacturer: 'Hester Biosciences', animal: 'GJ-RJ-4830', date: '10 Jan 2026', nextDue: '10 Jan 2027', vet: 'Dr. R. Patil', status: 'vaccinated' },
+    { id: 3, vaccine: 'Black Quarter (BQ)', batch: 'VB-BQ-2026-889', manufacturer: 'Venkys India', animal: 'GJ-RJ-4850', date: '5 Mar 2026', nextDue: '5 Mar 2027', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
+    { id: 4, vaccine: 'PPR (Goat Plague)', batch: 'VB-PPR-2025-204', manufacturer: 'Indian Immunologicals', animal: 'GJ-RJ-4840', date: '20 Nov 2025', nextDue: '20 Nov 2026', vet: 'Dr. R. Patil', status: 'due_soon' },
+    { id: 5, vaccine: 'Brucellosis S19', batch: 'VB-BR-2025-031', manufacturer: 'IVRI Izatnagar', animal: 'GJ-RJ-4821', date: '8 Feb 2025', nextDue: '8 Feb 2026', vet: 'Dr. Priya Sharma', status: 'overdue' },
+    { id: 6, vaccine: 'FMD', batch: 'VB-FMD-2026-442', manufacturer: 'Indian Immunologicals', animal: 'GJ-RJ-4822', date: '15 Apr 2026', nextDue: '15 Oct 2026', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
+    { id: 7, vaccine: 'Anthrax Spore Vaccine', batch: 'VB-ANT-2025-077', manufacturer: 'IVRI Izatnagar', animal: 'GJ-RJ-4870', date: '12 Dec 2025', nextDue: '12 Dec 2026', vet: 'Dr. R. Patil', status: 'due_soon' },
+    { id: 8, vaccine: 'HS', batch: 'VB-HS-2025-331', manufacturer: 'Hester Biosciences', animal: 'GJ-RJ-4831', date: '5 Jun 2025', nextDue: '5 Jun 2026', vet: 'Dr. Priya Sharma', status: 'overdue' }
+  ];
 
-export default function VaccinationPassbook() {
-  const navigate = useNavigate();
-  const [filter, setFilter] = useState("all");
+  const filteredRecords = filter === 'all' ? records : records.filter(r => r.status === filter);
 
-  const filtered = RECORDS.filter(r => filter === "all" || r.status === filter);
-  const counts = { all: RECORDS.length, valid: RECORDS.filter(r => r.status === "valid").length, due_soon: RECORDS.filter(r => r.status === "due_soon").length, overdue: RECORDS.filter(r => r.status === "overdue").length };
+  const statusConfig = {
+    vaccinated: { color: '#2E7D32', bg: '#E8F5E9', border: '#C8E6C9', label: 'Vaccinated', icon: CheckCircle },
+    due_soon: { color: '#F57F17', bg: '#FFF8E1', border: '#FFE082', label: 'Due Soon', icon: Clock },
+    overdue: { color: '#C62828', bg: '#FFEBEE', border: '#FFCDD2', label: 'Overdue', icon: AlertCircle }
+  };
+
+  const getStatusStyle = (status) => statusConfig[status];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-100 px-4 pt-10 pb-4 sticky top-0 z-10">
-        <button onClick={() => navigate("/farmer")} className="flex items-center text-gray-500 gap-2 mb-3 text-sm">
-          <ArrowLeft className="w-4 h-4" /> Dashboard
-        </button>
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-bold text-gray-800">Vaccination Passbook</h1>
-          <button className="flex items-center gap-1.5 text-blue-600 text-sm font-medium border border-blue-200 px-3 py-1.5 rounded-lg">
-            <Download className="w-4 h-4" /> Export PDF
-          </button>
+    <Layout title="Vaccination Passbook" showBack>
+      <div className="page-content" style={{ paddingBottom: '120px', padding: '16px' }}>
+        
+        {/* Coverage Section */}
+        <div style={{ background: 'white', borderRadius: '14px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.07)', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ background: '#E8F5E9', padding: '8px', borderRadius: '50%' }}>
+                <Syringe size={20} color="#2E7D32" />
+              </div>
+              <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#1B5E20' }}>Herd Vaccination Coverage</h2>
+            </div>
+            <div style={{ fontSize: '24px', fontWeight: '800', color: '#2E7D32' }}>78%</div>
+          </div>
+          
+          <div style={{ height: '8px', background: '#E0E0E0', borderRadius: '4px', marginBottom: '16px', overflow: 'hidden' }}>
+            <div style={{ width: '78%', height: '100%', background: '#2E7D32', borderRadius: '4px' }}></div>
+          </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#555' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#2E7D32' }}></span>
+              Vaccinated: 21
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#F57F17' }}></span>
+              Due Soon: 4
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C62828' }}></span>
+              Overdue: 2
+            </div>
+          </div>
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {Object.entries({ all: "All", valid: "Valid", due_soon: "Due Soon", overdue: "Overdue" }).map(([key, label]) => (
-            <button key={key} onClick={() => setFilter(key)}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap ${filter === key ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600"}`}>
-              {label} ({counts[key]})
+
+        {/* Filters */}
+        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '20px', paddingBottom: '4px', msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+          {[
+            { id: 'all', label: 'All (27)' },
+            { id: 'vaccinated', label: 'Vaccinated (21)' },
+            { id: 'due_soon', label: 'Due Soon (4)' },
+            { id: 'overdue', label: 'Overdue (2)' }
+          ].map(f => (
+            <button
+              key={f.id}
+              onClick={() => setFilter(f.id)}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '20px',
+                border: 'none',
+                background: filter === f.id ? '#2E7D32' : '#F5F5F5',
+                color: filter === f.id ? 'white' : '#666',
+                fontWeight: filter === f.id ? '600' : '500',
+                fontSize: '14px',
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              {f.label}
             </button>
           ))}
         </div>
-      </div>
 
-      <div className="p-4 space-y-3">
-        {counts.overdue > 0 && filter === "all" && (
-          <div className="bg-red-50 border border-red-100 rounded-xl p-3 flex items-start gap-2">
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-red-700"><strong>{counts.overdue} vaccination(s) overdue.</strong> Contact your field vet to schedule immediately.</p>
+        {/* Warning Banner */}
+        {filter === 'all' && (
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: '#FFEBEE', border: '1px solid #FFCDD2', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
+            <AlertCircle size={20} color="#C62828" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div style={{ fontSize: '14px', color: '#B71C1C', lineHeight: '1.4' }}>
+              <span style={{ fontWeight: '600' }}>2 vaccination(s) overdue.</span> Contact your field vet to schedule immediately.
+            </div>
           </div>
         )}
 
-        {filtered.map(r => {
-          const cfg = STATUS_CONFIG[r.status];
-          const Icon = cfg.icon;
-          return (
-            <div key={r.id} className={`bg-white rounded-xl border ${cfg.border} p-4`}>
-              <div className="flex justify-between items-start mb-3">
-                <div className="flex-1 pr-2">
-                  <p className="font-semibold text-sm text-gray-800">{r.vaccine}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Animal: {r.animal}</p>
+        {/* Cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {filteredRecords.map(record => {
+            const styleConfig = getStatusStyle(record.status);
+            const StatusIcon = styleConfig.icon;
+            
+            return (
+              <div key={record.id} style={{ 
+                background: 'white', 
+                borderRadius: '14px', 
+                padding: '16px', 
+                boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
+                borderLeft: `4px solid ${styleConfig.color}`
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                  <div>
+                    <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '700', color: '#333' }}>{record.vaccine}</h3>
+                    <div style={{ fontSize: '14px', color: '#666', fontWeight: '500' }}>Tag: {record.animal}</div>
+                  </div>
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '4px', 
+                    background: styleConfig.bg, 
+                    color: styleConfig.color, 
+                    padding: '4px 8px', 
+                    borderRadius: '8px', 
+                    fontSize: '12px', 
+                    fontWeight: '600',
+                    border: `1px solid ${styleConfig.border}`
+                  }}>
+                    <StatusIcon size={14} />
+                    {styleConfig.label}
+                  </div>
                 </div>
-                <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${cfg.bg} ${cfg.color}`}>
-                  <Icon className="w-3 h-3" /> {cfg.label}
-                </span>
+
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: '1fr 1fr', 
+                  gap: '12px', 
+                  background: '#F9F9F9', 
+                  padding: '12px', 
+                  borderRadius: '8px',
+                  marginBottom: '12px'
+                }}>
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#777', marginBottom: '2px' }}>Administered</div>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: '#333' }}>{record.date}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#777', marginBottom: '2px' }}>Next Due</div>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: '#333' }}>{record.nextDue}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#777', marginBottom: '2px' }}>Batch</div>
+                    <div style={{ fontSize: '13px', fontWeight: '500', color: '#444' }}>{record.batch}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#777', marginBottom: '2px' }}>Manufacturer</div>
+                    <div style={{ fontSize: '13px', fontWeight: '500', color: '#444' }}>{record.manufacturer}</div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px', color: '#666' }}>
+                  <span>Administered by: {record.vet}</span>
+                  <button style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '4px', 
+                    background: 'none', 
+                    border: 'none', 
+                    color: '#2E7D32', 
+                    fontSize: '13px', 
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}>
+                    <Download size={14} /> Certificate
+                  </button>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
-                <div><span className="text-gray-400">Batch:</span> <span className="font-mono font-medium text-gray-700">{r.batch}</span></div>
-                <div><span className="text-gray-400">Manufacturer:</span> {r.manufacturer}</div>
-                <div><span className="text-gray-400">Administered:</span> {r.date}</div>
-                <div><span className="text-gray-400">Next Due:</span> <span className={r.status === "overdue" ? "text-red-600 font-semibold" : ""}>{r.nextDue}</span></div>
-                <div className="col-span-2"><span className="text-gray-400">Vet:</span> {r.vet}</div>
-              </div>
-              <div className="flex items-center gap-1 mt-3 pt-3 border-t border-gray-50">
-                <Syringe className="w-3 h-3 text-blue-400" />
-                <p className="text-xs text-gray-400">{r.manufacturer}</p>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
       </div>
-    </div>
+    </Layout>
   );
-}
+};
+
+export default VaccinationPassbook;

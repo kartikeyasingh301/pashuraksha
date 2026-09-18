@@ -1,4 +1,4 @@
-/**
+﻿/**
  * db/database.js
  * Uses node:sqlite — built into Node.js 22+. No npm install, no compilation.
  * Adds a thin compatibility shim (.pragma, .transaction) so all route files
@@ -13,7 +13,7 @@ const fs      = require('fs');
 const bcrypt  = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
-const DB_PATH     = path.join(__dirname, 'pashusuraksha.db');
+const DB_PATH     = path.join(__dirname, 'Pashuraksha.db');
 const SCHEMA_PATH = path.join(__dirname, 'schema.sql');
 
 // ── Open (or create) the SQLite file ─────────────────────────────────────────
@@ -248,3 +248,4 @@ seedReports();
 seedCasesAndClusters();
 
 module.exports = db;
+

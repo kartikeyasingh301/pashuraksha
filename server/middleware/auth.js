@@ -1,4 +1,4 @@
-/**
+﻿/**
  * auth.js — JWT authentication & authorization middleware
  */
 
@@ -6,7 +6,7 @@
 
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'pashusuraksha_secret_2024';
+const JWT_SECRET = process.env.JWT_SECRET || 'Pashuraksha_secret_2024';
 
 /**
  * Verifies Bearer token and attaches req.user = { id, username, role }
@@ -42,3 +42,4 @@ function requireVet(req, res, next) {
 }
 
 module.exports = { authenticateToken, requireVet };
+

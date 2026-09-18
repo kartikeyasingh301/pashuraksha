@@ -1,6 +1,6 @@
-# PashuSuraksha - Animal Health Surveillance System
+﻿# Pashuraksha - Animal Health Surveillance System
 
-**PashuSuraksha** is a comprehensive, mobile-first surveillance platform designed for the early detection and management of livestock diseases in India. 
+**Pashuraksha** is a comprehensive, mobile-first surveillance platform designed for the early detection and management of livestock diseases in India. 
 
 It provides an end-to-end pipeline:
 1. **Farmers** can report animal health issues with GPS tagging and symptom tracking.
@@ -54,3 +54,4 @@ It provides an end-to-end pipeline:
    npm run dev
    ```
    *Runs on http://localhost:5173*
+

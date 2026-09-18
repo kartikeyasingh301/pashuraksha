@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone, FileText } from "lucide-react";
 import Layout from "../../components/Layout.jsx";
@@ -83,7 +83,7 @@ export default function FarmerDashboard() {
   useEffect(() => {
     async function fetchReports() {
       try {
-        const data = await apiGet("/reports/my");
+        const data = await apiGet("/reports");
         setReports(data.reports || data || []);
       } catch (_) {
         setReports([]);
@@ -139,6 +139,76 @@ export default function FarmerDashboard() {
         }}>
           <ClipboardList size={22} /> {t.report}
         </button>
+
+        {/* My Herd Summary */}
+        <div style={{
+          background:"white", borderRadius:"14px", padding:"16px", marginBottom:"16px",
+          boxShadow:"0 2px 8px rgba(0,0,0,0.07)", border:"1px solid #f0f0f0"
+        }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"12px" }}>
+            <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:0 }}>My Herd</h3>
+            <span style={{ fontSize:"12px", color:"#888" }}>27 Animals</span>
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:"8px" }}>
+            <div style={{ textAlign:"center", padding:"10px 4px", background:"#F5F5F5", borderRadius:"10px" }}>
+              <div style={{ fontSize:"20px", fontWeight:"800", color:"#333" }}>27</div>
+              <div style={{ fontSize:"10px", color:"#888", fontWeight:"600" }}>Total</div>
+            </div>
+            <div style={{ textAlign:"center", padding:"10px 4px", background:"#E8F5E9", borderRadius:"10px" }}>
+              <div style={{ fontSize:"20px", fontWeight:"800", color:"#2E7D32" }}>24</div>
+              <div style={{ fontSize:"10px", color:"#2E7D32", fontWeight:"600" }}>Healthy</div>
+            </div>
+            <div style={{ textAlign:"center", padding:"10px 4px", background:"#FFF8E1", borderRadius:"10px" }}>
+              <div style={{ fontSize:"20px", fontWeight:"800", color:"#F57F17" }}>2</div>
+              <div style={{ fontSize:"10px", color:"#F57F17", fontWeight:"600" }}>Observing</div>
+            </div>
+            <div style={{ textAlign:"center", padding:"10px 4px", background:"#FFEBEE", borderRadius:"10px" }}>
+              <div style={{ fontSize:"20px", fontWeight:"800", color:"#C62828" }}>1</div>
+              <div style={{ fontSize:"10px", color:"#C62828", fontWeight:"600" }}>Active Case</div>
+            </div>
+          </div>
+          {/* Vaccination Coverage */}
+          <div style={{ marginTop:"12px", paddingTop:"12px", borderTop:"1px solid #f0f0f0" }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"6px" }}>
+              <span style={{ fontSize:"13px", fontWeight:"600", color:"#555" }}>Vaccination Coverage</span>
+              <span style={{ fontSize:"13px", fontWeight:"700", color:"#2E7D32" }}>78%</span>
+            </div>
+            <div style={{ height:"6px", background:"#E0E0E0", borderRadius:"3px", overflow:"hidden" }}>
+              <div style={{ width:"78%", height:"100%", background:"linear-gradient(90deg, #2E7D32, #43A047)", borderRadius:"3px" }} />
+            </div>
+          </div>
+        </div>
+
+        {/* Upcoming Actions */}
+        <div style={{
+          background:"white", borderRadius:"14px", padding:"16px", marginBottom:"16px",
+          boxShadow:"0 2px 8px rgba(0,0,0,0.07)", border:"1px solid #f0f0f0"
+        }}>
+          <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:"0 0 12px 0" }}>Upcoming Actions</h3>
+          <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#FFF8E1", borderRadius:"10px", borderLeft:"3px solid #F57F17" }}>
+              <Syringe size={16} color="#F57F17" />
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:"13px", fontWeight:"600", color:"#333" }}>FMD Vaccination Due</div>
+                <div style={{ fontSize:"11px", color:"#888" }}>4 animals due by Oct 2026</div>
+              </div>
+            </div>
+            <div style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#E3F2FD", borderRadius:"10px", borderLeft:"3px solid #1565C0" }}>
+              <ClipboardList size={16} color="#1565C0" />
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:"13px", fontWeight:"600", color:"#333" }}>Follow-up Required</div>
+                <div style={{ fontSize:"11px", color:"#888" }}>GJ-RJ-4831 under observation</div>
+              </div>
+            </div>
+            <div style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#FFEBEE", borderRadius:"10px", borderLeft:"3px solid #C62828" }}>
+              <ShieldAlert size={16} color="#C62828" />
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:"13px", fontWeight:"600", color:"#333" }}>FMD Advisory Active</div>
+                <div style={{ fontSize:"11px", color:"#888" }}>Elevated risk near your area</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Herd & Passbook */}
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"10px", marginBottom:"20px" }}>
