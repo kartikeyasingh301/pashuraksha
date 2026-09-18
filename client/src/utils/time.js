@@ -1,4 +1,5 @@
-﻿export function getKolkataHour() {
+
+export function getKolkataHour() {
   const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Asia/Kolkata',
     hour: 'numeric',
