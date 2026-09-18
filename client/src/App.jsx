@@ -21,10 +21,11 @@ import AdvisoryBroadcast from './pages/vet/AdvisoryBroadcast.jsx';
 import ParaVetDashboard from './pages/paravet/ParaVetDashboard.jsx';
 import GovtCommandCenter from './pages/govt/GovtCommandCenter.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
+import SplashScreen from './components/SplashScreen.jsx';
 
 function PrivateRoute({ children, role }) {
   const { isAuthenticated, user, loading } = useAuth();
-  if (loading) return <div className='full-loading'>Loading...</div>;
+  if (loading) return <SplashScreen />;
   if (!isAuthenticated) return <Navigate to='/login' replace />;
   if (role && user?.role !== role) {
     return <Navigate to={user?.role === 'vet' ? '/vet' : '/farmer'} replace />;
@@ -34,7 +35,7 @@ function PrivateRoute({ children, role }) {
 
 function RootRedirect() {
   const { isAuthenticated, user, loading } = useAuth();
-  if (loading) return <div className='full-loading'>Loading...</div>;
+  if (loading) return <SplashScreen />;
   if (!isAuthenticated) return <Navigate to='/login' replace />;
   return <Navigate to={user?.role === 'vet' ? '/vet' : '/farmer'} replace />;
 }

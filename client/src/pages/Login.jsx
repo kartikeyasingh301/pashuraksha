@@ -9,6 +9,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [longLoading, setLongLoading] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function Login() {
       return;
     }
     setLoading(true);
+    const timer = setTimeout(() => setLongLoading(true), 4000);
     setError('');
     try {
       const user = await login(username.trim(), password);
@@ -27,6 +29,8 @@ export default function Login() {
     } catch (err) {
       setError('Invalid username or password.');
     } finally {
+      clearTimeout(timer);
+      setLongLoading(false);
       setLoading(false);
     }
   }
@@ -138,7 +142,7 @@ export default function Login() {
             onMouseOver={(e) => !loading && (e.target.style.background = '#14492E')}
             onMouseOut={(e) => !loading && (e.target.style.background = '#1E6C45')}
           >
-            {loading ? 'Signing in...' : 'SIGN IN'} {loading ? null : <ArrowRight size={18} />}
+            {loading ? (longLoading ? 'Waking up secure server...' : 'Signing in...') : 'SIGN IN'} {loading ? null : <ArrowRight size={18} />}
           </button>
         </form>
 

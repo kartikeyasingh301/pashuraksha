@@ -44,6 +44,9 @@ export function AuthProvider({ children }) {
       }
       setToken(storedToken);
 
+      // Optimistic unlock for instant load (UX win)
+      setLoading(false);
+
       // 2. Try to verify with backend if we are online
       try {
         const data = await apiGet('/auth/me');
