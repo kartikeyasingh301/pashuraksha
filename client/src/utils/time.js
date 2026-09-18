@@ -1,6 +1,10 @@
-﻿export function getKolkataTime() {
-  const d = new Date();
-  return new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+﻿export function getKolkataHour() {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Kolkata',
+    hour: 'numeric',
+    hourCycle: 'h23'
+  });
+  return parseInt(formatter.format(new Date()), 10);
 }
 
 export function formatKolkataTime(dateString, lang = 'en-IN') {
@@ -13,7 +17,7 @@ export function formatKolkataTime(dateString, lang = 'en-IN') {
 }
 
 export function getGreeting() {
-  const hr = getKolkataTime().getHours();
+  const hr = getKolkataHour();
   if (hr < 12) return 'Good morning';
   if (hr < 17) return 'Good afternoon';
   return 'Good evening';

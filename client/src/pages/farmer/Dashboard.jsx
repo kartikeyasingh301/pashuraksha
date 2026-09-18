@@ -81,7 +81,7 @@ export default function FarmerDashboard() {
   const [showMissedCall, setShowMissedCall] = useState(false);
 
   const t = TRANSLATIONS[lang];
-  const hour = getKolkataTime().getHours();
+  const hour = getKolkataHour();
   const greeting = hour < 12 ? t.morning : hour < 17 ? t.afternoon : t.evening;
 
   useEffect(() => {
