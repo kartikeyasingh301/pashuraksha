@@ -49,7 +49,27 @@ function OutbreakDNAModal({ item, onClose, onAction }) {
           </div>
 
           <div style={{ background: "white", padding: "16px", borderRadius: "12px", border: "1px solid #e0e0e0", marginBottom: "20px" }}>
-             <h3 style={{ margin: "0 0 12px 0", fontSize: "14px", fontWeight: "800", color: "#333", textTransform: "uppercase" }}>System Interpretation</h3>
+             
+            <div style={{ background: "white", padding: "16px", borderRadius: "12px", border: "1px solid #e0e0e0", marginBottom: "20px" }}>
+               <h3 style={{ margin: "0 0 12px 0", fontSize: "14px", fontWeight: "800", color: "#333", textTransform: "uppercase" }}>Report Source Mix</h3>
+               <div style={{ display: "flex", gap: "12px" }}>
+                  <div style={{ flex: 1, background: "#E3F2FD", padding: "12px", borderRadius: "8px", textAlign: "center" }}>
+                     <div style={{ fontSize: "20px", fontWeight: "800", color: "#1565C0" }}>7</div>
+                     <div style={{ fontSize: "11px", fontWeight: "700", color: "#1565C0" }}>APP</div>
+                  </div>
+                  <div style={{ flex: 1, background: "#F3E5F5", padding: "12px", borderRadius: "8px", textAlign: "center" }}>
+                     <div style={{ fontSize: "20px", fontWeight: "800", color: "#7B1FA2" }}>3</div>
+                     <div style={{ fontSize: "11px", fontWeight: "700", color: "#7B1FA2" }}>VOICE</div>
+                  </div>
+                  <div style={{ flex: 1, background: "#FFF3E0", padding: "12px", borderRadius: "8px", textAlign: "center" }}>
+                     <div style={{ fontSize: "20px", fontWeight: "800", color: "#E65100" }}>2</div>
+                     <div style={{ fontSize: "11px", fontWeight: "700", color: "#E65100" }}>IVR</div>
+                  </div>
+               </div>
+            </div>
+
+
+            <h3 style={{ margin: "0 0 12px 0", fontSize: "14px", fontWeight: "800", color: "#333", textTransform: "uppercase" }}>System Interpretation</h3>
              <ul style={{ margin: 0, paddingLeft: "20px", color: "#333", fontSize: "14px", display: "flex", flexDirection: "column", gap: "8px" }}>
                {item.sentinel?.reasons?.map((r, idx) => <li key={idx}>{r}</li>)}
              </ul>
@@ -73,7 +93,7 @@ function OutbreakDNAModal({ item, onClose, onAction }) {
         
         {/* Footer Actions */}
         <div style={{ padding: "16px 20px", background: "white", borderTop: "1px solid #eee", display: "flex", gap: "12px" }}>
-           <button onClick={() => onAction(item.id)} style={{ flex: 1, padding: "14px", background: "#1B5E20", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", fontSize: "15px", cursor: "pointer" }}>Open Case Workspace</button>
+           <button onClick={() => onAction(item.case_id || item.id)} style={{ flex: 1, padding: "14px", background: "#1B5E20", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", fontSize: "15px", cursor: "pointer" }}>Open Case Workspace</button>
         </div>
       </div>
     </div>
@@ -161,7 +181,8 @@ export default function CriticalAlerts() {
                          </div>
 
                          <div style={{ fontSize: "13px", color: "#444", marginBottom: "16px" }}>
-                           <strong>Why flagged:</strong> {item.sentinel?.reasons?.[0]}
+                           <span style={{ background: "#eee", padding: "2px 6px", borderRadius: "4px", fontSize: "11px", fontWeight: "700", marginRight: "8px" }}>Source Mix: APP/VOICE/IVR</span>
+                             <strong>Why flagged:</strong> {item.sentinel?.reasons?.[0]}
                          </div>
 
                          <button onClick={() => setSelectedDNA(item)} style={{ width: "100%", padding: "12px", background: "white", color: "#1565C0", border: "2px solid #1565C0", borderRadius: "8px", fontWeight: "700", fontSize: "14px", cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>

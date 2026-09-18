@@ -9,7 +9,8 @@ export default function CaseWorkspace() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [callState, setCallState] = useState(null);
+  const [error, setError] = useState(null);
+  const [callState, setCallState] = useState(0);
 
   useEffect(() => {
     async function load() {
@@ -18,6 +19,7 @@ export default function CaseWorkspace() {
         setData(res);
       } catch (e) {
         console.error(e);
+        setError(e.message || 'Case details could not be loaded.');
       } finally {
         setLoading(false);
       }
@@ -25,11 +27,26 @@ export default function CaseWorkspace() {
     load();
   }, [id]);
 
-  if (loading) return <Layout title="Case Workspace" showBack><div style={{ padding: "40px", textAlign: "center" }}>Loading Case Intelligence...</div></Layout>;
-  if (!data || !data.case) return <Layout title="Case Workspace" showBack><div style={{ padding: "40px", textAlign: "center" }}>Case not found.</div></Layout>;
+  
+  if (loading) return <Layout title="Case Workspace" showBack><div style={{ padding: "80px 40px", textAlign: "center", color: "#666" }}><Activity size={48} color="#ccc" className="spin-anim" style={{ marginBottom: "16px" }}/><br/>Loading Case Intelligence...</div></Layout>;
+  if (error) return <Layout title="Case Workspace" showBack><div style={{ padding: "80px 40px", textAlign: "center", color: "#D32F2F" }}><ShieldAlert size={48} color="#FFCDD2" style={{ marginBottom: "16px" }}/><br/>{error}<br/><br/><button onClick={() => navigate(-1)} className="btn btn-outline">Go Back</button></div></Layout>;
+  if (!data || !data.case) return <Layout title="Case Workspace" showBack><div style={{ padding: "80px 40px", textAlign: "center", color: "#666" }}><FileText size={48} color="#e0e0e0" style={{ marginBottom: "16px" }}/><br/>Case {id} could not be found.<br/><br/><button onClick={() => navigate(-1)} className="btn btn-outline">Back to Queue</button></div></Layout>;
+
 
   const c = data.case;
-  const isCrit = c.sentinel?.risk_level === 'CRITICAL';
+  const sourceString = data.reports?.[0]?.source || 'APP';
+  const hasVoice = sourceString === 'VOICE';
+  const hasIVR = sourceString === 'IVR';
+    const isCrit = c.sentinel?.risk_level === 'CRITICAL';
+  
+  const handleCall = () => {
+    if(callState > 0) return;
+    setCallState(1);
+    setTimeout(() => setCallState(2), 1500);
+    setTimeout(() => setCallState(3), 4000);
+    setTimeout(() => setCallState(4), 8000);
+  };
+
   
   const cardStyle = { background: "white", borderRadius: "12px", border: "1px solid #e0e0e0", padding: "16px", marginBottom: "16px" };
 
@@ -126,6 +143,23 @@ export default function CaseWorkspace() {
           </div>
         )}
     
+        
+        {/* CALL FARMER LOGIC */}
+        {(hasVoice || hasIVR) && (
+          <div style={{ ...cardStyle, background: "#E3F2FD", borderColor: "#BBDEFB" }}>
+             <h3 style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#1565C0", display: "flex", alignItems: "center", gap: "6px", fontWeight: "700" }}>
+               <Phone size={16} /> Contact Originator
+             </h3>
+             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+               <button onClick={handleCall} disabled={callState > 0} style={{ padding: "12px 24px", background: callState === 4 ? "#2E7D32" : "#1565C0", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", cursor: callState > 0 ? "not-allowed" : "pointer" }}>
+                 {callState === 0 ? "CALL FARMER" : callState === 1 ? "Dialing..." : callState === 2 ? "Calling..." : callState === 3 ? "Connected" : "Call Logged"}
+               </button>
+               {callState === 4 && <span style={{ fontSize: "12px", color: "#2E7D32", fontWeight: "700" }}><CheckCircle size={14} style={{ verticalAlign: "middle", marginRight: "4px" }}/> Added to timeline</span>}
+             </div>
+          </div>
+        )}
+
+
         {/* WHY FLAGGED */}
         <div style={cardStyle}>
           <h3 style={{ fontSize: "14px", fontWeight: "800", color: "#333", margin: "0 0 12px 0", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "8px" }}><Activity size={18}/> Outbreak Context</h3>

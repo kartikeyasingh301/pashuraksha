@@ -78,11 +78,13 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
+      <ErrorBoundary>
+    <AuthProvider>
         <SyncProvider>
           <AppRoutes />
         </SyncProvider>
       </AuthProvider>
+    </ErrorBoundary>
     </BrowserRouter>
   );
 }

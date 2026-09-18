@@ -10,22 +10,22 @@ const SPECIES_COLORS = {
 };
 
 const ANIMALS = [
-  { id:"C-001", tagId:"GJ-RJ-4821", species:"Cattle", breed:"Gir", sex:"Female", age:"4 yrs", village:"Gondal", status:"healthy", vaccinated:true, lastVaccine:"FMD — Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-441",vet:"Dr. Priya Sharma",status:"Valid"},{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-112",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"08 Apr 2026",text:"FMD Vaccination administered"},{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
-  { id:"C-002", tagId:"GJ-RJ-4822", species:"Cattle", breed:"Sahiwal", sex:"Female", age:"3 yrs", village:"Gondal", status:"healthy", vaccinated:true, lastVaccine:"FMD — Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-442",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[], events:[{date:"08 Apr 2026",text:"FMD Vaccination administered"}] },
-  { id:"B-001", tagId:"GJ-RJ-4830", species:"Buffalo", breed:"Murrah", sex:"Female", age:"6 yrs", village:"Gondal", status:"healthy", vaccinated:true, lastVaccine:"HS — Jan 2026", vaccines:[{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-112",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
-  { id:"B-002", tagId:"GJ-RJ-4831", species:"Buffalo", breed:"Jafarabadi", sex:"Female", age:"5 yrs", village:"Dhoraji", status:"under_observation", vaccinated:true, lastVaccine:"HS — Jan 2026", vaccines:[{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-113",vet:"Dr. R. Patil",status:"Valid"}], treatments:[{drug:"Oxytetracycline 10mg/kg IM",date:"12 Sep 2026",withdrawal:"26 Sep 2026"}], events:[{date:"18 Sep 2026",text:"Fever reported — under observation"},{date:"12 Sep 2026",text:"Oxytetracycline administered"},{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
-  { id:"G-001", tagId:"GJ-RJ-4840", species:"Goat", breed:"Osmanabadi", sex:"Male", age:"2 yrs", village:"Gondal", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
-  { id:"G-002", tagId:"GJ-RJ-4841", species:"Goat", breed:"Sirohi", sex:"Female", age:"1.5 yrs", village:"Upleta", status:"healthy", vaccinated:true, lastVaccine:"PPR — Nov 2025", vaccines:[{name:"PPR",date:"20 Nov 2025",batch:"VB-PPR-2025-204",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"20 Nov 2025",text:"PPR Vaccination administered"}] },
-  { id:"C-003", tagId:"GJ-RJ-4850", species:"Cattle", breed:"HF Cross", sex:"Female", age:"3 yrs", village:"Gondal", status:"healthy", vaccinated:true, lastVaccine:"BQ — Mar 2026", vaccines:[{name:"BQ",date:"05 Mar 2026",batch:"VB-BQ-2026-889",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[], events:[{date:"05 Mar 2026",text:"BQ Vaccination administered"}] },
-  { id:"S-001", tagId:"GJ-RJ-4860", species:"Sheep", breed:"Marwari", sex:"Male", age:"2 yrs", village:"Dhoraji", status:"healthy", vaccinated:true, lastVaccine:"PPR — Nov 2025", vaccines:[{name:"PPR",date:"20 Nov 2025",batch:"VB-PPR-2025-205",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"20 Nov 2025",text:"PPR Vaccination administered"}] },
-  { id:"C-004", tagId:"GJ-RJ-4870", species:"Cattle", breed:"Gir", sex:"Male", age:"5 yrs", village:"Upleta", status:"under_observation", vaccinated:true, lastVaccine:"FMD — Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-443",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[{drug:"Meloxicam 0.5mg/kg",date:"17 Sep 2026",withdrawal:"01 Oct 2026"}], events:[{date:"18 Sep 2026",text:"Lameness reported"},{date:"17 Sep 2026",text:"Meloxicam administered"},{date:"08 Apr 2026",text:"FMD Vaccination administered"}] },
-  { id:"G-003", tagId:"GJ-RJ-4880", species:"Goat", breed:"Surti", sex:"Female", age:"3 yrs", village:"Gondal", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
+  { id:"C-001", tagId:"MH-NK-4821", species:"Cattle", breed:"Gir", sex:"Female", age:"4 yrs", village:"Malegaon", status:"healthy", vaccinated:true, lastVaccine:"FMD — Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-441",vet:"Dr. Priya Sharma",status:"Valid"},{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-112",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"08 Apr 2026",text:"FMD Vaccination administered"},{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
+  { id:"C-002", tagId:"MH-NK-4822", species:"Cattle", breed:"Sahiwal", sex:"Female", age:"3 yrs", village:"Malegaon", status:"healthy", vaccinated:true, lastVaccine:"FMD — Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-442",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[], events:[{date:"08 Apr 2026",text:"FMD Vaccination administered"}] },
+  { id:"B-001", tagId:"MH-NK-4830", species:"Buffalo", breed:"Murrah", sex:"Female", age:"6 yrs", village:"Malegaon", status:"healthy", vaccinated:true, lastVaccine:"HS — Jan 2026", vaccines:[{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-112",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
+  { id:"B-002", tagId:"MH-NK-4831", species:"Buffalo", breed:"Jafarabadi", sex:"Female", age:"5 yrs", village:"Baglan", status:"under_observation", vaccinated:true, lastVaccine:"HS — Jan 2026", vaccines:[{name:"HS",date:"10 Jan 2026",batch:"VB-HS-2026-113",vet:"Dr. R. Patil",status:"Valid"}], treatments:[{drug:"Oxytetracycline 10mg/kg IM",date:"12 Sep 2026",withdrawal:"26 Sep 2026"}], events:[{date:"18 Sep 2026",text:"Fever reported — under observation"},{date:"12 Sep 2026",text:"Oxytetracycline administered"},{date:"10 Jan 2026",text:"HS Vaccination administered"}] },
+  { id:"G-001", tagId:"MH-NK-4840", species:"Goat", breed:"Osmanabadi", sex:"Male", age:"2 yrs", village:"Malegaon", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
+  { id:"G-002", tagId:"MH-NK-4841", species:"Goat", breed:"Sirohi", sex:"Female", age:"1.5 yrs", village:"Satana", status:"healthy", vaccinated:true, lastVaccine:"PPR — Nov 2025", vaccines:[{name:"PPR",date:"20 Nov 2025",batch:"VB-PPR-2025-204",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"20 Nov 2025",text:"PPR Vaccination administered"}] },
+  { id:"C-003", tagId:"MH-NK-4850", species:"Cattle", breed:"HF Cross", sex:"Female", age:"3 yrs", village:"Malegaon", status:"healthy", vaccinated:true, lastVaccine:"BQ — Mar 2026", vaccines:[{name:"BQ",date:"05 Mar 2026",batch:"VB-BQ-2026-889",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[], events:[{date:"05 Mar 2026",text:"BQ Vaccination administered"}] },
+  { id:"S-001", tagId:"MH-NK-4860", species:"Sheep", breed:"Marwari", sex:"Male", age:"2 yrs", village:"Baglan", status:"healthy", vaccinated:true, lastVaccine:"PPR — Nov 2025", vaccines:[{name:"PPR",date:"20 Nov 2025",batch:"VB-PPR-2025-205",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"20 Nov 2025",text:"PPR Vaccination administered"}] },
+  { id:"C-004", tagId:"MH-NK-4870", species:"Cattle", breed:"Gir", sex:"Male", age:"5 yrs", village:"Satana", status:"under_observation", vaccinated:true, lastVaccine:"FMD — Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-443",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[{drug:"Meloxicam 0.5mg/kg",date:"17 Sep 2026",withdrawal:"01 Oct 2026"}], events:[{date:"18 Sep 2026",text:"Lameness reported"},{date:"17 Sep 2026",text:"Meloxicam administered"},{date:"08 Apr 2026",text:"FMD Vaccination administered"}] },
+  { id:"G-003", tagId:"MH-NK-4880", species:"Goat", breed:"Surti", sex:"Female", age:"3 yrs", village:"Malegaon", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
 ];
 
 const SUMMARY = { total: 27, healthy: 24, observation: 2, vacDue: 4 };
 const FILTERS = ["All", "Cattle", "Buffalo", "Goat", "Sheep"];
 
-const cardStyle = { background:"white", borderRadius:"14px", padding:"16px", boxShadow:"0 2px 8px rgba(0,0,0,0.07)", marginBottom:"12px" };
+
 const badgeStyle = (bg, color) => ({ display:"inline-flex", alignItems:"center", gap:"4px", padding:"3px 10px", borderRadius:"20px", fontSize:"11px", fontWeight:"700", background:bg, color });
 
 export default function HerdLedger() {
@@ -46,12 +46,12 @@ export default function HerdLedger() {
       <Layout title={a.tagId} showBack>
         <div className="page-content" style={{ paddingBottom:"120px" }}>
           {/* Profile Card */}
-          <div style={cardStyle}>
+          <div className="card">
             <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"12px" }}>
               <div style={{ width:48, height:48, borderRadius:"50%", background:sc.bg, color:sc.color, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"800", fontSize:"18px" }}>{a.species[0]}</div>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:"18px", fontWeight:"700", color:"#333" }}>{a.tagId}</div>
-                <div style={{ fontSize:"13px", color:"#888" }}>{a.species} &bull; {a.breed} &bull; {a.sex}</div>
+                <div style={{ fontSize:"13px", color:"#888" }}>{a.species} - {a.breed} - {a.sex}</div>
               </div>
               {a.status === "healthy"
                 ? <span style={badgeStyle("#E8F5E9","#2E7D32")}><Heart size={12}/> Healthy</span>
@@ -65,7 +65,7 @@ export default function HerdLedger() {
           </div>
 
           {/* Vaccination History */}
-          <div style={cardStyle}>
+          <div className="card">
             <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:"0 0 12px 0", display:"flex", alignItems:"center", gap:"8px" }}><Syringe size={16} color="#1565C0"/> Vaccination History</h3>
             {a.vaccines.length === 0 ? (
               <div style={{ padding:"16px", background:"#FFEBEE", borderRadius:"10px", fontSize:"13px", color:"#C62828" }}>No vaccinations recorded. Contact your nearest vet.</div>
@@ -81,7 +81,7 @@ export default function HerdLedger() {
           </div>
 
           {/* Treatment History */}
-          <div style={cardStyle}>
+          <div className="card">
             <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:"0 0 12px 0", display:"flex", alignItems:"center", gap:"8px" }}><Activity size={16} color="#7B1FA2"/> Treatment History</h3>
             {a.treatments.length === 0 ? (
               <div style={{ fontSize:"13px", color:"#999", padding:"12px 0" }}>No drug administration recorded.</div>
@@ -94,7 +94,7 @@ export default function HerdLedger() {
           </div>
 
           {/* Health Timeline */}
-          <div style={cardStyle}>
+          <div className="card">
             <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:"0 0 12px 0", display:"flex", alignItems:"center", gap:"8px" }}><Calendar size={16} color="#E65100"/> Health Timeline</h3>
             {a.events.length === 0 ? (
               <div style={{ fontSize:"13px", color:"#999", padding:"12px 0" }}>No health events recorded.</div>
@@ -151,7 +151,7 @@ export default function HerdLedger() {
         {/* Count + Add */}
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"12px" }}>
           <span style={{ fontSize:"13px", color:"#888" }}>{filtered.length} animals</span>
-          <button style={{ display:"flex", alignItems:"center", gap:"6px", background:"#2E7D32", color:"white", border:"none", padding:"8px 14px", borderRadius:"10px", fontSize:"13px", fontWeight:"600", cursor:"pointer" }}>
+          <button className="btn btn-primary" style={{ padding: "8px 14px", fontSize: "13px", width: "auto" }}>
             <Plus size={16}/> Add Animal
           </button>
         </div>
@@ -160,8 +160,7 @@ export default function HerdLedger() {
         {filtered.map(a => {
           const sc = SPECIES_COLORS[a.species] || { bg:"#F5F5F5", color:"#666" };
           return (
-            <div key={a.id} onClick={() => setSelected(a)} style={{
-              ...cardStyle, display:"flex", alignItems:"center", cursor:"pointer", gap:"12px",
+            <div key={a.id} onClick={() => setSelected(a)} className="card" style={{ display:"flex", alignItems:"center", cursor:"pointer", gap:"12px",
               transition:"box-shadow 0.2s", border:"1px solid #f0f0f0"
             }}>
               <div style={{ width:42, height:42, borderRadius:"50%", background:sc.bg, color:sc.color, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"800", fontSize:"15px", flexShrink:0 }}>{a.species[0]}</div>
@@ -170,7 +169,7 @@ export default function HerdLedger() {
                   <span style={{ fontSize:"14px", fontWeight:"700", color:"#333" }}>{a.tagId}</span>
                   {a.status !== "healthy" && <span style={{ fontSize:"10px", fontWeight:"700", background:"#FFF8E1", color:"#F57F17", padding:"2px 8px", borderRadius:"10px" }}>Under Obs.</span>}
                 </div>
-                <div style={{ fontSize:"12px", color:"#999" }}>{a.species} &bull; {a.breed} &bull; {a.age}</div>
+                <div style={{ fontSize:"12px", color:"#999" }}>{a.species} - {a.breed} - {a.age}</div>
                 <div style={{ fontSize:"11px", color:"#bbb", marginTop:"3px", display:"flex", alignItems:"center", gap:"4px" }}><Syringe size={11}/> {a.vaccinated ? a.lastVaccine : "Not vaccinated"}</div>
               </div>
               <ChevronRight size={18} color="#ccc"/>

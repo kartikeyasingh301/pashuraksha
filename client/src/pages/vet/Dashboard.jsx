@@ -43,7 +43,7 @@ export default function VetDashboard() {
         
         outbreaks.forEach(o => {
           attentionQueue.push({
-            id: o.id, type: 'OUTBREAK',
+            id: o.case_id || o.id, type: 'OUTBREAK',
             title: `${o.syndrome || 'Disease'} — ${o.species || 'Animals'}`,
             location: `${o.cluster_label || o.district || 'Unknown Location'}`,
             stats: `${o.report_count || 5} reports | Cluster Detected`,
@@ -87,7 +87,7 @@ export default function VetDashboard() {
           pendingLab: samples.filter(s => s.status === 'PENDING').length,
           slaAtRisk,
           attentionQueue: attentionQueue.slice(0, 5), // Top 5 priority items
-          appPct, voicePct, ivrPct
+          appPct, voicePct, ivrPct, fieldWorkerPct, webPct
         });
       } catch (_) {}
       finally { setLoading(false); }

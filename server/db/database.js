@@ -43,26 +43,26 @@ const transactionSeed = db.transaction(() => {
   
   // 1. Users
   const insUser = db.prepare('INSERT INTO users (id, username, password, role, name, district) VALUES (?, ?, ?, ?, ?, ?)');
-  insUser.run(1, 'farmer1', bcrypt.hashSync('farmer123', 10), 'farmer', 'Raju Kumar', 'Rajkot');
-  insUser.run(2, 'vet1', bcrypt.hashSync('vet123', 10), 'vet', 'Dr. Priya Sharma', 'Rajkot');
+  insUser.run(1, 'farmer1', bcrypt.hashSync('farmer123', 10), 'farmer', 'Raju Kumar', 'Nashik');
+  insUser.run(2, 'vet1', bcrypt.hashSync('vet123', 10), 'vet', 'Dr. Priya Sharma', 'Nashik');
 
   // 2. Cases
   const insCase = db.prepare(`INSERT INTO cases (id, syndrome, species, district, village, started_at, status, severity, report_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-  insCase.run(101, 'FMD', 'Cattle', 'Rajkot', 'Gondal', daysAgo(6), 'CLUSTER', 'HIGH', 3);
-  insCase.run(102, 'PPR', 'Goat', 'Surat', 'Olpad', daysAgo(10), 'CASE', 'CRITICAL', 2);
-  insCase.run(103, 'BQ', 'Buffalo', 'Vadodara', 'Karjan', daysAgo(2), 'CASE', 'MEDIUM', 1);
+  insCase.run(101, 'FMD', 'Cattle', 'Nashik', 'Malegaon', daysAgo(6), 'CLUSTER', 'HIGH', 3);
+  insCase.run(102, 'PPR', 'Goat', 'Ahilyanagar', 'Sangamner', daysAgo(10), 'CASE', 'CRITICAL', 2);
+  insCase.run(103, 'BQ', 'Buffalo', 'Pune', 'Baramati', daysAgo(2), 'CASE', 'MEDIUM', 1);
 
   // 3. Clusters
   const insCluster = db.prepare(`INSERT INTO clusters (id, case_id, label, center_lat, center_lng, radius_km, report_count, status, detected_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-  insCluster.run(201, 101, 'FMD Rajkot District Cluster', 22.0397, 70.7080, 25.5, 5, 'SUSPECTED_OUTBREAK', daysAgo(3));
+  insCluster.run(201, 101, 'FMD Nashik District Cluster', 20.5522, 74.5244, 25.5, 5, 'SUSPECTED_OUTBREAK', daysAgo(3));
 
   // 4. Suspected Outbreaks
   const insOutbreak = db.prepare(`INSERT INTO suspected_outbreaks (id, cluster_id, suspected_at, status, notes) VALUES (?, ?, ?, ?, ?)`);
-  insOutbreak.run(301, 201, daysAgo(3), 'SUSPECTED', 'Rapid multi-village spread of FMD in Rajkot. Mortality recorded. Vet confirmation required.');
+  insOutbreak.run(301, 201, daysAgo(3), 'SUSPECTED', 'Rapid multi-village spread of FMD in Nashik. Mortality recorded. Vet confirmation required.');
 
   // 5. Responses
   const insResp = db.prepare(`INSERT INTO responses (id, outbreak_id, vet_id, action_type, description, scheduled_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`);
-  insResp.run(401, 301, 2, 'VACCINATION_DRIVE', 'Ring vaccination planned for Gondal & Jetpur villages (10km radius)', daysAgo(1), daysAgo(1));
+  insResp.run(401, 301, 2, 'VACCINATION_DRIVE', 'Ring vaccination planned for Malegaon & Satana villages (10km radius)', daysAgo(1), daysAgo(1));
   insResp.run(402, 301, 2, 'SAMPLE_COLLECTION', 'Collect vesicular fluid and epithelial tissue for ICAR-NIVEDI', daysAgo(2), daysAgo(2));
 
   // 6. Reports (Link back to cases/users)
@@ -71,18 +71,18 @@ const transactionSeed = db.transaction(() => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?)
   `);
   const rps = [
-    // Gondal FMD Reports (Farmer 1) -> Case 101, Cluster 201
-    { i: uuidv4(), l:'LOC-1', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness, Excessive Salivation', m:0, h:'GJ-RJ-4821', v:'Gondal', d:'Rajkot', la:22.3247, ln:70.7897, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Multiple animals affected in same herd' },
-    { i: uuidv4(), l:'LOC-2', u:1, sp:'Cattle', syn:'FMD', sym:'Fever, Skin Lesions, Loss of appetite', m:0, h:'GJ-RJ-4822', v:'Gondal', d:'Rajkot', la:22.3261, ln:70.7912, vx:'unvaccinated', cap:daysAgo(4), st:'SUSPECTED_OUTBREAK', cid:101, n:'Neighbours herd showing similar signs' },
-    { source: 'VOICE', i: uuidv4(), l:'LOC-3', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:1, h:'GJ-RJ-4850', v:'Gondal', d:'Rajkot', la:22.3255, ln:70.7880, vx:'unvaccinated', cap:daysAgo(3), st:'SUSPECTED_OUTBREAK', cid:101, n:'One calf died overnight' },
-    // Jetpur FMD Reports (Farmer 1) -> Cluster 201
-    { source: 'IVR', i: uuidv4(), l:'LOC-4', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness', m:0, h:'GJ-RJ-4870', v:'Jetpur', d:'Rajkot', la:21.7531, ln:70.6237, vx:'unvaccinated', cap:daysAgo(6), st:'SUSPECTED_OUTBREAK', cid:101, n:'Possibly same strain as Gondal reports' },
-    { source: 'VOICE', i: uuidv4(), l:'LOC-5', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:2, h:'GJ-RJ-4888', v:'Jetpur', d:'Rajkot', la:21.7548, ln:70.6252, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Two deaths - elderly cows' },
-    // Olpad PPR Reports (Unknown farmer) -> Case 102
-    { i: uuidv4(), l:'LOC-6', u:1, sp:'Goat', syn:'PPR', sym:'Diarrhea, Respiratory distress', m:3, h:'GJ-SU-11', v:'Olpad', d:'Surat', la:21.3283, ln:72.7441, vx:'unvaccinated', cap:daysAgo(10), st:'CASE', cid:102, n:'Severe flock outbreak' },
-    { i: uuidv4(), l:'LOC-7', u:1, sp:'Goat', syn:'PPR', sym:'Fever, Nasal Discharge', m:5, h:'GJ-SU-12', v:'Olpad', d:'Surat', la:21.3300, ln:72.7450, vx:'unvaccinated', cap:daysAgo(9), st:'CASE', cid:102, n:'Spreading fast' },
-    // Karjan BQ Report (Unknown farmer) -> Case 103
-    { i: uuidv4(), l:'LOC-8', u:1, sp:'Buffalo', syn:'BQ', sym:'Swelling, Sudden death', m:2, h:'GJ-VD-99', v:'Karjan', d:'Vadodara', la:22.0465, ln:73.1251, vx:'unknown', cap:daysAgo(2), st:'CASE', cid:103, n:'Sudden collapse in field' }
+    // Malegaon FMD Reports (Farmer 1) -> Case 101, Cluster 201
+    { i: uuidv4(), l:'LOC-1', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness, Excessive Salivation', m:0, h:'MH-NK-4821', v:'Malegaon', d:'Nashik', la:20.5540, ln:74.5260, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Multiple animals affected in same herd' },
+    { i: uuidv4(), l:'LOC-2', u:1, sp:'Cattle', syn:'FMD', sym:'Fever, Skin Lesions, Loss of appetite', m:0, h:'MH-NK-4822', v:'Malegaon', d:'Nashik', la:20.5561, ln:74.5282, vx:'unvaccinated', cap:daysAgo(4), st:'SUSPECTED_OUTBREAK', cid:101, n:'Neighbours herd showing similar signs' },
+    { source: 'VOICE', i: uuidv4(), l:'LOC-3', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:1, h:'MH-NK-4850', v:'Malegaon', d:'Nashik', la:20.5555, ln:74.5210, vx:'unvaccinated', cap:daysAgo(3), st:'SUSPECTED_OUTBREAK', cid:101, n:'One calf died overnight' },
+    // Satana FMD Reports (Farmer 1) -> Cluster 201
+    { source: 'IVR', i: uuidv4(), l:'LOC-4', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness', m:0, h:'MH-NK-4870', v:'Satana', d:'Nashik', la:20.5931, ln:74.2037, vx:'unvaccinated', cap:daysAgo(6), st:'SUSPECTED_OUTBREAK', cid:101, n:'Possibly same strain as Malegaon reports' },
+    { source: 'VOICE', i: uuidv4(), l:'LOC-5', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:2, h:'MH-NK-4888', v:'Satana', d:'Nashik', la:20.5948, ln:74.2052, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Two deaths - elderly cows' },
+    // Sangamner PPR Reports (Unknown farmer) -> Case 102
+    { i: uuidv4(), l:'LOC-6', u:1, sp:'Goat', syn:'PPR', sym:'Diarrhea, Respiratory distress', m:3, h:'MH-AN-11', v:'Sangamner', d:'Ahilyanagar', la:19.5783, ln:74.2041, vx:'unvaccinated', cap:daysAgo(10), st:'CASE', cid:102, n:'Severe flock outbreak' },
+    { i: uuidv4(), l:'LOC-7', u:1, sp:'Goat', syn:'PPR', sym:'Fever, Nasal Discharge', m:5, h:'MH-AN-12', v:'Sangamner', d:'Ahilyanagar', la:19.5700, ln:74.2050, vx:'unvaccinated', cap:daysAgo(9), st:'CASE', cid:102, n:'Spreading fast' },
+    // Baramati BQ Report (Unknown farmer) -> Case 103
+    { i: uuidv4(), l:'LOC-8', u:1, sp:'Buffalo', syn:'BQ', sym:'Swelling, Sudden death', m:2, h:'MH-PN-99', v:'Baramati', d:'Pune', la:18.1565, ln:74.5851, vx:'unknown', cap:daysAgo(2), st:'CASE', cid:103, n:'Sudden collapse in field' }
   ];
   
   rps.forEach(r => insRep.run(r.i, r.l, r.u, r.sp, r.syn, r.sym, r.m, r.h, r.v, r.d, r.la, r.ln, r.vx, r.cap, r.st, r.cid, r.n, r.source || 'APP'));

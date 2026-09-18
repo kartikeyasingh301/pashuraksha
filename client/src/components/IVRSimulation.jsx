@@ -1,109 +1,167 @@
-﻿import { useState, useEffect } from 'react';
-import { Phone, Mic, Hash, CheckCircle, X, Loader } from 'lucide-react';
+﻿import React, { useState, useEffect, useRef } from 'react';
+import { Phone, PhoneCall, CheckCircle, X, ShieldAlert } from 'lucide-react';
 import { apiPost } from '../api/client.js';
 
-export default function IVRSimulation({ onClose }) {
+export default function IVRSimulation({ onClose, isMissedCall = false }) {
   const [step, setStep] = useState(0);
   const [logs, setLogs] = useState([]);
   const [reportId, setReportId] = useState(null);
+  const [processing, setProcessing] = useState(false);
+  const logsEndRef = useRef(null);
   
   const addLog = (msg, isUser = false) => {
     setLogs(prev => [...prev, { msg, isUser }]);
   };
 
   useEffect(() => {
+    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [logs]);
+
+  useEffect(() => {
     let timers = [];
     if (step === 0) {
-      addLog("Dialing 1800-PASHU-HELP...");
-      timers.push(setTimeout(() => {
-        addLog("Connected.", false);
-        setStep(1);
-      }, 1500));
+      if (isMissedCall) {
+        addLog("SIMULATED MISSED-CALL CALLBACK");
+        timers.push(setTimeout(() => addLog("Registering missed call from +91-9876543210..."), 800));
+        timers.push(setTimeout(() => addLog("Farmer profile found: Raju Kumar, Malegaon, Nashik, Maharashtra."), 1500));
+        timers.push(setTimeout(() => addLog("Automatic Callback Initiated..."), 2500));
+        timers.push(setTimeout(() => { addLog("Connected."); setStep(1); }, 4000));
+      } else {
+        addLog("Dialing 1800-XXX-XXXX...");
+        timers.push(setTimeout(() => addLog("Connecting..."), 800));
+        timers.push(setTimeout(() => { addLog("Connected."); setStep(1); }, 2000));
+      }
     } else if (step === 1) {
-      timers.push(setTimeout(() => addLog("Pashuraksha Animal Health Helpline. For English, press 1. Hindi, press 2. Gujarati, press 3.", false), 1000));
+      timers.push(setTimeout(() => addLog("Welcome to Pashuraksha Animal Health Helpline. For Marathi, press 1. For Hindi, press 2. For English, press 3."), 500));
     } else if (step === 2) {
-      timers.push(setTimeout(() => addLog("Press 1 to Report a sick animal. Press 2 for Vaccination information. Press 3 for Emergency.", false), 500));
+      if (isMissedCall) {
+        timers.push(setTimeout(() => addLog("Namaskar Raju Kumar. Press 1 to Report Sick Animal. Press 2 to Report Animal Death. Press 3 for Vaccination Info. Press 4 for Emergency Veterinary Assistance."), 500));
+      } else {
+        timers.push(setTimeout(() => addLog("Press 1 to Report Sick Animal. Press 2 to Report Animal Death. Press 3 for Vaccination Info. Press 4 for Emergency Veterinary Assistance."), 500));
+      }
     } else if (step === 3) {
-      timers.push(setTimeout(() => addLog("Select Species. 1 for Cattle, 2 for Buffalo, 3 for Goat, 4 for Sheep.", false), 500));
+      timers.push(setTimeout(() => addLog("Select Species: 1 for Cattle, 2 for Buffalo, 3 for Goat, 4 for Sheep, 5 for Poultry."), 500));
     } else if (step === 4) {
-      timers.push(setTimeout(() => addLog("Select Symptoms. 1 for Fever, 2 for Lameness, 3 for Blisters.", false), 500));
+      timers.push(setTimeout(() => addLog("Select Symptoms: 1 for Fever, 2 for Lameness, 3 for Blisters/Mouth Lesions, 4 for Breathing Difficulty, 5 for Diarrhea."), 500));
     } else if (step === 5) {
-      timers.push(setTimeout(() => addLog("Enter number of affected animals, followed by the hash key.", false), 500));
+      timers.push(setTimeout(() => addLog("Enter number of animals affected using the keypad, then press #."), 500));
     } else if (step === 6) {
-      timers.push(setTimeout(() => addLog("Enter PIN code or say your village name.", false), 500));
+      timers.push(setTimeout(() => addLog("Enter number of deaths, then press #."), 500));
     } else if (step === 7) {
-      timers.push(setTimeout(() => addLog("You reported Fever and Blisters in 2 Cattle in Gondal. Press 1 to confirm, 2 to edit.", false), 1000));
+      if (!isMissedCall) {
+        timers.push(setTimeout(() => addLog("Location not registered. Press 1 for Malegaon, 2 for Satana, 3 for Baglan."), 500));
+      } else {
+        timers.push(setTimeout(() => setStep(8), 500));
+      }
     } else if (step === 8) {
-      addLog("Generating report...", false);
-      apiPost("/reports", {
-        species: "Cattle",
-        syndrome: "FMD",
-        symptoms: "Fever, Blisters/Ulcers",
-        mortalityCount: 0,
-        village: "Gondal",
-        district: "Rajkot",
-        vaccination_status: "unknown",
-        source: "IVR"
-      }).then(res => {
-         setReportId(res.id || "PR-IVR-SUCCESS");
-         addLog(`Report successfully created. Your Report ID is ${res.id}.`, false);
-         addLog("A veterinarian has been notified. Thank you for calling.", false);
-         setTimeout(() => setStep(9), 3000);
-      }).catch(err => {
-         addLog("Error creating report: " + err.message, false);
-      });
+      timers.push(setTimeout(() => addLog("You reported fever and lameness in 5 cattle in Malegaon, Nashik, Maharashtra. Press 1 to confirm. Press 2 to edit."), 500));
     }
 
     return () => timers.forEach(clearTimeout);
-  }, [step]);
+  }, [step, isMissedCall]);
 
-  const handleInput = (val) => {
-    addLog(`[Pressed ${val}]`, true);
-    setStep(s => s + 1);
+  const handleKeypad = async (key) => {
+    if (processing) return;
+    addLog(`[Pressed ${key}]`, true);
+
+    if (step === 1) {
+      setStep(2);
+    } else if (step === 2) {
+      if (key === '4') {
+        setStep(99); // Emergency
+      } else {
+        setStep(3);
+      }
+    } else if (step === 3) {
+      setStep(4);
+    } else if (step === 4) {
+      setStep(5);
+    } else if (step === 5) {
+      if (key === '#') setStep(6);
+    } else if (step === 6) {
+      if (key === '#') setStep(7);
+    } else if (step === 7) {
+      setStep(8);
+    } else if (step === 8) {
+      if (key === '1') {
+        setProcessing(true);
+        addLog("Processing report into Sentinel Surveillance Engine...");
+        try {
+          const res = await apiPost('/reports', {
+            source: 'IVR',
+            species: 'Cattle',
+            syndrome: 'FMD',
+            symptoms: 'Fever, Lameness',
+            mortality_count: 0,
+            village: 'Malegaon',
+            district: 'Nashik',
+            captured_at: new Date().toISOString()
+          });
+          setReportId(res.report.id || 'PR-IVR-1042');
+          addLog("REPORT CREATED. Report ID: PR-IVR-1042.");
+          addLog("A preliminary risk assessment has been forwarded to the local veterinary officer.");
+        } catch(e) {
+          addLog("REPORT CREATED (Offline Simulation).");
+          setReportId('PR-IVR-OFFLINE');
+        }
+        setProcessing(false);
+      } else if (key === '2') {
+        setStep(3);
+      }
+    } else if (step === 99) {
+      setProcessing(true);
+      addLog("EMERGENCY REQUEST PRIORITIZED.");
+      timers = [
+        setTimeout(() => addLog("Creating Emergency Ticket..."), 1000),
+        setTimeout(() => addLog("Ticket created and routed to Nashik District Rapid Response Team."), 2500)
+      ];
+    }
   };
 
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.6)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-      <div style={{ background: "#222", width: "100%", maxWidth: "350px", borderRadius: "30px", overflow: "hidden", border: "8px solid #111", boxShadow: "0 20px 40px rgba(0,0,0,0.5)", display: "flex", flexDirection: "column", height: "600px" }}>
-        {/* Phone Header */}
-        <div style={{ background: "#333", padding: "20px", textAlign: "center", position: "relative" }}>
-          <button onClick={onClose} style={{ position: "absolute", top: "15px", right: "15px", background: "transparent", border: "none", color: "#999", cursor: "pointer" }}>
-            <X size={20} />
-          </button>
-          <div style={{ color: "#fff", fontSize: "12px", opacity: 0.6, marginBottom: "4px" }}>PASHURAKSHA HELPLINE</div>
-          <div style={{ color: "#F57C00", fontSize: "10px", fontWeight: "700", marginBottom: "8px", textTransform: "uppercase" }}>SIMULATED FOR SIH PROTOTYPE</div>
-          <div style={{ color: "#fff", fontSize: "20px", fontWeight: "600" }}>1800-XXX-XXXX</div>
-          <div style={{ color: step > 0 && step < 9 ? "#4CAF50" : "#999", fontSize: "14px", marginTop: "8px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-            {step === 0 ? <Loader size={14} className="spin-anim" /> : (step < 9 ? <Phone size={14} /> : <CheckCircle size={14} />)}
-            {step === 0 ? "Dialing..." : (step < 9 ? "Connected 00:12" : "Call Ended")}
-          </div>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 9999, display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div style={{ background: "#F5F5F5", width: "100%", maxWidth: "400px", height: "85vh", borderRadius: "24px", display: "flex", flexDirection: "column", overflow: "hidden", position: "relative", border: "4px solid #333" }}>
+        
+        {/* Header */}
+        <div style={{ background: "#1B5E20", color: "white", padding: "16px", textAlign: "center", position: "relative" }}>
+          <button onClick={onClose} style={{ position: "absolute", right: "16px", top: "16px", background: "none", border: "none", color: "white", cursor: "pointer" }}><X size={24} /></button>
+          <PhoneCall size={24} style={{ marginBottom: "8px" }} />
+          <h2 style={{ margin: 0, fontSize: "16px", fontWeight: "700" }}>Pashuraksha Helpline</h2>
+          <div style={{ fontSize: "12px", opacity: 0.8, marginTop: "4px" }}>SIMULATED IVR FOR SIH PROTOTYPE</div>
         </div>
 
-        {/* Call Screen / Logs */}
-        <div style={{ flex: 1, background: "#1a1a1a", padding: "16px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "12px" }}>
-          {logs.map((log, i) => (
-            <div key={i} style={{ alignSelf: log.isUser ? "flex-end" : "flex-start", background: log.isUser ? "#2E7D32" : "#333", color: "#fff", padding: "10px 14px", borderRadius: "16px", maxWidth: "80%", fontSize: "14px", lineHeight: "1.4" }}>
-              {log.msg}
+        {/* Screen */}
+        <div style={{ flex: 1, background: "white", margin: "16px", borderRadius: "12px", padding: "12px", overflowY: "auto", border: "1px solid #E0E0E0", boxShadow: "inset 0 2px 4px rgba(0,0,0,0.05)", display: "flex", flexDirection: "column", gap: "8px" }}>
+          {logs.map((l, i) => (
+            <div key={i} style={{ alignSelf: l.isUser ? "flex-end" : "flex-start", background: l.isUser ? "#E8F5E9" : "#F5F5F5", color: l.isUser ? "#1B5E20" : "#333", padding: "8px 12px", borderRadius: "8px", fontSize: "13px", maxWidth: "85%", border: l.isUser ? "1px solid #C8E6C9" : "1px solid #E0E0E0" }}>
+              {l.msg}
             </div>
           ))}
-          {step === 8 && <div style={{ alignSelf: "flex-start", color: "#4CAF50", fontSize: "14px", display: "flex", alignItems: "center", gap: "6px" }}><Loader size={14} className="spin-anim"/> Processing...</div>}
+          <div ref={logsEndRef} />
         </div>
 
         {/* Keypad */}
-        <div style={{ background: "#222", padding: "20px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "15px", borderTop: "1px solid #333" }}>
-          {[1,2,3,4,5,6,7,8,9,'*',0,'#'].map(key => (
-            <button key={key} onClick={() => handleInput(key)} disabled={step === 0 || step >= 8} style={{ background: "#333", border: "none", borderRadius: "50%", width: "60px", height: "60px", margin: "0 auto", color: "#fff", fontSize: "24px", display: "flex", alignItems: "center", justifyContent: "center", cursor: step === 0 || step >= 8 ? "default" : "pointer", opacity: step === 0 || step >= 8 ? 0.5 : 1 }}>
-              {key}
-            </button>
-          ))}
-        </div>
-        
-        {/* End Call */}
-        <div style={{ background: "#222", padding: "10px 20px 30px 20px", display: "flex", justifyContent: "center" }}>
-          <button onClick={onClose} style={{ background: "#d32f2f", border: "none", borderRadius: "50%", width: "60px", height: "60px", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 4px 10px rgba(211,47,47,0.4)" }}>
-            <Phone size={28} style={{ transform: "rotate(135deg)" }} />
+        <div style={{ padding: "0 16px 24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
+            {[1,2,3,4,5,6,7,8,9,'*',0,'#'].map(key => (
+              <button 
+                key={key} 
+                onClick={() => handleKeypad(key.toString())}
+                disabled={processing || reportId}
+                style={{
+                  padding: "16px", background: "white", border: "1px solid #E0E0E0", borderRadius: "12px", fontSize: "20px", fontWeight: "600", color: "#333", cursor: (processing || reportId) ? "not-allowed" : "pointer", boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
+                }}
+              >
+                {key}
+              </button>
+            ))}
+          </div>
+          
+          <button onClick={onClose} style={{ width: "100%", padding: "16px", background: "#D32F2F", color: "white", border: "none", borderRadius: "12px", fontSize: "16px", fontWeight: "700", marginTop: "16px", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+            <Phone size={20} /> End Call
           </button>
         </div>
+
       </div>
     </div>
   );

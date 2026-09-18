@@ -6,14 +6,14 @@ const VaccinationPassbook = () => {
   const [filter, setFilter] = useState('all');
 
   const records = [
-    { id: 1, vaccine: 'Foot & Mouth Disease (FMD)', batch: 'VB-FMD-2026-441', manufacturer: 'Indian Immunologicals', animal: 'GJ-RJ-4821', date: '15 Apr 2026', nextDue: '15 Oct 2026', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
-    { id: 2, vaccine: 'Hemorrhagic Septicemia (HS)', batch: 'VB-HS-2026-112', manufacturer: 'Hester Biosciences', animal: 'GJ-RJ-4830', date: '10 Jan 2026', nextDue: '10 Jan 2027', vet: 'Dr. R. Patil', status: 'vaccinated' },
-    { id: 3, vaccine: 'Black Quarter (BQ)', batch: 'VB-BQ-2026-889', manufacturer: 'Venkys India', animal: 'GJ-RJ-4850', date: '5 Mar 2026', nextDue: '5 Mar 2027', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
-    { id: 4, vaccine: 'PPR (Goat Plague)', batch: 'VB-PPR-2025-204', manufacturer: 'Indian Immunologicals', animal: 'GJ-RJ-4840', date: '20 Nov 2025', nextDue: '20 Nov 2026', vet: 'Dr. R. Patil', status: 'due_soon' },
-    { id: 5, vaccine: 'Brucellosis S19', batch: 'VB-BR-2025-031', manufacturer: 'IVRI Izatnagar', animal: 'GJ-RJ-4821', date: '8 Feb 2025', nextDue: '8 Feb 2026', vet: 'Dr. Priya Sharma', status: 'overdue' },
-    { id: 6, vaccine: 'FMD', batch: 'VB-FMD-2026-442', manufacturer: 'Indian Immunologicals', animal: 'GJ-RJ-4822', date: '15 Apr 2026', nextDue: '15 Oct 2026', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
-    { id: 7, vaccine: 'Anthrax Spore Vaccine', batch: 'VB-ANT-2025-077', manufacturer: 'IVRI Izatnagar', animal: 'GJ-RJ-4870', date: '12 Dec 2025', nextDue: '12 Dec 2026', vet: 'Dr. R. Patil', status: 'due_soon' },
-    { id: 8, vaccine: 'HS', batch: 'VB-HS-2025-331', manufacturer: 'Hester Biosciences', animal: 'GJ-RJ-4831', date: '5 Jun 2025', nextDue: '5 Jun 2026', vet: 'Dr. Priya Sharma', status: 'overdue' }
+    { id: 1, vaccine: 'Foot & Mouth Disease (FMD)', batch: 'VB-FMD-2026-441', manufacturer: 'Indian Immunologicals', animal: 'MH-NK-4821', date: '15 Apr 2026', nextDue: '15 Oct 2026', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
+    { id: 2, vaccine: 'Hemorrhagic Septicemia (HS)', batch: 'VB-HS-2026-112', manufacturer: 'Hester Biosciences', animal: 'MH-NK-4830', date: '10 Jan 2026', nextDue: '10 Jan 2027', vet: 'Dr. R. Patil', status: 'vaccinated' },
+    { id: 3, vaccine: 'Black Quarter (BQ)', batch: 'VB-BQ-2026-889', manufacturer: 'Venkys India', animal: 'MH-NK-4850', date: '5 Mar 2026', nextDue: '5 Mar 2027', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
+    { id: 4, vaccine: 'PPR (Goat Plague)', batch: 'VB-PPR-2025-204', manufacturer: 'Indian Immunologicals', animal: 'MH-NK-4840', date: '20 Nov 2025', nextDue: '20 Nov 2026', vet: 'Dr. R. Patil', status: 'due_soon' },
+    { id: 5, vaccine: 'Brucellosis S19', batch: 'VB-BR-2025-031', manufacturer: 'IVRI Izatnagar', animal: 'MH-NK-4821', date: '8 Feb 2025', nextDue: '8 Feb 2026', vet: 'Dr. Priya Sharma', status: 'overdue' },
+    { id: 6, vaccine: 'FMD', batch: 'VB-FMD-2026-442', manufacturer: 'Indian Immunologicals', animal: 'MH-NK-4822', date: '15 Apr 2026', nextDue: '15 Oct 2026', vet: 'Dr. Priya Sharma', status: 'vaccinated' },
+    { id: 7, vaccine: 'Anthrax Spore Vaccine', batch: 'VB-ANT-2025-077', manufacturer: 'IVRI Izatnagar', animal: 'MH-NK-4870', date: '12 Dec 2025', nextDue: '12 Dec 2026', vet: 'Dr. R. Patil', status: 'due_soon' },
+    { id: 8, vaccine: 'HS', batch: 'VB-HS-2025-331', manufacturer: 'Hester Biosciences', animal: 'MH-NK-4831', date: '5 Jun 2025', nextDue: '5 Jun 2026', vet: 'Dr. Priya Sharma', status: 'overdue' }
   ];
 
   const filteredRecords = filter === 'all' ? records : records.filter(r => r.status === filter);
@@ -31,7 +31,7 @@ const VaccinationPassbook = () => {
       <div className="page-content" style={{ paddingBottom: '120px', padding: '16px' }}>
         
         {/* Coverage Section */}
-        <div style={{ background: 'white', borderRadius: '14px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.07)', marginBottom: '20px' }}>
+        <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{ background: '#E8F5E9', padding: '8px', borderRadius: '50%' }}>

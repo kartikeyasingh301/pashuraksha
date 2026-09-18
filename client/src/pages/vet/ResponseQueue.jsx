@@ -56,7 +56,7 @@ export default function ResponseQueue() {
                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
                         <div>
                           <div style={{ fontSize: "11px", fontWeight: "800", color: "#666", letterSpacing: "1px", marginBottom: "4px" }}>
-                             {item.sentinel?.risk_level} PRIORITY • {item.status || 'NEW'}
+                             {item.sentinel?.risk_level} PRIORITY - {item.status || 'NEW'}
                           </div>
                           <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "800", color: "#333" }}>{item.syndrome} — {item.species}</h3>
                           <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#666" }}>{item.village}, {item.district}</p>
@@ -76,7 +76,7 @@ export default function ResponseQueue() {
                      </div>
 
                      <div style={{ display: "flex", gap: "8px" }}>
-                        <button onClick={() => navigate(`/vet/case/${item.id}`)} style={{ flex: 1, padding: "10px", background: "#1B5E20", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", fontSize: "13px", cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: "6px" }}>
+                        <button onClick={() => navigate(`/vet/case/${item.case_id || item.id}`)} style={{ flex: 1, padding: "10px", background: "#1B5E20", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", fontSize: "13px", cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: "6px" }}>
                            <ChevronRight size={16} /> OPEN CASE
                         </button>
                         <button style={{ flex: 1, padding: "10px", background: "white", color: "#1B5E20", border: "1px solid #1B5E20", borderRadius: "8px", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>

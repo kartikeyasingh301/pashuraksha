@@ -98,7 +98,7 @@ export default function ParaVetDashboard() {
                 return (
                   <div key={s.id} className="bg-white rounded-xl border border-gray-100 p-4">
                     <div className="flex justify-between items-start mb-3">
-                      <div><p className="font-semibold text-sm text-gray-800">{s.id}</p><p className="text-xs text-gray-400">{s.animal} · {s.disease}</p></div>
+                      <div><p className="font-semibold text-sm text-gray-800">{s.id}</p><p className="text-xs text-gray-400">{s.animal} - {s.disease}</p></div>
                       <span className={`text-[10px] px-2 py-1 rounded-full font-semibold ${STATUS_COLOR[s.status]}`}>{s.status.replace(/_/g," ")}</span>
                     </div>
                     <div className="flex items-center gap-0.5 mb-3 overflow-x-auto pb-1">
@@ -111,7 +111,7 @@ export default function ParaVetDashboard() {
                         </React.Fragment>
                       ))}
                     </div>
-                    <p className="text-xs text-gray-400">QR: <span className="font-mono font-medium text-gray-600">{s.qr}</span> · Collected: {s.collected}</p>
+                    <p className="text-xs text-gray-400">QR: <span className="font-mono font-medium text-gray-600">{s.qr}</span> - Collected: {s.collected}</p>
                   </div>
                 );
               })}

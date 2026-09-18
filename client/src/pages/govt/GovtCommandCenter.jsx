@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMaharashtra, useEffect } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Shield, TrendingUp, Users, Syringe, Truck, AlertTriangle, Activity, Globe, ChevronRight, RefreshCw } from "lucide-react";
@@ -26,14 +26,14 @@ const TREND_14D = [
   {d:"11 Sep",cases:35},{d:"12 Sep",cases:41},{d:"13 Sep",cases:38},{d:"14 Sep",cases:44},
 ];
 
-const STATE_BAR = [
+const MAHARASHTRA_BAR = [
   {state:"MH",cases:44},{state:"GJ",cases:28},{state:"UP",cases:22},{state:"RJ",cases:17},{state:"KA",cases:12},{state:"MP",cases:9},
 ];
 
 const EPI_METRICS = [
-  { label: "Attack Rate", value: "4.2%", sub: "Cattle — Last 30 days", color: "text-red-600", bg: "bg-red-50" },
-  { label: "Case Fatality Rate", value: "1.8%", sub: "All species — Active clusters", color: "text-orange-600", bg: "bg-orange-50" },
-  { label: "Vaccination Coverage", value: "61%", sub: "FMD — Maharashtra", color: "text-blue-600", bg: "bg-blue-50" },
+  { label: "Attack Rate", value: "4.2%", sub: "Cattle - Last 30 days", color: "text-red-600", bg: "bg-red-50" },
+  { label: "Case Fatality Rate", value: "1.8%", sub: "All species - Active clusters", color: "text-orange-600", bg: "bg-orange-50" },
+  { label: "Vaccination Coverage", value: "61%", sub: "FMD - Maharashtra", color: "text-blue-600", bg: "bg-blue-50" },
   { label: "Containment Rate", value: "78%", sub: "Clusters resolved < 14 days", color: "text-green-600", bg: "bg-green-50" },
 ];
 
@@ -41,8 +41,8 @@ const TRIAGE_OPTS = { RED: { color: "red", fill: "red" }, YELLOW: { color: "oran
 const COLORS = ["#ef4444","#f97316","#eab308","#22c55e","#3b82f6"];
 
 export default function GovtCommandCenter() {
-  const [time, setTime] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [time, setTime] = useMaharashtra("");
+  const [loading, setLoading] = useMaharashtra(false);
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
@@ -64,7 +64,7 @@ export default function GovtCommandCenter() {
           <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center"><Globe className="w-5 h-5" /></div>
           <div>
             <h1 className="text-lg font-bold">National Animal Health Command Center</h1>
-            <p className="text-slate-400 text-xs">Ministry of Fisheries, Animal Husbandry & Dairying — GOI</p>
+            <p className="text-slate-400 text-xs">Ministry of Fisheries, Animal Husbandry & Dairying - GOI</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -125,7 +125,7 @@ export default function GovtCommandCenter() {
                   <div className="text-xs">
                     <p className="font-bold">{c.disease}</p>
                     <p>{c.district}, {c.state}</p>
-                    <p>{c.count} cases · {c.triage}</p>
+                    <p>{c.count} cases - {c.triage}</p>
                   </div>
                 </Popup>
               </CircleMarker>
@@ -168,7 +168,7 @@ export default function GovtCommandCenter() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <h3 className="font-semibold text-sm mb-4 text-slate-200 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-blue-400" /> National Case Trend — Last 14 Days</h3>
+          <h3 className="font-semibold text-sm mb-4 text-slate-200 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-blue-400" /> National Case Trend - Last 14 Days</h3>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={TREND_14D}>
               <XAxis dataKey="d" fontSize={9} tick={{ fill: "#64748b" }} />
@@ -179,14 +179,14 @@ export default function GovtCommandCenter() {
           </ResponsiveContainer>
         </div>
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <h3 className="font-semibold text-sm mb-4 text-slate-200 flex items-center gap-2"><Shield className="w-4 h-4 text-amber-400" /> Cases by State</h3>
+          <h3 className="font-semibold text-sm mb-4 text-slate-200 flex items-center gap-2"><Shield className="w-4 h-4 text-amber-400" /> Cases by Maharashtra</h3>
           <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={STATE_BAR} barSize={28}>
+            <BarChart data={MAHARASHTRA_BAR} barSize={28}>
               <XAxis dataKey="state" fontSize={10} tick={{ fill: "#64748b" }} />
               <YAxis fontSize={9} tick={{ fill: "#64748b" }} />
               <Tooltip contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155", borderRadius: "8px", fontSize: "11px" }} />
               <Bar dataKey="cases" radius={[4, 4, 0, 0]}>
-                {STATE_BAR.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                {MAHARASHTRA_BAR.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>

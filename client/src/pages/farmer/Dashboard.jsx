@@ -77,6 +77,7 @@ export default function FarmerDashboard() {
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState("en");
   const [showIVR, setShowIVR] = useState(false);
+  const [showMissedCall, setShowMissedCall] = useState(false);
 
   const t = TRANSLATIONS[lang];
   const hour = new Date().getHours();
