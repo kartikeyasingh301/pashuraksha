@@ -1,6 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, ShieldAlert, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, ShieldAlert, ArrowRight, Loader2, User, Stethoscope } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import Logo from '../components/Logo.jsx';
 
