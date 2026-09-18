@@ -1,4 +1,4 @@
-import { getKolkataTime } from '../../utils/time.js';
+import { getKolkataHour } from '../../utils/time.js';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone, FileText } from "lucide-react";
