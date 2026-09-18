@@ -1,4 +1,4 @@
-import { getKolkataHour } from '../../utils/time.js';
+import { getKolkataHour, formatKolkataTime } from '../../utils/time.js';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone, FileText } from "lucide-react";
@@ -269,7 +269,7 @@ export default function FarmerDashboard() {
                     <span style={{ fontSize:"13px", color:"#aaa", marginLeft:"8px" }}>— {report.species || "Animal"}</span>
                   </div>
                   <div style={{ marginTop:"6px" }}>
-                    <span style={{ fontSize:"12px", color:"#aaa" }}>{new Date(report.capturedAt || report.captured_at).toLocaleDateString("en-IN")}</span>
+                    <span style={{ fontSize:"12px", color:"#aaa" }}>{formatKolkataTime(report.capturedAt || report.captured_at)}</span>
                   </div>
                 </div>
               ))}
