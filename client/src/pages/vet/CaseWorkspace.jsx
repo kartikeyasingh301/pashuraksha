@@ -9,6 +9,7 @@ export default function CaseWorkspace() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [callState, setCallState] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -100,6 +101,31 @@ export default function CaseWorkspace() {
           </div>
         </div>
 
+        
+        {/* VOICE EVIDENCE (If source is Voice) */}
+        {hasVoice && (
+          <div style={{ ...cardStyle, background: "#F3E5F5", borderColor: "#E1BEE7" }}>
+             <h3 style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#4A148C", display: "flex", alignItems: "center", gap: "6px", fontWeight: "700" }}>
+               <Mic size={16} /> Original Voice Report
+             </h3>
+             <div style={{ background: "white", padding: "12px", borderRadius: "8px", display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", border: "1px solid rgba(0,0,0,0.05)" }}>
+                <button style={{ background: "#7B1FA2", border: "none", color: "white", width: "40px", height: "40px", borderRadius: "20px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><Play size={16} fill="white" /></button>
+                <div style={{ flex: 1 }}>
+                  <div style={{ background: "#eee", height: "4px", borderRadius: "2px", width: "100%", position: "relative" }}>
+                     <div style={{ background: "#7B1FA2", height: "4px", borderRadius: "2px", width: "30%" }}></div>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "#666", marginTop: "4px" }}>
+                     <span>00:04</span><span>00:14</span>
+                  </div>
+                </div>
+             </div>
+             <div style={{ background: "white", padding: "12px", borderRadius: "8px", fontSize: "13px", color: "#333", border: "1px solid rgba(0,0,0,0.05)" }}>
+               <div style={{ fontSize: "11px", color: "#666", fontWeight: "700", marginBottom: "4px", textTransform: "uppercase" }}>Transcription</div>
+               "My cow has fever and blisters. It is having difficulty walking. Two other cows also look sick."
+             </div>
+          </div>
+        )}
+    
         {/* WHY FLAGGED */}
         <div style={cardStyle}>
           <h3 style={{ fontSize: "14px", fontWeight: "800", color: "#333", margin: "0 0 12px 0", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "8px" }}><Activity size={18}/> Outbreak Context</h3>

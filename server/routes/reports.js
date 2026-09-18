@@ -32,9 +32,9 @@ function insertReport(body, userId) {
     INSERT INTO reports
       (id, local_id, user_id, species, syndrome, symptoms, mortality_count,
        herd_id, animal_id, village, district, latitude, longitude,
-       vaccination_status, captured_at, synced_at, status, notes)
+       vaccination_status, captured_at, synced_at, status, notes, source)
     VALUES
-      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'REPORT', ?)
+      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'REPORT', ?, ?)
   `).run(
     id,
     body.local_id   || null,

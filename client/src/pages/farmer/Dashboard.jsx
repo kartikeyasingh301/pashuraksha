@@ -6,6 +6,7 @@ import PipelineTag from "../../components/PipelineTag.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import { apiGet } from "../../api/client.js";
 import { useSyncContext } from "../../contexts/SyncContext.jsx";
+import IVRSimulation from "../../components/IVRSimulation.jsx";
 
 const TRANSLATIONS = {
   en: {
@@ -75,6 +76,7 @@ export default function FarmerDashboard() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState("en");
+  const [showIVR, setShowIVR] = useState(false);
 
   const t = TRANSLATIONS[lang];
   const hour = new Date().getHours();

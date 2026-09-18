@@ -67,17 +67,17 @@ const transactionSeed = db.transaction(() => {
 
   // 6. Reports (Link back to cases/users)
   const insRep = db.prepare(`
-    INSERT INTO reports (id, local_id, user_id, species, syndrome, symptoms, mortality_count, herd_id, village, district, latitude, longitude, vaccination_status, captured_at, synced_at, status, case_id, notes)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?)
+    INSERT INTO reports (id, local_id, user_id, species, syndrome, symptoms, mortality_count, herd_id, village, district, latitude, longitude, vaccination_status, captured_at, synced_at, status, case_id, notes, source)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?)
   `);
   const rps = [
     // Gondal FMD Reports (Farmer 1) -> Case 101, Cluster 201
     { i: uuidv4(), l:'LOC-1', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness, Excessive Salivation', m:0, h:'GJ-RJ-4821', v:'Gondal', d:'Rajkot', la:22.3247, ln:70.7897, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Multiple animals affected in same herd' },
     { i: uuidv4(), l:'LOC-2', u:1, sp:'Cattle', syn:'FMD', sym:'Fever, Skin Lesions, Loss of appetite', m:0, h:'GJ-RJ-4822', v:'Gondal', d:'Rajkot', la:22.3261, ln:70.7912, vx:'unvaccinated', cap:daysAgo(4), st:'SUSPECTED_OUTBREAK', cid:101, n:'Neighbours herd showing similar signs' },
-    { i: uuidv4(), l:'LOC-3', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:1, h:'GJ-RJ-4850', v:'Gondal', d:'Rajkot', la:22.3255, ln:70.7880, vx:'unvaccinated', cap:daysAgo(3), st:'SUSPECTED_OUTBREAK', cid:101, n:'One calf died overnight' },
+    { source: 'VOICE', i: uuidv4(), l:'LOC-3', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:1, h:'GJ-RJ-4850', v:'Gondal', d:'Rajkot', la:22.3255, ln:70.7880, vx:'unvaccinated', cap:daysAgo(3), st:'SUSPECTED_OUTBREAK', cid:101, n:'One calf died overnight' },
     // Jetpur FMD Reports (Farmer 1) -> Cluster 201
-    { i: uuidv4(), l:'LOC-4', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness', m:0, h:'GJ-RJ-4870', v:'Jetpur', d:'Rajkot', la:21.7531, ln:70.6237, vx:'unvaccinated', cap:daysAgo(6), st:'SUSPECTED_OUTBREAK', cid:101, n:'Possibly same strain as Gondal reports' },
-    { i: uuidv4(), l:'LOC-5', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:2, h:'GJ-RJ-4888', v:'Jetpur', d:'Rajkot', la:21.7548, ln:70.6252, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Two deaths - elderly cows' },
+    { source: 'IVR', i: uuidv4(), l:'LOC-4', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness', m:0, h:'GJ-RJ-4870', v:'Jetpur', d:'Rajkot', la:21.7531, ln:70.6237, vx:'unvaccinated', cap:daysAgo(6), st:'SUSPECTED_OUTBREAK', cid:101, n:'Possibly same strain as Gondal reports' },
+    { source: 'VOICE', i: uuidv4(), l:'LOC-5', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:2, h:'GJ-RJ-4888', v:'Jetpur', d:'Rajkot', la:21.7548, ln:70.6252, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Two deaths - elderly cows' },
     // Olpad PPR Reports (Unknown farmer) -> Case 102
     { i: uuidv4(), l:'LOC-6', u:1, sp:'Goat', syn:'PPR', sym:'Diarrhea, Respiratory distress', m:3, h:'GJ-SU-11', v:'Olpad', d:'Surat', la:21.3283, ln:72.7441, vx:'unvaccinated', cap:daysAgo(10), st:'CASE', cid:102, n:'Severe flock outbreak' },
     { i: uuidv4(), l:'LOC-7', u:1, sp:'Goat', syn:'PPR', sym:'Fever, Nasal Discharge', m:5, h:'GJ-SU-12', v:'Olpad', d:'Surat', la:21.3300, ln:72.7450, vx:'unvaccinated', cap:daysAgo(9), st:'CASE', cid:102, n:'Spreading fast' },
@@ -85,7 +85,7 @@ const transactionSeed = db.transaction(() => {
     { i: uuidv4(), l:'LOC-8', u:1, sp:'Buffalo', syn:'BQ', sym:'Swelling, Sudden death', m:2, h:'GJ-VD-99', v:'Karjan', d:'Vadodara', la:22.0465, ln:73.1251, vx:'unknown', cap:daysAgo(2), st:'CASE', cid:103, n:'Sudden collapse in field' }
   ];
   
-  rps.forEach(r => insRep.run(r.i, r.l, r.u, r.sp, r.syn, r.sym, r.m, r.h, r.v, r.d, r.la, r.ln, r.vx, r.cap, r.st, r.cid, r.n));
+  rps.forEach(r => insRep.run(r.i, r.l, r.u, r.sp, r.syn, r.sym, r.m, r.h, r.v, r.d, r.la, r.ln, r.vx, r.cap, r.st, r.cid, r.n, r.source || 'APP'));
 
   // 7. Lab Samples
   const insLab = db.prepare(`INSERT INTO lab_samples (id, report_id, case_id, sample_type, submitted_at, result, result_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);

@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS reports (
   status            TEXT DEFAULT 'REPORT',
   case_id           INTEGER,
   notes             TEXT,
-  created_at        TEXT DEFAULT (datetime('now'))
+  created_at        TEXT DEFAULT (datetime('now')),
+  source            TEXT DEFAULT 'APP'
 );
 
 CREATE TABLE IF NOT EXISTS cases (
