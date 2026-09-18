@@ -10,6 +10,7 @@
 const express = require('express');
 const db      = require('../db/database');
 const { authenticateToken, requireVet } = require('../middleware/auth');
+const { augmentWithSentinel } = require('../pipeline/SentinelEngine');
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.get('/', authenticateToken, requireVet, (req, res) => {
     FROM cases c
     ORDER BY c.created_at DESC
   `).all();
-  res.json({ cases });
+  res.json({ cases: cases.map(augmentWithSentinel) });
 });
 
 // GET /api/cases/:id — case detail with linked reports
@@ -36,7 +37,7 @@ router.get('/:id', authenticateToken, requireVet, (req, res) => {
 
   const clusters = db.prepare('SELECT * FROM clusters WHERE case_id = ?').all(req.params.id);
 
-  res.json({ case: caseRecord, reports, clusters });
+  res.json({ case: augmentWithSentinel(caseRecord), reports, clusters });
 });
 
 // POST /api/cases/:id/response — add a vet response to a case's outbreak

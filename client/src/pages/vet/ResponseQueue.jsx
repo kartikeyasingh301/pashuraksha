@@ -1,133 +1,95 @@
 ﻿import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout.jsx';
-import PipelineTag from '../../components/PipelineTag.jsx';
-import { apiGet, apiPost } from '../../api/client.js';
-import { CheckCircle, MapPin } from 'lucide-react';
-
-const ACTION_TYPES = ['field_visit', 'quarantine', 'vaccination', 'sample_collection'];
-
-function ResponseForm({ caseId, onSubmit }) {
-  const [form, setForm] = useState({ actionType: 'field_visit', description: '', scheduledDate: '' });
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      await onSubmit(caseId, form);
-      setSuccess(true);
-      setForm({ actionType: 'field_visit', description: '', scheduledDate: '' });
-      setTimeout(() => setSuccess(false), 3000);
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className='response-form'>
-      {success && <div className='alert alert-success'>Response added successfully!</div>}
-      <div className='form-row'>
-        <div className='form-group'>
-          <label className='form-label'>Action Type</label>
-          <select name='actionType' className='form-control' value={form.actionType} onChange={handleChange}>
-            {ACTION_TYPES.map((t) => <option key={t} value={t}>{t.replace('_', ' ').toUpperCase()}</option>)}
-          </select>
-        </div>
-        <div className='form-group'>
-          <label className='form-label'>Scheduled Date</label>
-          <input type='date' name='scheduledDate' className='form-control' value={form.scheduledDate} onChange={handleChange} />
-        </div>
-      </div>
-      <div className='form-group'>
-        <label className='form-label'>Description</label>
-        <textarea name='description' className='form-control' rows={2} value={form.description} onChange={handleChange} placeholder='Describe the planned response action...' />
-      </div>
-      <button type='submit' className='btn btn-primary' disabled={submitting}>{submitting ? 'Adding...' : 'Add Response'}</button>
-    </form>
-  );
-}
+import { apiGet } from '../../api/client.js';
+import { CheckCircle, Clock, ActivitySquare, ShieldAlert, ChevronRight, CheckSquare } from 'lucide-react';
 
 export default function ResponseQueue() {
-  const [cases, setCases] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [expandedId, setExpandedId] = useState(null);
+  const [filter, setFilter] = useState('ALL');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchCases() {
+    async function load() {
       try {
-        const data = await apiGet('/cases');
-        const all = data.cases || data || [];
-        setCases(all.filter((c) => c.status !== 'RESOLVED'));
-      } catch (err) {
-        setError(err.message || 'Failed to load cases');
-      } finally {
-        setLoading(false);
-      }
+        const res = await apiGet('/cases');
+        const queueItems = (res.cases || []).sort((a,b) => (b.sentinel?.signal_score || 0) - (a.sentinel?.signal_score || 0));
+        setItems(queueItems);
+      } catch(e) {}
+      finally { setLoading(false); }
     }
-    fetchCases();
+    load();
   }, []);
 
-  async function handleAddResponse(caseId, formData) {
-    await apiPost('/cases/' + caseId + '/response', formData);
-    const data = await apiGet('/cases');
-    const all = data.cases || data || [];
-    setCases(all.filter((c) => c.status !== 'RESOLVED'));
-  }
+  const filtered = filter === 'ALL' ? items : items.filter(i => i.sentinel?.risk_level === filter);
 
   return (
-    <Layout title='Response Queue' showBack>
-      <div className='page-content'>
-        {error && <div className='alert alert-error'>{error}</div>}
+    <Layout title="Response Queue" showBack>
+      <div className="page-content" style={{ paddingBottom: "100px" }}>
+        
+        {/* Filters */}
+        <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "16px", marginBottom: "8px" }}>
+           {['ALL', 'CRITICAL', 'HIGH', 'ROUTINE'].map(f => (
+             <button key={f} onClick={() => setFilter(f)} style={{
+                padding: "8px 16px", borderRadius: "20px", fontWeight: "700", fontSize: "12px", whiteSpace: "nowrap", cursor: "pointer",
+                border: filter === f ? "none" : "1px solid #ccc",
+                background: filter === f ? "#1B5E20" : "white", color: filter === f ? "white" : "#666"
+             }}>{f}</button>
+           ))}
+        </div>
+
         {loading ? (
-          <div className='loading-state'>Loading response queue...</div>
-        ) : cases.length === 0 ? (
-          <div className='empty-state'>
-            <div className='empty-icon'>✅</div>
-            <p>No cases pending response. Queue is clear!</p>
+          <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>Loading queue...</div>
+        ) : filtered.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "40px", background: "white", borderRadius: "12px", border: "1px solid #eee", color: "#666" }}>
+            <CheckSquare size={48} color="#e0e0e0" style={{ margin: "0 auto 16px" }}/>
+            <div style={{ fontSize: "16px", fontWeight: "700", color: "#333" }}>Queue is Clear</div>
+            <p style={{ margin: "8px 0 0 0", fontSize: "14px" }}>Your response queue has no pending items for this filter.</p>
           </div>
         ) : (
-          <div className='response-list'>
-            {cases.map((c) => (
-              <div key={c.id} className='response-case-card card'>
-                <div className='response-case-header' onClick={() => setExpandedId(expandedId === c.id ? null : c.id)}>
-                  <div>
-                    <strong>{c.syndrome || 'Unknown'}</strong>
-                    <span className='case-species'> — {c.species || 'Unknown'}</span>
-                    <div className='case-location'>📍 {c.village || c.location || ''}</div>
-                  </div>
-                  <div className='case-right'>
-                    <PipelineTag status={c.status || 'CASE'} />
-                    <span className='expand-icon'>{expandedId === c.id ? '▲' : '▼'}</span>
-                  </div>
-                </div>
-                {expandedId === c.id && (
-                  <div className='response-expand'>
-                    {c.responses && c.responses.length > 0 && (
-                      <div className='existing-responses'>
-                        <h4>Existing Responses</h4>
-                        {c.responses.map((r, i) => (
-                          <div key={i} className='existing-response-item'>
-                            <strong>{r.actionType}</strong> — {r.description}
-                            {r.scheduledDate && <span> (Scheduled: {new Date(r.scheduledDate).toLocaleDateString('en-IN')})</span>}
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+             {filtered.map(item => (
+                <div key={item.id} style={{ background: "white", borderRadius: "12px", border: "1px solid #eee", overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+                   <div style={{ padding: "16px", borderLeft: `6px solid ${item.sentinel?.risk_level === 'CRITICAL' ? '#C62828' : item.sentinel?.risk_level === 'HIGH' ? '#F57C00' : '#4CAF50'}` }}>
+                     
+                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+                        <div>
+                          <div style={{ fontSize: "11px", fontWeight: "800", color: "#666", letterSpacing: "1px", marginBottom: "4px" }}>
+                             {item.sentinel?.risk_level} PRIORITY • {item.status || 'NEW'}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                    <h4 className='add-response-title'>Add Response</h4>
-                    <ResponseForm caseId={c.id} onSubmit={handleAddResponse} />
-                  </div>
-                )}
-              </div>
-            ))}
+                          <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "800", color: "#333" }}>{item.syndrome} — {item.species}</h3>
+                          <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#666" }}>{item.village}, {item.district}</p>
+                        </div>
+                        <div style={{ textAlign: "right" }}>
+                          <div style={{ fontSize: "18px", fontWeight: "800", color: "#1B5E20" }}>{item.sentinel?.signal_score}</div>
+                          <div style={{ fontSize: "10px", color: "#888", fontWeight: "700", textTransform: "uppercase" }}>Priority</div>
+                        </div>
+                     </div>
+
+                     <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
+                        <span style={{ fontSize: "12px", background: "#f5f5f5", padding: "4px 8px", borderRadius: "4px", color: "#444" }}>Reports: {item.report_count || 1}</span>
+                        <span style={{ fontSize: "12px", background: item.sentinel?.sla_state === 'SAFE' ? "#E8F5E9" : "#FFEBEE", color: item.sentinel?.sla_state === 'SAFE' ? "#2E7D32" : "#C62828", padding: "4px 8px", borderRadius: "4px", display: "flex", alignItems: "center", gap: "4px" }}>
+                           <Clock size={12}/> SLA: {item.sentinel?.sla_hours_remaining}h ({item.sentinel?.sla_state})
+                        </span>
+                        <span style={{ fontSize: "12px", background: "#E3F2FD", color: "#1565C0", padding: "4px 8px", borderRadius: "4px" }}>Assignee: Unassigned</span>
+                     </div>
+
+                     <div style={{ display: "flex", gap: "8px" }}>
+                        <button onClick={() => navigate(`/vet/case/${item.id}`)} style={{ flex: 1, padding: "10px", background: "#1B5E20", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", fontSize: "13px", cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: "6px" }}>
+                           <ChevronRight size={16} /> OPEN CASE
+                        </button>
+                        <button style={{ flex: 1, padding: "10px", background: "white", color: "#1B5E20", border: "1px solid #1B5E20", borderRadius: "8px", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
+                           ASSIGN
+                        </button>
+                     </div>
+
+                   </div>
+                </div>
+             ))}
           </div>
         )}
+
       </div>
     </Layout>
   );

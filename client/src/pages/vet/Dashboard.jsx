@@ -1,62 +1,79 @@
 ﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, BarChart2, Bell, Activity, ClipboardList, Map as MapIcon, Syringe, Dna, Microscope, Timer, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, Activity, Map as MapIcon, Dna, Timer, ShieldAlert, ChevronRight, FileText, CheckCircle } from 'lucide-react';
 import Layout from '../../components/Layout.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { apiGet } from '../../api/client.js';
 
-const NAV_CARDS = [
-  { to: '/vet/alerts', icon: <AlertTriangle size={32} />, label: 'Critical Alerts', color: '#C62828', desc: 'View critical cases and outbreaks' },
-  { to: '/vet/clusters', icon: <Activity size={32} />, label: 'Emerging Clusters', color: '#E65100', desc: 'Spatiotemporal disease clusters' },
-  { to: '/vet/queue', icon: <ClipboardList size={32} />, label: 'Response Queue', color: '#1565C0', desc: 'Pending field responses' },
-  { to: '/vet/map', icon: <MapIcon size={32} />, label: 'Map View', color: '#2E7D32', desc: 'Geographic incident overview' },
-  { to: '/vet/vaccination', icon: <Syringe size={32} />, label: 'Vaccination Gaps', color: '#6A1B9A', desc: 'Coverage analysis by village' },
-  { to: '/vet/zoonotic', icon: <Dna size={32} />, label: 'Zoonotic Alerts', color: '#AD1457', desc: 'Human health risk notifications' },
-  { to: '/vet/lab', icon: <Microscope size={32} />, label: 'Lab Status', color: '#00695C', desc: 'Sample results and pending tests' },
-  { to: '/vet/district', icon: <BarChart2 size={32} />, label: 'District Command', color: '#0277BD', desc: 'Heatmap, SLA monitor, epi trends' },
-  { to: '/vet/broadcast', icon: <Bell size={32} />, label: 'Advisory Broadcast', color: '#558B2F', desc: 'Send geo-fenced multilingual SMS' },
-];
-
 export default function VetDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [summary, setSummary] = useState({ 
-    totalReports: 0, activeCases: 0, suspectedOutbreaks: 0, pendingLab: 0, criticalAlerts: 0, slaBreaches: 0, recentReports: [] 
-  });
+  const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchSummary() {
       try {
-        const [alertsData, casesData, labData, reportsData] = await Promise.all([
-          apiGet('/alerts').catch(() => ({ critical: { cases: [], outbreaks: [] } })),
+        const [alertsData, casesData, labData] = await Promise.all([
+          apiGet('/alerts').catch(() => ({ critical: { cases: [], outbreaks: [] }, emerging: [] })),
           apiGet('/cases').catch(() => ({ cases: [] })),
-          apiGet('/lab').catch(() => ({ samples: [] })),
-          apiGet('/reports').catch(() => ({ reports: [] }))
+          apiGet('/lab').catch(() => ({ samples: [] }))
         ]);
-        const cases = casesData.cases || casesData || [];
-        const samples = labData.samples || labData || [];
-        const reports = reportsData.reports || reportsData || [];
-        const criticalCount = (alertsData.critical?.cases?.length || 0) + (alertsData.critical?.outbreaks?.length || 0);
         
-        // SLA breach = Reports un-actioned for > 24hrs
-        const now = new Date();
-        let slaBreaches = 0;
-        reports.forEach(r => {
-           if(r.status === 'REPORT' || r.status === 'SUSPECTED_OUTBREAK') {
-              const diffHours = (now - new Date(r.captured_at)) / (1000 * 60 * 60);
-              if (diffHours > 24) slaBreaches++;
-           }
+        const cases = casesData.cases || [];
+        const samples = labData.samples || [];
+        const outbreaks = alertsData.critical?.outbreaks || [];
+        const emerging = alertsData.emerging || [];
+
+        // Build Attention Required Queue
+        let attentionQueue = [];
+        
+        outbreaks.forEach(o => {
+          attentionQueue.push({
+            id: o.id, type: 'OUTBREAK',
+            title: `${o.syndrome || 'Disease'} — ${o.species || 'Animals'}`,
+            location: `${o.cluster_label || o.district || 'Unknown Location'}`,
+            stats: `${o.report_count || 5} reports | Cluster Detected`,
+            reason: o.sentinel?.reasons?.[0] || 'Critical outbreak threshold met',
+            color: 'RED', route: '/vet/alerts'
+          });
         });
 
+        cases.forEach(c => {
+          if(c.sentinel?.risk_level === 'CRITICAL' || c.sentinel?.risk_level === 'HIGH') {
+            attentionQueue.push({
+              id: c.id, type: 'EMERGING',
+              title: `${c.syndrome} — ${c.species}`,
+              location: `${c.village || ''}, ${c.district || ''}`,
+              stats: `${c.report_count || 1} reports`,
+              reason: c.sentinel?.reasons?.[0] || 'Emerging risk signal detected',
+              color: c.sentinel?.risk_level === 'CRITICAL' ? 'RED' : 'AMBER',
+              route: '/vet/queue'
+            });
+          }
+        });
+
+        samples.filter(s => s.status === 'PENDING').forEach(s => {
+          attentionQueue.push({
+             id: s.id, type: 'LAB',
+             title: `Lab Follow-up`,
+             location: `Sample ${s.id}`,
+             stats: `Status: Pending`,
+             reason: 'Result expected soon',
+             color: 'BLUE', route: '/vet/lab'
+          });
+        });
+
+        const slaAtRisk = cases.filter(c => c.sentinel?.sla_state === 'AT RISK' || c.sentinel?.sla_state === 'BREACHED').length;
+
         setSummary({
-          totalReports: reports.length,
-          activeCases: cases.filter((c) => c.status === 'ACTIVE' || c.status === 'CASE').length,
-          suspectedOutbreaks: (alertsData.critical?.outbreaks?.length || 0) + reports.filter(r => r.status === 'SUSPECTED_OUTBREAK').length,
-          pendingLab: samples.filter((s) => s.status === 'PENDING').length,
-          criticalAlerts: criticalCount,
-          slaBreaches,
-          recentReports: reports.slice(0, 3)
+          totalCases: cases.length,
+          critical: outbreaks.length + cases.filter(c => c.sentinel?.risk_level === 'CRITICAL').length,
+          highRisk: cases.filter(c => c.sentinel?.risk_level === 'HIGH').length,
+          activeCases: cases.filter(c => c.status === 'CASE' || c.status === 'CLUSTER').length,
+          pendingLab: samples.filter(s => s.status === 'PENDING').length,
+          slaAtRisk,
+          attentionQueue: attentionQueue.slice(0, 5) // Top 5 priority items
         });
       } catch (_) {}
       finally { setLoading(false); }
@@ -64,93 +81,117 @@ export default function VetDashboard() {
     fetchSummary();
   }, []);
 
-  const greeting = new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening';
+  const greeting = new Date().getHours() < 12 ? 'GOOD MORNING' : new Date().getHours() < 17 ? 'GOOD AFTERNOON' : 'GOOD EVENING';
 
   return (
-    <Layout title="Vet Dashboard">
-      <div className="page-content">
-        <div className="greeting-section">
-          <h2 className="greeting-text">{greeting}, Dr. {user?.name || user?.username}</h2>
-          <p className="greeting-sub">Animal Health Surveillance Overview</p>
+    <Layout title="Operations Center">
+      <div className="page-content" style={{ paddingBottom: '100px' }}>
+        
+        {/* HEADER */}
+        <div style={{ marginBottom: "20px" }}>
+          <h2 style={{ fontSize: "12px", letterSpacing: "1px", color: "#666", margin: "0 0 4px 0" }}>{greeting}, DR. {user?.name?.toUpperCase() || 'VET'}</h2>
+          <h1 style={{ fontSize: "22px", fontWeight: "800", color: "#1B5E20", margin: 0 }}>Animal Health Surveillance</h1>
         </div>
 
-        {loading ? (
-          <div className="loading-state">Loading summary...</div>
+        {loading || !summary ? (
+          <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>Loading intelligence...</div>
         ) : (
-          <div className="summary-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginBottom: "24px" }}>
-            <div className="summary-card" style={{ background:"#F5F5F5" }}>
-              <div className="summary-num" style={{ color:"#333" }}>{summary.totalReports}</div>
-              <div className="summary-label">Total Reports</div>
-            </div>
-            <div className="summary-card" style={{ background:"#FFF8E1" }}>
-              <div className="summary-num" style={{ color:"#F57F17" }}>{summary.activeCases}</div>
-              <div className="summary-label">Active Cases</div>
-            </div>
-            <div className="summary-card" style={{ background:"#FFEBEE" }}>
-              <div className="summary-num" style={{ color:"#C62828" }}>{summary.suspectedOutbreaks}</div>
-              <div className="summary-label">Suspected Outbreaks</div>
-            </div>
-            <div className="summary-card" style={{ background:"#E3F2FD" }}>
-              <div className="summary-num" style={{ color:"#1565C0" }}>{summary.pendingLab}</div>
-              <div className="summary-label">Pending Lab</div>
-            </div>
-            <div className="summary-card" style={{ background:"#FFEBEE", border:"1px solid #FFCDD2" }}>
-              <div className="summary-num" style={{ color:"#B71C1C", display:"flex", alignItems:"center", justifyContent:"center", gap:"6px" }}>
-                {summary.slaBreaches > 0 && <Timer size={20} />} {summary.slaBreaches}
+          <>
+            {/* COMPACT KPIs */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
+              <div style={{ background: "white", padding: "16px", borderRadius: "12px", border: "1px solid #eee", textAlign: "center" }}>
+                <div style={{ fontSize: "24px", fontWeight: "800", color: "#333" }}>{summary.totalCases}</div>
+                <div style={{ fontSize: "11px", fontWeight: "700", color: "#666", textTransform: "uppercase" }}>Reports</div>
               </div>
-              <div className="summary-label" style={{ color:"#B71C1C", fontWeight:"700" }}>SLA Breaches (&gt;24h)</div>
+              <div style={{ background: "#FFEBEE", padding: "16px", borderRadius: "12px", border: "1px solid #FFCDD2", textAlign: "center" }}>
+                <div style={{ fontSize: "24px", fontWeight: "800", color: "#C62828" }}>{summary.critical}</div>
+                <div style={{ fontSize: "11px", fontWeight: "700", color: "#C62828", textTransform: "uppercase" }}>Critical</div>
+              </div>
+              <div style={{ background: "#FFF8E1", padding: "16px", borderRadius: "12px", border: "1px solid #FFECB3", textAlign: "center" }}>
+                <div style={{ fontSize: "24px", fontWeight: "800", color: "#F57F17" }}>{summary.highRisk}</div>
+                <div style={{ fontSize: "11px", fontWeight: "700", color: "#F57F17", textTransform: "uppercase" }}>High Risk</div>
+              </div>
+              <div style={{ background: "#E8F5E9", padding: "16px", borderRadius: "12px", border: "1px solid #C8E6C9", textAlign: "center" }}>
+                <div style={{ fontSize: "24px", fontWeight: "800", color: "#2E7D32" }}>{summary.activeCases}</div>
+                <div style={{ fontSize: "11px", fontWeight: "700", color: "#2E7D32", textTransform: "uppercase" }}>Active</div>
+              </div>
+              <div style={{ background: "#E3F2FD", padding: "16px", borderRadius: "12px", border: "1px solid #BBDEFB", textAlign: "center" }}>
+                <div style={{ fontSize: "24px", fontWeight: "800", color: "#1565C0" }}>{summary.pendingLab}</div>
+                <div style={{ fontSize: "11px", fontWeight: "700", color: "#1565C0", textTransform: "uppercase" }}>Labs</div>
+              </div>
+              <div style={{ background: summary.slaAtRisk > 0 ? "#FFEBEE" : "white", padding: "16px", borderRadius: "12px", border: summary.slaAtRisk > 0 ? "1px solid #FFCDD2" : "1px solid #eee", textAlign: "center" }}>
+                <div style={{ fontSize: "24px", fontWeight: "800", color: summary.slaAtRisk > 0 ? "#B71C1C" : "#333" }}>{summary.slaAtRisk}</div>
+                <div style={{ fontSize: "11px", fontWeight: "700", color: summary.slaAtRisk > 0 ? "#B71C1C" : "#666", textTransform: "uppercase" }}>SLA Risk</div>
+              </div>
             </div>
-          </div>
-        )}
 
-        <div style={{ marginBottom: "24px" }}>
-          <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#1B5E20", marginBottom: "12px" }}>Recent Field Reports</h3>
-          {summary.recentReports && summary.recentReports.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              {summary.recentReports.map(r => (
-                <div key={r.id} style={{ background: "white", borderRadius: "12px", padding: "16px", boxShadow: "0 2px 8px rgba(0,0,0,0.07)", border: "1px solid #f0f0f0" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
-                    <div>
-                      <h4 style={{ margin: 0, fontSize: "15px", fontWeight: "700", color: "#333" }}>{r.syndrome} in {r.species}</h4>
-                      <p style={{ margin: 0, fontSize: "12px", color: "#666", marginTop: "2px" }}><MapIcon size={12} style={{ display: "inline", marginBottom: "-2px" }}/> {r.village}, {r.district}</p>
-                    </div>
-                    {r.status === 'SUSPECTED_OUTBREAK' ? (
-                      <span style={{ fontSize: "11px", fontWeight: "700", background: "#FFEBEE", color: "#C62828", padding: "4px 8px", borderRadius: "12px", display: "flex", alignItems: "center", gap: "4px" }}>
-                        <ShieldAlert size={12} /> CRITICAL
-                      </span>
-                    ) : r.mortality_count > 0 ? (
-                      <span style={{ fontSize: "11px", fontWeight: "700", background: "#FFF8E1", color: "#F57F17", padding: "4px 8px", borderRadius: "12px" }}>HIGH RISK</span>
-                    ) : (
-                      <span style={{ fontSize: "11px", fontWeight: "700", background: "#F5F5F5", color: "#666", padding: "4px 8px", borderRadius: "12px" }}>ROUTINE</span>
-                    )}
-                  </div>
-                  <div style={{ fontSize: "13px", color: "#444", marginBottom: "12px" }}>
-                    <strong>Symptoms:</strong> {r.symptoms}
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #eee", paddingTop: "12px" }}>
-                    <span style={{ fontSize: "11px", color: "#888" }}>{new Date(r.captured_at).toLocaleString()}</span>
-                    <button style={{ background: "none", border: "none", color: "#1565C0", fontSize: "13px", fontWeight: "600", cursor: "pointer" }} onClick={() => navigate("/vet/alerts")}>Review Case</button>
-                  </div>
+            {/* ATTENTION REQUIRED ZONE */}
+            <div style={{ marginBottom: "32px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#333", margin: 0, textTransform: "uppercase" }}>Attention Required</h3>
+                <span style={{ fontSize: "12px", color: "#666", fontWeight: "600", cursor: "pointer" }} onClick={() => navigate('/vet/queue')}>View Queue &rarr;</span>
+              </div>
+              
+              {summary.attentionQueue.length === 0 ? (
+                <div style={{ background: "white", padding: "32px", borderRadius: "12px", border: "1px solid #eee", textAlign: "center" }}>
+                   <CheckCircle size={32} color="#4CAF50" style={{ marginBottom: "12px" }}/>
+                   <div style={{ fontSize: "15px", fontWeight: "700", color: "#333" }}>All Clear</div>
+                   <div style={{ fontSize: "13px", color: "#666" }}>No items require immediate attention.</div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div style={{ textAlign: "center", padding: "20px", background: "white", borderRadius: "12px", color: "#888", fontSize: "14px" }}>No recent reports found.</div>
-          )}
-        </div>
-
-        <div className="nav-cards-grid">
-          {NAV_CARDS.map((card) => (
-            <div key={card.to} className="nav-card card" onClick={() => navigate(card.to)} style={{ cursor: 'pointer' }}>
-              <div className="nav-card-icon" style={{ color: card.color }}>{card.icon}</div>
-              <div className="nav-card-label">{card.label}</div>
-              <div className="nav-card-desc">{card.desc}</div>
-              {card.to === '/vet/alerts' && summary.criticalAlerts > 0 && (
-                <span className="alert-count-badge">{summary.criticalAlerts}</span>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                  {summary.attentionQueue.map((item, idx) => (
+                    <div key={idx} style={{ 
+                      background: "white", borderRadius: "12px", padding: "20px", 
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.05)", border: "1px solid #eee",
+                      borderLeft: `6px solid ${item.color === 'RED' ? '#C62828' : item.color === 'AMBER' ? '#F57C00' : '#1565C0'}`
+                    }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+                        <div>
+                          <div style={{ fontSize: "11px", fontWeight: "800", color: item.color === 'RED' ? '#C62828' : item.color === 'AMBER' ? '#F57C00' : '#1565C0', letterSpacing: "1px", marginBottom: "4px" }}>
+                            {item.color === 'RED' ? 'CRITICAL CASE' : item.color === 'AMBER' ? 'EMERGING SIGNAL' : 'LAB FOLLOW-UP'}
+                          </div>
+                          <h4 style={{ margin: 0, fontSize: "18px", fontWeight: "800", color: "#333" }}>{item.title}</h4>
+                          <p style={{ margin: 0, fontSize: "13px", color: "#666", marginTop: "4px", display: "flex", alignItems: "center", gap: "4px" }}>
+                            <MapIcon size={14}/> {item.location}
+                          </p>
+                        </div>
+                        <div style={{ textAlign: "right" }}>
+                           <span style={{ fontSize: "12px", fontWeight: "700", background: "#f5f5f5", padding: "4px 8px", borderRadius: "6px", color: "#444" }}>{item.stats}</span>
+                        </div>
+                      </div>
+                      
+                      <div style={{ fontSize: "14px", color: "#444", marginBottom: "16px", background: "#fafafa", padding: "10px 12px", borderRadius: "6px", border: "1px solid #f0f0f0" }}>
+                        <strong>Reason:</strong> {item.reason}
+                      </div>
+                      
+                      <button onClick={() => navigate(item.route)} style={{ width: "100%", padding: "12px", background: "white", color: "#1B5E20", border: "2px solid #1B5E20", borderRadius: "8px", fontWeight: "700", cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
+                        {item.type === 'LAB' ? 'VIEW LAB' : item.type === 'EMERGING' ? 'OPEN SENTINEL' : 'OPEN CASE'}
+                        <ChevronRight size={18} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
-          ))}
-        </div>
+
+            {/* QUICK LINKS */}
+            <div>
+              <h3 style={{ fontSize: "14px", fontWeight: "800", color: "#666", margin: "0 0 12px 0", textTransform: "uppercase" }}>Tools</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <div onClick={() => navigate('/vet/map')} style={{ background: "white", padding: "16px", borderRadius: "12px", border: "1px solid #eee", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                   <MapIcon size={24} color="#2E7D32"/>
+                   <span style={{ fontWeight: "700", color: "#333" }}>District Map</span>
+                </div>
+                <div onClick={() => navigate('/vet/district')} style={{ background: "white", padding: "16px", borderRadius: "12px", border: "1px solid #eee", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                   <BarChart2 size={24} color="#1565C0"/>
+                   <span style={{ fontWeight: "700", color: "#333" }}>Analytics</span>
+                </div>
+              </div>
+            </div>
+
+          </>
+        )}
       </div>
     </Layout>
   );

@@ -12,6 +12,7 @@
 const express = require('express');
 const db      = require('../db/database');
 const { authenticateToken, requireVet } = require('../middleware/auth');
+const { augmentWithSentinel } = require('../pipeline/SentinelEngine');
 
 const router = express.Router();
 
@@ -73,6 +74,15 @@ router.get('/', authenticateToken, requireVet, (req, res) => {
   `).all(sevenDaysAgoStr);
 
   res.json({
+    critical: {
+      cases: criticalCases.map(augmentWithSentinel),
+      outbreaks: suspectedOutbreaks.map(augmentWithSentinel)
+    },
+    zoonotic: zoonotic.map(augmentWithSentinel),
+    emerging: emerging.map(augmentWithSentinel)
+  });
+  return;
+// old code below
     critical: {
       cases:    criticalCases,
       outbreaks: suspectedOutbreaks,

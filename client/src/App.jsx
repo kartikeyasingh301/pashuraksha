@@ -11,6 +11,7 @@ import VetDashboard from './pages/vet/Dashboard.jsx';
 import CriticalAlerts from './pages/vet/CriticalAlerts.jsx';
 import EmergingClusters from './pages/vet/EmergingClusters.jsx';
 import ResponseQueue from './pages/vet/ResponseQueue.jsx';
+import CaseWorkspace from './pages/vet/CaseWorkspace.jsx';
 import MapView from './pages/vet/MapView.jsx';
 import VaccinationGap from './pages/vet/VaccinationGap.jsx';
 import ZoonoticAlerts from './pages/vet/ZoonoticAlerts.jsx';
@@ -58,6 +59,7 @@ function AppRoutes() {
       <Route path='/vet/alerts' element={<PrivateRoute role='vet'><CriticalAlerts /></PrivateRoute>} />
       <Route path='/vet/clusters' element={<PrivateRoute role='vet'><EmergingClusters /></PrivateRoute>} />
       <Route path='/vet/queue' element={<PrivateRoute role='vet'><ResponseQueue /></PrivateRoute>} />
+      <Route path='/vet/case/:id' element={<PrivateRoute role='vet'><CaseWorkspace /></PrivateRoute>} />
       <Route path='/vet/map' element={<PrivateRoute role='vet'><MapView /></PrivateRoute>} />
       <Route path='/vet/vaccination' element={<PrivateRoute role='vet'><VaccinationGap /></PrivateRoute>} />
       <Route path='/vet/zoonotic' element={<PrivateRoute role='vet'><ZoonoticAlerts /></PrivateRoute>} />
