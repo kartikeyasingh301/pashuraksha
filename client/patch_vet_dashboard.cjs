@@ -1,33 +1,16 @@
-﻿import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, BarChart2, Bell, Activity, ClipboardList, Map as MapIcon, Syringe, Dna, Microscope, Timer, ShieldAlert } from 'lucide-react';
-import Layout from '../../components/Layout.jsx';
-import { useAuth } from '../../contexts/AuthContext.jsx';
-import { apiGet } from '../../api/client.js';
+﻿const fs = require("fs");
+const path = require("path");
+const file = path.join(__dirname, "src/pages/vet/Dashboard.jsx");
+let code = fs.readFileSync(file, "utf8");
 
-const NAV_CARDS = [
-  { to: '/vet/alerts', icon: <AlertTriangle size={32} />, label: 'Critical Alerts', color: '#C62828', desc: 'View critical cases and outbreaks' },
-  { to: '/vet/clusters', icon: <Activity size={32} />, label: 'Emerging Clusters', color: '#E65100', desc: 'Spatiotemporal disease clusters' },
-  { to: '/vet/queue', icon: <ClipboardList size={32} />, label: 'Response Queue', color: '#1565C0', desc: 'Pending field responses' },
-  { to: '/vet/map', icon: <MapIcon size={32} />, label: 'Map View', color: '#2E7D32', desc: 'Geographic incident overview' },
-  { to: '/vet/vaccination', icon: <Syringe size={32} />, label: 'Vaccination Gaps', color: '#6A1B9A', desc: 'Coverage analysis by village' },
-  { to: '/vet/zoonotic', icon: <Dna size={32} />, label: 'Zoonotic Alerts', color: '#AD1457', desc: 'Human health risk notifications' },
-  { to: '/vet/lab', icon: <Microscope size={32} />, label: 'Lab Status', color: '#00695C', desc: 'Sample results and pending tests' },
-  { to: '/vet/district', icon: <BarChart2 size={32} />, label: 'District Command', color: '#0277BD', desc: 'Heatmap, SLA monitor, epi trends' },
-  { to: '/vet/broadcast', icon: <Bell size={32} />, label: 'Advisory Broadcast', color: '#558B2F', desc: 'Send geo-fenced multilingual SMS' },
-];
+// 1. Add Timer icon for SLA
+code = code.replace(
+  "AlertTriangle, BarChart2, Bell, Activity, ClipboardList, Map as MapIcon, Syringe, Dna, Microscope",
+  "AlertTriangle, BarChart2, Bell, Activity, ClipboardList, Map as MapIcon, Syringe, Dna, Microscope, Timer, ShieldAlert"
+);
 
-export default function VetDashboard() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [summary, setSummary] = useState({ 
-    totalReports: 0, activeCases: 0, suspectedOutbreaks: 0, pendingLab: 0, criticalAlerts: 0, slaBreaches: 0, recentReports: [] 
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchSummary() {
-      try {
+// 2. Add extra state and fetch logic
+const newFetch = `
         const [alertsData, casesData, labData, reportsData] = await Promise.all([
           apiGet('/alerts').catch(() => ({ critical: { cases: [], outbreaks: [] } })),
           apiGet('/cases').catch(() => ({ cases: [] })),
@@ -58,25 +41,12 @@ export default function VetDashboard() {
           slaBreaches,
           recentReports: reports.slice(0, 3)
         });
-      } catch (_) {}
-      finally { setLoading(false); }
-    }
-    fetchSummary();
-  }, []);
+`;
 
-  const greeting = new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening';
+code = code.replace(/const \[alertsData, casesData\] = await Promise\.all\(\[\s+apiGet\('\/alerts'\)[\s\S]*?criticalAlerts: criticalCount,\s+\}\);/m, newFetch);
 
-  return (
-    <Layout title="Vet Dashboard">
-      <div className="page-content">
-        <div className="greeting-section">
-          <h2 className="greeting-text">{greeting}, Dr. {user?.name || user?.username}</h2>
-          <p className="greeting-sub">Animal Health Surveillance Overview</p>
-        </div>
-
-        {loading ? (
-          <div className="loading-state">Loading summary...</div>
-        ) : (
+// 3. Update summary-grid to include SLA
+const newGrid = `
           <div className="summary-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginBottom: "24px" }}>
             <div className="summary-card" style={{ background:"#F5F5F5" }}>
               <div className="summary-num" style={{ color:"#333" }}>{summary.totalReports}</div>
@@ -101,8 +71,11 @@ export default function VetDashboard() {
               <div className="summary-label" style={{ color:"#B71C1C", fontWeight:"700" }}>SLA Breaches (&gt;24h)</div>
             </div>
           </div>
-        )}
+`;
+code = code.replace(/<div className="summary-grid">[\s\S]*?<\/div>\s*<\/div>/m, newGrid);
 
+// 4. Insert Recent Reports section before nav-cards-grid
+const recentReportsSection = `
         <div style={{ marginBottom: "24px" }}>
           <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#1B5E20", marginBottom: "12px" }}>Recent Field Reports</h3>
           {summary.recentReports && summary.recentReports.length > 0 ? (
@@ -138,20 +111,9 @@ export default function VetDashboard() {
             <div style={{ textAlign: "center", padding: "20px", background: "white", borderRadius: "12px", color: "#888", fontSize: "14px" }}>No recent reports found.</div>
           )}
         </div>
+`;
 
-        <div className="nav-cards-grid">
-          {NAV_CARDS.map((card) => (
-            <div key={card.to} className="nav-card card" onClick={() => navigate(card.to)} style={{ cursor: 'pointer' }}>
-              <div className="nav-card-icon" style={{ color: card.color }}>{card.icon}</div>
-              <div className="nav-card-label">{card.label}</div>
-              <div className="nav-card-desc">{card.desc}</div>
-              {card.to === '/vet/alerts' && summary.criticalAlerts > 0 && (
-                <span className="alert-count-badge">{summary.criticalAlerts}</span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </Layout>
-  );
-}
+code = code.replace('<div className="nav-cards-grid">', recentReportsSection + '\n        <div className="nav-cards-grid">');
+
+fs.writeFileSync(file, code, "utf8");
+console.log("VetDashboard.jsx patched successfully!");
