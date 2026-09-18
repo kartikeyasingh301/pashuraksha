@@ -72,7 +72,7 @@ export default function AdvisoryBroadcast() {
             <label style={{ display: "flex", alignItems: "center", gap: "10px", padding: "12px", border: "1px solid #e0e0e0", borderRadius: "8px", background: target === "district" ? "#E8F5E9" : "white", cursor: "pointer" }}>
               <input type="radio" name="target" checked={target === "district"} onChange={() => setTarget("district")} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: "600", fontSize: "14px" }}>Entire District (Rajkot)</div>
+                <div style={{ fontWeight: "600", fontSize: "14px" }}>Entire District (Nashik)</div>
                 <div style={{ fontSize: "12px", color: "#666" }}>General advisory broadcast</div>
               </div>
             </label>

@@ -155,25 +155,15 @@ const LABELS = {
 
 export default function Advisory() {
   const [lang, setLang] = useState('en');
+  const [showVideo, setShowVideo] = useState(false);
   const t = LABELS[lang];
   const list = ADVISORIES[lang];
 
   return (
-    <Layout title={t.title}>
+    <Layout lang={lang} setLang={setLang}  title={t.title}>
       <div className="page-content" style={{ paddingBottom: '80px' }}>
 
-        {/* Language Switcher */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', background: 'white', padding: '6px 14px', borderRadius: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', gap: '6px' }}>
-            <Languages size={16} color="#2E7D32" />
-            <select value={lang} onChange={(e) => setLang(e.target.value)}
-              style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '14px', fontWeight: '700', color: '#2E7D32' }}>
-              <option value="en">English</option>
-              <option value="hi">हिंदी</option>
-              <option value="mr">मराठी</option>
-            </select>
-          </div>
-        </div>
+        
 
         <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px', lineHeight: '1.5' }}>{t.intro}</p>
 

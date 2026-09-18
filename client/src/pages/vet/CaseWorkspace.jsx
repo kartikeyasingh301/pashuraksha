@@ -10,6 +10,7 @@ function formatSLA(hours) {
 }
 
 import { apiGet, apiPost } from '../../api/client.js';
+import { formatKolkataTime } from '../../utils/time.js';
 import { ShieldAlert, MapPin, Activity, CheckCircle, Clock, ChevronRight, FileText, FlaskConical, Users, Crosshair, Phone } from 'lucide-react';
 
 export default function CaseWorkspace() {

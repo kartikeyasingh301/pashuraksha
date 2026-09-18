@@ -70,24 +70,7 @@ const VaccinationPassbook = () => {
             { id: 'due_soon', label: 'Due Soon (4)' },
             { id: 'overdue', label: 'Overdue (2)' }
           ].map(f => (
-            <button
-              key={f.id}
-              onClick={() => setFilter(f.id)}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '20px',
-                border: 'none',
-                background: filter === f.id ? '#2E7D32' : '#F5F5F5',
-                color: filter === f.id ? 'white' : '#666',
-                fontWeight: filter === f.id ? '600' : '500',
-                fontSize: '14px',
-                whiteSpace: 'nowrap',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-            >
-              {f.label}
-            </button>
+            <button key={f.id} onClick={() => setFilter(f.id)} className={"chip " + (filter === f.id ? "active" : "")}>{f.label}</button>
           ))}
         </div>
 
@@ -108,13 +91,7 @@ const VaccinationPassbook = () => {
             const StatusIcon = styleConfig.icon;
             
             return (
-              <div key={record.id} style={{ 
-                background: 'white', 
-                borderRadius: '14px', 
-                padding: '16px', 
-                boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
-                borderLeft: `4px solid ${styleConfig.color}`
-              }}>
+              <div key={record.id} className="card" style={{ borderLeftColor: styleConfig.color }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
                   <div>
                     <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '700', color: '#333' }}>{record.vaccine}</h3>

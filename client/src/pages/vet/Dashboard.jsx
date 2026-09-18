@@ -1,3 +1,4 @@
+import { getGreeting } from '../../utils/time.js';
 ﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, Activity, Map as MapIcon, Dna, Timer, ShieldAlert, ChevronRight, FileText, CheckCircle, BarChart2 } from 'lucide-react';
@@ -95,7 +96,8 @@ export default function VetDashboard() {
     fetchSummary();
   }, []);
 
-  const greeting = new Date().getHours() < 12 ? 'GOOD MORNING' : new Date().getHours() < 17 ? 'GOOD AFTERNOON' : 'GOOD EVENING';
+  
+  const greeting = getGreeting().toUpperCase();
 
   return (
     <Layout title="Operations Center">
@@ -187,7 +189,7 @@ export default function VetDashboard() {
                           </div>
                           <h4 style={{ margin: 0, fontSize: "18px", fontWeight: "800", color: "#333" }}>{item.title}</h4>
                           <p style={{ margin: 0, fontSize: "13px", color: "#666", marginTop: "4px", display: "flex", alignItems: "center", gap: "4px" }}>
-                            <MapIcon size={14}/> {item.location}
+                            {item.type === 'LAB' ? <FlaskConical size={14}/> : <MapPin size={14}/>} {item.location}
                           </p>
                         </div>
                         <div style={{ textAlign: "right" }}>
@@ -199,7 +201,7 @@ export default function VetDashboard() {
                         <strong>Reason:</strong> {item.reason}
                       </div>
                       
-                      <button onClick={() => navigate(item.route)} style={{ width: "100%", padding: "12px", background: "white", color: "#1B5E20", border: "2px solid #1B5E20", borderRadius: "8px", fontWeight: "700", cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
+                      <button onClick={() => navigate(item.route)} className="btn btn-secondary btn-block">
                         {item.type === 'LAB' ? 'VIEW LAB' : item.type === 'EMERGING' ? 'OPEN SENTINEL' : 'OPEN CASE'}
                         <ChevronRight size={18} />
                       </button>

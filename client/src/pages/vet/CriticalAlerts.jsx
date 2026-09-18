@@ -10,16 +10,22 @@ function formatSLA(hours) {
 }
 
 import { apiGet } from '../../api/client.js';
+import { formatKolkataTime } from '../../utils/time.js';
 import { ShieldAlert, Activity, Filter, MapPin, ChevronRight, ActivitySquare, Shield, Clock } from 'lucide-react';
 
 function OutbreakDNAModal({ item, onClose, onAction }) {
   if (!item) return null;
   const dna = item.sentinel?.outbreak_dna || { clinical: 50, temporal: 50, spatial: 50, preventive: 50, movement: 50, historical: 50 };
   const actions = item.sentinel?.next_best_actions || [];
+  useEffect(() => {
+    const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 9999, display: "flex", justifyContent: "center", alignItems: "flex-end", padding: "0" }}>
-      <div style={{ background: "white", width: "100%", maxWidth: "600px", height: "85vh", borderTopLeftRadius: "24px", borderTopRightRadius: "24px", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <div className="signal-modal-overlay">
+      <div className="signal-modal-content">
         
         {/* Header */}
         <div style={{ padding: "20px", background: item.sentinel?.risk_level === 'CRITICAL' ? "#D32F2F" : "#F57C00", color: "white", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>

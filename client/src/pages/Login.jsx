@@ -43,11 +43,11 @@ export default function Login() {
 
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: '100dvh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#F8F9FA',
+      background: 'var(--bg)',
       position: 'relative',
       overflow: 'hidden',
       padding: '20px'
@@ -58,7 +58,7 @@ export default function Login() {
       <div style={{ position: 'absolute', bottom: '-15vw', left: '-10vw', width: '50vw', height: '50vw', borderRadius: '50%', border: '1px solid rgba(30,108,69,0.03)' }}></div>
 
       <div style={{
-        background: '#FFFFFF',
+        background: 'var(--surface)',
         width: '100%',
         maxWidth: '440px',
         borderRadius: '16px',
@@ -66,29 +66,29 @@ export default function Login() {
         boxShadow: '0 12px 32px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02)',
         position: 'relative',
         zIndex: 1,
-        border: '1px solid #E8EAED'
+        border: '1px solid var(--border)'
       }}>
         
         {/* Brand Header */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ display: 'inline-flex', justifyContent: 'center', marginBottom: '16px', padding: '12px', background: '#F8F9FA', borderRadius: '16px', border: '1px solid #E8EAED' }}>
-            <Logo size={56} color="#1E6C45" />
+          <div style={{ display: 'inline-flex', justifyContent: 'center', marginBottom: '16px', padding: '12px', background: 'var(--bg)', borderRadius: '16px', border: '1px solid var(--border)' }}>
+            <Logo size={56} color="var(--brand-600)" />
           </div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1C1E21', margin: '0 0 4px 0', letterSpacing: '-0.02em' }}>Pashuraksha</h1>
-          <h2 style={{ fontSize: '1rem', fontWeight: '600', color: '#1E6C45', margin: '0 0 6px 0' }}>Pashu Swasthya Rakshak</h2>
-          <p style={{ fontSize: '0.85rem', color: '#5F6368', margin: 0, fontWeight: '500' }}>Animal Health Surveillance & Response</p>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-primary)', margin: '0 0 4px 0', letterSpacing: '-0.02em' }}>Pashuraksha</h1>
+          <h2 style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--brand-600)', margin: '0 0 6px 0' }}>Pashu Swasthya Rakshak</h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, fontWeight: '500' }}>Animal Health Surveillance & Response</p>
         </div>
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {error && (
-            <div style={{ background: '#FFEBEE', color: '#D32F2F', padding: '12px 16px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ background: 'var(--danger-bg)', color: 'var(--danger-text)', padding: '12px 16px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <ShieldAlert size={16} /> {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="username" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#1C1E21', marginBottom: '8px' }}>Username</label>
+            <label htmlFor="username" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '8px' }}>Username</label>
             <input 
               id="username" 
               type="text" 
@@ -98,15 +98,15 @@ export default function Login() {
               autoComplete="username"
               disabled={loading}
               style={{
-                width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1.5px solid #E8EAED', fontSize: '1rem', color: '#1C1E21', background: '#FFFFFF', transition: 'all 0.2s ease', outline: 'none'
+                width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1.5px solid var(--border)', fontSize: '1rem', color: 'var(--text-primary)', background: 'var(--surface)', transition: 'all 0.2s ease', outline: 'none'
               }}
-              onFocus={(e) => { e.target.style.borderColor = '#1E6C45'; e.target.style.boxShadow = '0 0 0 3px #EBF3ED'; }}
-              onBlur={(e) => { e.target.style.borderColor = '#E8EAED'; e.target.style.boxShadow = 'none'; }}
+              onFocus={(e) => { e.target.style.borderColor = 'var(--brand-600)'; e.target.style.boxShadow = '0 0 0 3px var(--brand-50)'; }}
+              onBlur={(e) => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
             />
           </div>
 
           <div>
-            <label htmlFor="password" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#1C1E21', marginBottom: '8px' }}>Password</label>
+            <label htmlFor="password" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '8px' }}>Password</label>
             <div style={{ position: 'relative' }}>
               <input 
                 id="password" 
@@ -117,15 +117,15 @@ export default function Login() {
                 autoComplete="current-password"
                 disabled={loading}
                 style={{
-                  width: '100%', padding: '14px 44px 14px 16px', borderRadius: '8px', border: '1.5px solid #E8EAED', fontSize: '1rem', color: '#1C1E21', background: '#FFFFFF', transition: 'all 0.2s ease', outline: 'none'
+                  width: '100%', padding: '14px 44px 14px 16px', borderRadius: '8px', border: '1.5px solid var(--border)', fontSize: '1rem', color: 'var(--text-primary)', background: 'var(--surface)', transition: 'all 0.2s ease', outline: 'none'
                 }}
-                onFocus={(e) => { e.target.style.borderColor = '#1E6C45'; e.target.style.boxShadow = '0 0 0 3px #EBF3ED'; }}
-                onBlur={(e) => { e.target.style.borderColor = '#E8EAED'; e.target.style.boxShadow = 'none'; }}
+                onFocus={(e) => { e.target.style.borderColor = 'var(--brand-600)'; e.target.style.boxShadow = '0 0 0 3px var(--brand-50)'; }}
+                onBlur={(e) => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
               />
               <button 
                 type="button" 
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#5F6368', padding: '4px', display: 'flex' }}
+                style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '4px', display: 'flex' }}
                 tabIndex="-1"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -137,18 +137,18 @@ export default function Login() {
             type="submit" 
             disabled={loading}
             style={{
-              width: '100%', padding: '14px', background: '#1E6C45', color: '#FFFFFF', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s ease', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+              width: '100%', padding: '14px', background: 'var(--brand-600)', color: 'var(--surface)', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s ease', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
             }}
-            onMouseOver={(e) => !loading && (e.target.style.background = '#14492E')}
-            onMouseOut={(e) => !loading && (e.target.style.background = '#1E6C45')}
+            onMouseOver={(e) => !loading && (e.target.style.background = 'var(--brand-700)')}
+            onMouseOut={(e) => !loading && (e.target.style.background = 'var(--brand-600)')}
           >
-            {loading ? (longLoading ? 'Waking up secure server...' : 'Signing in...') : 'SIGN IN'} {loading ? null : <ArrowRight size={18} />}
+            {loading ? <><Loader2 size={18} className="animate-spin" /> {longLoading ? 'Waking up secure server...' : 'Signing in...'}</> : <>SIGN IN <ArrowRight size={18} /></>}
           </button>
         </form>
 
         {/* Demo Roles Container */}
-        <div style={{ marginTop: '40px', paddingTop: '32px', borderTop: '1px solid #E8EAED' }}>
-          <div style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: '700', color: '#5F6368', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>
+        <div style={{ marginTop: '40px', paddingTop: '32px', borderTop: '1px solid var(--border)' }}>
+          <div style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>
             Demo Environment
           </div>
           
@@ -156,23 +156,23 @@ export default function Login() {
             <button 
               type="button"
               onClick={() => handleDemoFill('farmer')}
-              style={{ padding: '12px 8px', background: '#FFFFFF', border: '1px solid #E8EAED', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center' }}
-              onMouseOver={(e) => { e.currentTarget.style.borderColor = '#1E6C45'; e.currentTarget.style.background = '#F8F9FA'; }}
-              onMouseOut={(e) => { e.currentTarget.style.borderColor = '#E8EAED'; e.currentTarget.style.background = '#FFFFFF'; }}
+              style={{ padding: '12px 8px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center' }}
+              onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--brand-600)'; e.currentTarget.style.background = 'var(--bg)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)'; }}
             >
-              <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#1C1E21', marginBottom: '2px' }}>FARMER DEMO</div>
-              <div style={{ fontSize: '0.7rem', color: '#5F6368' }}>Report & Herd</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}><User size={16} color="var(--brand-600)" /> FARMER DEMO</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Report & Herd</div>
             </button>
             
             <button 
               type="button"
               onClick={() => handleDemoFill('vet')}
-              style={{ padding: '12px 8px', background: '#FFFFFF', border: '1px solid #E8EAED', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center' }}
-              onMouseOver={(e) => { e.currentTarget.style.borderColor = '#1E6C45'; e.currentTarget.style.background = '#F8F9FA'; }}
-              onMouseOut={(e) => { e.currentTarget.style.borderColor = '#E8EAED'; e.currentTarget.style.background = '#FFFFFF'; }}
+              style={{ padding: '12px 8px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center' }}
+              onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--brand-600)'; e.currentTarget.style.background = 'var(--bg)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)'; }}
             >
-              <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#1C1E21', marginBottom: '2px' }}>VET DEMO</div>
-              <div style={{ fontSize: '0.7rem', color: '#5F6368' }}>Surveillance & Ops</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}><Stethoscope size={16} color="var(--brand-600)" /> VET DEMO</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Surveillance & Ops</div>
             </button>
           </div>
         </div>
@@ -180,7 +180,7 @@ export default function Login() {
       </div>
       
       {/* Trust Footer */}
-      <div style={{ position: 'absolute', bottom: '24px', left: '0', right: '0', textAlign: 'center', fontSize: '0.8rem', color: '#5F6368', fontWeight: '500' }}>
+      <div style={{ position: 'absolute', bottom: '24px', left: '0', right: '0', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '500' }}>
         Field Reporting &nbsp;&bull;&nbsp; Early Warning &nbsp;&bull;&nbsp; Veterinary Response<br/>
         <span style={{ fontSize: '0.7rem', opacity: 0.7, marginTop: '8px', display: 'block' }}>Maharashtra Animal Health Surveillance</span>
       </div>

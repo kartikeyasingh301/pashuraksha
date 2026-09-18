@@ -12,7 +12,7 @@ const MOCK_CHART_DATA = [
 const MOCK_SPECIES_DATA = [
   { name: 'Cattle', value: 400 }, { name: 'Buffalo', value: 300 }, { name: 'Goat', value: 300 }
 ];
-const COLORS = ['#ef4444', '#f97316', '#22c55e'];
+const COLORS = ['var(--cat-1)', 'var(--cat-2)', 'var(--cat-3)', 'var(--cat-4)'];
 
 const MAHARASHTRA_DISTRICTS = [
   'Pune', 'Nashik', 'Ahilyanagar', 'Nagpur', 'Mumbai', 'Thane', 'Kolhapur', 'Solapur', 'Satara', 'Jalgaon', 'Amravati', 'Aurangabad'
@@ -24,7 +24,9 @@ export default function DistrictDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
+    const timer = setInterval(() => {
+      setTime(new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true }).format(new Date()));
+    }, 1000);
     setTimeout(() => setLoading(false), 1000); // Simulate API load
     return () => clearInterval(timer);
   }, []);

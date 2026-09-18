@@ -1,28 +1,19 @@
 ﻿import { useEffect } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-
-// Fix leaflet default icon issue
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
+import { formatKolkataTime } from '../utils/time.js';
 
 const STATUS_COLORS = {
-  REPORT: '#757575',
-  CASE: '#1976D2',
-  CLUSTER: '#F57F17',
-  SUSPECTED_OUTBREAK: '#C62828',
-  CONFIRMED: '#2E7D32',
-  RESPONSE: '#6A1B9A',
+  REPORT: 'var(--text-secondary)',
+  CASE: 'var(--info-text)',
+  CLUSTER: 'var(--warning-text)',
+  SUSPECTED_OUTBREAK: 'var(--danger-text)',
+  CONFIRMED: 'var(--danger-text)',
+  RESPONSE: 'var(--cat-3)',
 };
 
-function getColor(status) {
-  return STATUS_COLORS[status] || '#757575';
-}
+function getColor(status) { return STATUS_COLORS[status] || 'var(--text-secondary)'; }
 
 function getCoords(feature) {
   if (!feature) return null;
@@ -35,49 +26,71 @@ function getCoords(feature) {
   return null;
 }
 
+function MapFitter({ incidents }) {
+  const map = useMap();
+  useEffect(() => {
+    const bounds = [];
+    incidents.forEach(f => {
+      const coords = getCoords(f);
+      if (coords) bounds.push(coords);
+    });
+    if (bounds.length > 0) {
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+    }
+  }, [incidents, map]);
+  return null;
+}
+
+function createCustomIcon(status, count) {
+  const color = getColor(status);
+  const size = count > 1 ? 28 : 16;
+  const html = count > 1 
+    ? `<div style="background:${color}; color:white; width:${size}px; height:${size}px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; border: 2px solid white; box-shadow: var(--shadow-sm);">${count}</div>`
+    : `<div style="background:${color}; width:${size}px; height:${size}px; border-radius:50%; border: 2px solid white; box-shadow: var(--shadow-sm);"></div>`;
+  
+  return L.divIcon({
+    html,
+    className: 'custom-div-icon',
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2]
+  });
+}
+
 export default function LeafletMap({ incidents = [], height = '400px', filterStatus = null }) {
   const filtered = filterStatus
     ? incidents.filter((f) => (f.properties?.status || f.status) === filterStatus)
     : incidents;
 
   return (
-    <div style={{ height, width: '100%', borderRadius: '12px', overflow: 'hidden' }}>
-      <MapContainer
-        center={[22.3, 72.1]}
-        zoom={8}
-        style={{ height: '100%', width: '100%' }}
-        zoomControl={true}
-      >
+    <div style={{ height, width: '100%', borderRadius: 'var(--radius-card)', overflow: 'hidden', position: 'relative' }}>
+      <MapContainer center={[19.5, 75.0]} zoom={6} style={{ height: '100%', width: '100%' }} zoomControl={true}>
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution='&copy; OpenStreetMap'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          className="desaturated-tiles"
         />
+        <MapFitter incidents={filtered} />
         {filtered.map((feature, idx) => {
           const coords = getCoords(feature);
           if (!coords) return null;
           const props = feature.properties || feature;
           const status = props.status || 'REPORT';
-          const color = getColor(status);
+          const count = props.report_count || props.reportCount || 1;
           return (
-            <CircleMarker
-              key={props.id || idx}
-              center={coords}
-              radius={status === 'SUSPECTED_OUTBREAK' ? 14 : status === 'CLUSTER' ? 11 : 8}
-              pathOptions={{ fillColor: color, color: color, fillOpacity: 0.75, weight: 2 }}
-            >
+            <Marker key={props.id || idx} position={coords} icon={createCustomIcon(status, count)}>
               <Popup>
                 <div className="map-popup">
                   <strong>{props.syndrome || props.disease || 'Unknown'}</strong>
                   <div>{props.species || ''}</div>
                   <div>{props.village || props.location || ''}</div>
                   <div>{props.district || ''}</div>
-                  <div><em>{status}</em></div>
+                  <div><em style={{color: getColor(status)}}>{status}</em></div>
                   <div className="popup-date">
-                    {props.capturedAt ? new Date(props.capturedAt).toLocaleDateString('en-IN') : ''}
+                    {props.capturedAt || props.started_at || props.detected_at ? formatKolkataTime(props.capturedAt || props.started_at || props.detected_at) : ''}
                   </div>
                 </div>
               </Popup>
-            </CircleMarker>
+            </Marker>
           );
         })}
       </MapContainer>

@@ -30,7 +30,13 @@ export default function LabStatus() {
     <Layout title='Lab Status' showBack>
       <div className='page-content'>
         {error && <div className='alert alert-error'>{error}</div>}
-        {loading ? <div className='loading-state'>Loading lab results...</div> : samples.length === 0 ? (
+        {loading ? (
+    <div style={{ padding: '20px' }}>
+      <div className="skeleton skeleton-title"></div>
+      <div className="skeleton skeleton-text" style={{ height: '80px' }}></div>
+      <div className="skeleton skeleton-text" style={{ height: '80px' }}></div>
+    </div>
+  ) : samples.length === 0 ? (
           <div className='empty-state'>
             <div className='empty-icon'>🔬</div>
             <p>No lab samples found. Samples will appear here once submitted.</p>

@@ -1,3 +1,4 @@
+import { getKolkataTime } from '../../utils/time.js';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone, FileText } from "lucide-react";
@@ -80,7 +81,7 @@ export default function FarmerDashboard() {
   const [showMissedCall, setShowMissedCall] = useState(false);
 
   const t = TRANSLATIONS[lang];
-  const hour = new Date().getHours();
+  const hour = getKolkataTime().getHours();
   const greeting = hour < 12 ? t.morning : hour < 17 ? t.afternoon : t.evening;
 
   useEffect(() => {
@@ -108,18 +109,7 @@ export default function FarmerDashboard() {
       <div style={{ position:"absolute", top:-30, right:-30, width:160, height:160, background:"rgba(255,255,255,0.07)", borderRadius:"50%" }} />
       <div style={{ position:"absolute", bottom:-40, right:40, width:110, height:110, background:"rgba(255,255,255,0.05)", borderRadius:"50%" }} />
 
-      {/* Language Switcher */}
-      <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:"14px", position:"relative", zIndex:1 }}>
-        <div style={{ display:"flex", alignItems:"center", background:"rgba(255,255,255,0.18)", padding:"5px 12px", borderRadius:"20px", gap:"6px", border:"1px solid rgba(255,255,255,0.25)" }}>
-          <Languages size={14} color="#fff" />
-          <select value={lang} onChange={(e) => setLang(e.target.value)}
-            style={{ border:"none", background:"transparent", outline:"none", fontSize:"13px", fontWeight:"700", color:"#fff" }}>
-            <option value="en" style={{ color:"#000" }}>English</option>
-            <option value="hi" style={{ color:"#000" }}>हिंदी</option>
-            <option value="mr" style={{ color:"#000" }}>मराठी</option>
-          </select>
-        </div>
-      </div>
+      
 
       <p style={{ color:"#A5D6A7", margin:"0 0 4px 0", fontSize:"12px", fontWeight:"600", textTransform:"uppercase", letterSpacing:"1.5px", position:"relative", zIndex:1 }}>Pashuraksha</p>
       <h2 style={{ color:"white", margin:"0 0 4px 0", fontSize:"24px", fontWeight:"800", position:"relative", zIndex:1 }}>{greeting},</h2>
@@ -129,7 +119,7 @@ export default function FarmerDashboard() {
   );
 
   return (
-    <Layout title="Farmer Dashboard" hero={heroBanner}>
+    <Layout title="Farmer Dashboard" lang={lang} setLang={setLang}  hero={heroBanner}>
       <div className="page-content" style={{ paddingBottom:"100px" }}>
 
         {/* Report Button */}

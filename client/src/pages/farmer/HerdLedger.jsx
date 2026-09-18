@@ -48,7 +48,7 @@ export default function HerdLedger() {
           {/* Profile Card */}
           <div className="card">
             <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"12px" }}>
-              <div style={{ width:48, height:48, borderRadius:"50%", background:sc.bg, color:sc.color, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"800", fontSize:"18px" }}>{a.species[0]}</div>
+              <div style={{ width:48, height:48, borderRadius:"50%", background:sc.bg, color:sc.color, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"800", fontSize:"18px" }}>{a.species === 'Cattle' ? '🐄' : a.species === 'Buffalo' ? '🐃' : a.species === 'Sheep' ? '🐑' : a.species === 'Goat' ? '🐐' : a.species[0]}</div>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:"18px", fontWeight:"700", color:"#333" }}>{a.tagId}</div>
                 <div style={{ fontSize:"13px", color:"#888" }}>{a.species} - {a.breed} - {a.sex}</div>
@@ -141,10 +141,7 @@ export default function HerdLedger() {
         {/* Filter Tabs */}
         <div style={{ display:"flex", gap:"6px", overflowX:"auto", marginBottom:"16px", paddingBottom:"4px" }}>
           {FILTERS.map(f => (
-            <button key={f} onClick={() => setFilter(f)} style={{
-              padding:"6px 14px", borderRadius:"20px", border:"none", fontSize:"12px", fontWeight:"600", cursor:"pointer", whiteSpace:"nowrap",
-              background: filter === f ? "#2E7D32" : "#F0F0F0", color: filter === f ? "white" : "#666"
-            }}>{f}</button>
+            <button key={f} onClick={() => setFilter(f)} className={"chip " + (filter === f ? "active" : "")}>{f}</button>
           ))}
         </div>
 
@@ -163,7 +160,7 @@ export default function HerdLedger() {
             <div key={a.id} onClick={() => setSelected(a)} className="card" style={{ display:"flex", alignItems:"center", cursor:"pointer", gap:"12px",
               transition:"box-shadow 0.2s", border:"1px solid #f0f0f0"
             }}>
-              <div style={{ width:42, height:42, borderRadius:"50%", background:sc.bg, color:sc.color, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"800", fontSize:"15px", flexShrink:0 }}>{a.species[0]}</div>
+              <div style={{ width:42, height:42, borderRadius:"50%", background:sc.bg, color:sc.color, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"800", fontSize:"15px", flexShrink:0 }}>{a.species === 'Cattle' ? '🐄' : a.species === 'Buffalo' ? '🐃' : a.species === 'Sheep' ? '🐑' : a.species === 'Goat' ? '🐐' : a.species[0]}</div>
               <div style={{ flex:1, minWidth:0 }}>
                 <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"2px" }}>
                   <span style={{ fontSize:"14px", fontWeight:"700", color:"#333" }}>{a.tagId}</span>
