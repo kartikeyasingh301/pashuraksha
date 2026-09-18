@@ -87,7 +87,7 @@ export default function VetDashboard() {
           pendingLab: samples.filter(s => s.status === 'PENDING').length,
           slaAtRisk,
           attentionQueue: attentionQueue.slice(0, 5), // Top 5 priority items
-          appPct, voicePct, ivrPct, fieldWorkerPct, webPct
+          appPct, voicePct, ivrPct, fieldWorkerPct: 0, webPct: 0
         });
       } catch (_) {}
       finally { setLoading(false); }
