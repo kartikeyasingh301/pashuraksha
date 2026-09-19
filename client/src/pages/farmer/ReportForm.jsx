@@ -185,7 +185,7 @@ export default function ReportForm() {
 
   return (
     <Layout lang={lang} setLang={setLang} title={t.title} showBack={true}>
-      <div className="page-content" style={{ paddingBottom: '120px' }}>
+      <div className="page-content form-content" style={{ paddingBottom: '120px' }}>
         
         {/* Tabs - Emojis removed, Lucide icons used */}
         <div style={{ display: "flex", background: "white", padding: "4px", borderRadius: "var(--radius-pill)", border: "1px solid var(--border)", marginBottom: "24px" }}>
