@@ -13,43 +13,93 @@ function formatKolkataTime(isoString) {
   }).format(new Date(isoString));
 }
 
+
 const TRANSLATIONS = {
   en: {
     back: "Back to Dashboard",
-    title: "Report Details",
+    title: "Detailed Health Report",
     loading: "Loading report details...",
     error: "Could not load report.",
     status: "Current Status",
     symptoms: "Reported Symptoms",
     location: "Location",
     species: "Animal Species",
-    syndrome: "Suspected Issue",
-    date: "Reported On"
+    syndrome: "Suspected Disease",
+    date: "Reported On",
+    mortality: "Animal Deaths",
+    mortalityNone: "None reported",
+    vaccination: "Vaccination Status",
+    vaccinationUnknown: "Unknown",
+    vaccinationYes: "Vaccinated",
+    vaccinationNo: "Not Vaccinated",
+    notes: "Veterinarian Notes",
+    notesNone: "No notes attached yet",
+    id: "Report Tracking ID"
   },
   hi: {
     back: "डैशबोर्ड पर वापस जाएं",
-    title: "रिपोर्ट विवरण",
+    title: "विस्तृत स्वास्थ्य रिपोर्ट",
     loading: "रिपोर्ट लोड हो रही है...",
     error: "रिपोर्ट लोड नहीं हो सकी।",
     status: "वर्तमान स्थिति",
-    symptoms: "लक्षण",
+    symptoms: "दर्ज किए गए लक्षण",
     location: "स्थान",
     species: "पशु",
-    syndrome: "समस्या",
-    date: "रिपोर्ट करने की तिथि"
+    syndrome: "संभावित बीमारी",
+    date: "रिपोर्ट करने की तिथि",
+    mortality: "पशुओं की मृत्यु",
+    mortalityNone: "कोई मृत्यु दर्ज नहीं",
+    vaccination: "टीकाकरण की स्थिति",
+    vaccinationUnknown: "अज्ञात",
+    vaccinationYes: "टीका लगा है",
+    vaccinationNo: "टीका नहीं लगा है",
+    notes: "डॉक्टर की टिप्पणी",
+    notesNone: "अभी तक कोई टिप्पणी नहीं",
+    id: "रिपोर्ट ट्रैकिंग आईडी"
   },
   mr: {
     back: "डॅशबोर्डवर परत जा",
-    title: "अहवाल तपशील",
+    title: "सविस्तर आरोग्य अहवाल",
     loading: "अहवाल लोड होत आहे...",
     error: "अहवाल लोड होऊ शकला नाही.",
     status: "सद्य स्थिती",
-    symptoms: "लक्षणे",
+    symptoms: "नोंदवलेली लक्षणे",
     location: "स्थान",
     species: "प्राणी",
-    syndrome: "समस्या",
-    date: "अहवाल दिल्याची तारीख"
+    syndrome: "संभाव्य आजार",
+    date: "अहवाल दिल्याची तारीख",
+    mortality: "प्राण्यांचा मृत्यू",
+    mortalityNone: "कोणताही मृत्यू नोंदवला नाही",
+    vaccination: "लसीकरणाची स्थिती",
+    vaccinationUnknown: "माहित नाही",
+    vaccinationYes: "लसीकरण झाले आहे",
+    vaccinationNo: "लसीकरण झालेले नाही",
+    notes: "डॉक्टरांची नोंद",
+    notesNone: "अद्याप कोणतीही नोंद नाही",
+    id: "अहवाल ट्रॅकिंग आयडी"
   }
+};
+
+const getTranslatedDisease = (disease, lang) => {
+  if (!disease) return "Unknown";
+  const d = disease.toUpperCase();
+  if (lang === 'hi') {
+    if (d.includes('FMD') || d.includes('FOOT')) return 'खुरपका-मुँहपका रोग (FMD)';
+    if (d.includes('LSD') || d.includes('LUMPY')) return 'लंपी त्वचा रोग (LSD)';
+    if (d.includes('PPR')) return 'पीपीआर (बकरी प्लेग)';
+    if (d.includes('MASTITIS')) return 'थनैला रोग (Mastitis)';
+    if (d.includes('BQ') || d.includes('BLACK')) return 'लंगड़ा बुखार (Black Quarter)';
+    if (d.includes('ANTHRAX')) return 'गिल्टी रोग (Anthrax)';
+  }
+  if (lang === 'mr') {
+    if (d.includes('FMD') || d.includes('FOOT')) return 'लाळ्या खुरकूत (FMD)';
+    if (d.includes('LSD') || d.includes('LUMPY')) return 'लंपी स्किन डिसीज (LSD)';
+    if (d.includes('PPR')) return 'पीपीआर (शेळ्यांचा प्लेग)';
+    if (d.includes('MASTITIS')) return 'मस्टायटीस (सडाचा आजार)';
+    if (d.includes('BQ') || d.includes('BLACK')) return 'फऱ्या (Black Quarter)';
+    if (d.includes('ANTHRAX')) return 'अँथ्रॅक्स';
+  }
+  return disease;
 };
 
 export default function ReportDetail() {
