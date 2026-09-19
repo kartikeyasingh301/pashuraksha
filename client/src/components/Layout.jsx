@@ -124,8 +124,8 @@ export default function Layout({ children, title, hero, showBack = false, header
               <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.1)', padding: '2px 8px', borderRadius: 'var(--radius-pill)', gap: '4px' }}>
                 <select value={lang} onChange={(e) => setLang(e.target.value)} style={{ background: 'transparent', color: 'white', border: 'none', outline: 'none', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
                   <option value="en" style={{color:'black'}}>English</option>
-                  <option value="hi" style={{color:'black'}}>Hindi</option>
-                  <option value="mr" style={{color:'black'}}>Marathi</option>
+                  <option value="hi" style={{color:'black'}}>हिंदी</option>
+                  <option value="mr" style={{color:'black'}}>मराठी</option>
                 </select>
               </div>
             )}

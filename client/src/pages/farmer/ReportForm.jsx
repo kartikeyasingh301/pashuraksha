@@ -262,23 +262,10 @@ export default function ReportForm() {
     setSubmitting(false);
   }
 
-  const headerControls = (
-    <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "16px" }}>
-      <div style={{ display: "flex", alignItems: "center", background: "white", padding: "5px 12px", borderRadius: "20px", gap: "6px", border: "1px solid #E0E0E0", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
-        <Languages size={16} color="#2E7D32" />
-        <select value={lang} onChange={(e) => setLang(e.target.value)} style={{ border: "none", background: "transparent", outline: "none", fontSize: "14px", fontWeight: "600", color: "#2E7D32" }}>
-          <option value="en">English</option>
-          <option value="hi">हिंदी</option>
-          <option value="mr">मराठी</option>
-        </select>
-      </div>
-    </div>
-  );
-
   return (
     <Layout title={t.title} showBack>
       <div className="page-content">
-        {headerControls}
+        
 
         {!isOnline && (
           <div className="alert alert-info" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
