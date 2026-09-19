@@ -35,7 +35,9 @@ function MapFitter({ incidents }) {
       if (coords) bounds.push(coords);
     });
     if (bounds.length > 0) {
-      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+      setTimeout(() => {
+        map.flyToBounds(bounds, { padding: [50, 50], maxZoom: 12, animate: true, duration: 1.5 });
+      }, 100);
     }
   }, [incidents, map]);
   return null;
@@ -65,8 +67,8 @@ export default function LeafletMap({ incidents = [], height = '400px', filterSta
     <div style={{ height, width: '100%', borderRadius: 'var(--radius-card)', overflow: 'hidden', position: 'relative' }}>
       <MapContainer center={[19.5, 75.0]} zoom={6} style={{ height: '100%', width: '100%' }} zoomControl={true}>
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution='&copy; OpenStreetMap'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MapFitter incidents={filtered} />
         {filtered.map((feature, idx) => {

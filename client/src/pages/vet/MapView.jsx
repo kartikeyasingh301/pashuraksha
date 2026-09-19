@@ -95,15 +95,17 @@ export default function MapView() {
         ) : (
           <div style={{ flex: 1, position: 'relative' }}>
             <LeafletMap incidents={filtered} height='100%' filterStatus={filter !== 'All' && filter !== 'Other' ? undefined : undefined} />
-            <div className='map-legend' style={{ bottom: '46px', border: 'none', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(4px)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-              <div className='legend-title' style={{ fontSize: '13px', textTransform: 'uppercase' }}>Command Legend</div>
+            <div className='map-legend' style={{ bottom: '24px', left: '16px', background: 'white', padding: '16px', borderRadius: '16px', border: '1px solid #f0f0f0', boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
+              <div className='legend-title' style={{ fontSize: '14px', fontWeight: '800', color: '#333', marginBottom: '12px' }}>Map Legend</div>
               {LEGEND.map((item) => (
-                <div key={item.label} className='legend-item' style={{ fontSize: '12px', fontWeight: '600' }}>
-                  <span className='legend-dot' style={{ background: item.color, width: '12px', height: '12px' }} />
+                <div key={item.label} className='legend-item' style={{ fontSize: '13px', fontWeight: '500', color: '#555', marginBottom: '8px' }}>
+                  <span className='legend-dot' style={{ background: item.color, width: '14px', height: '14px', borderRadius: '50%', flexShrink: 0 }} />
                   <span className='legend-label'>{item.label}</span>
                 </div>
               ))}
-              <div className='legend-count' style={{ fontWeight: '700' }}>{filtered.length} active signals</div>
+              <div className='legend-count' style={{ fontWeight: '700', fontSize: '12px', color: '#1B5E20', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #eee' }}>
+                {filtered.length} visible on map
+              </div>
             </div>
           </div>
         )}
