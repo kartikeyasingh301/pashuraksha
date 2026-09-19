@@ -16,7 +16,10 @@ const VaccinationPassbook = () => {
     { id: 8, vaccine: 'HS', batch: 'VB-HS-2025-331', manufacturer: 'Hester Biosciences', animal: 'MH-NK-4831', date: '5 Jun 2025', nextDue: '5 Jun 2026', vet: 'Dr. Priya Sharma', status: 'overdue' }
   ];
 
-  const filteredRecords = filter === 'all' ? records : records.filter(r => r.status === filter);
+  const filteredRecords = (filter === 'all' ? records : records.filter(r => r.status === filter)).sort((a, b) => {
+      const order = { 'overdue': 1, 'due_soon': 2, 'vaccinated': 3 };
+      return order[a.status] - order[b.status];
+    });
 
   const statusConfig = {
     vaccinated: { color: '#2E7D32', bg: '#E8F5E9', border: '#C8E6C9', label: 'Vaccinated', icon: CheckCircle },

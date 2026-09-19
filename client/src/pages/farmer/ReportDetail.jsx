@@ -88,6 +88,27 @@ export default function ReportDetail() {
     fetchReport();
   }, [id]);
 
+
+  const getTranslatedStatus = (status) => {
+    if (!status) return t.statusPending || "PENDING SYNC";
+    const st = status.toUpperCase();
+    if (lang === 'hi') {
+      if (st === 'REPORT') return 'रिपोर्ट दर्ज';
+      if (st === 'CASE') return 'सत्यापित मामला';
+      if (st === 'CLUSTER') return 'गंभीर मामला';
+      if (st === 'SUSPECTED' || st === 'SUSPECTED_OUTBREAK') return 'संभावित प्रकोप';
+      if (st === 'COMPLETED') return 'पूरा हुआ';
+    }
+    if (lang === 'mr') {
+      if (st === 'REPORT') return 'अहवाल नोंदवला';
+      if (st === 'CASE') return 'सत्यापित प्रकरण';
+      if (st === 'CLUSTER') return 'गंभीर प्रकरण';
+      if (st === 'SUSPECTED' || st === 'SUSPECTED_OUTBREAK') return 'संभाव्य प्रादुर्भाव';
+      if (st === 'COMPLETED') return 'पूर्ण झाले';
+    }
+    return st;
+  };
+
   const getStatusColor = (status) => {
     if (status === 'CASE' || status === 'CLUSTER') return '#F57C00';
     if (status === 'SUSPECTED') return '#D32F2F';
@@ -119,7 +140,7 @@ export default function ReportDetail() {
               <strong style={{ fontSize: "20px", color: "#111" }}>{report.syndrome || report.disease}</strong>
             </div>
             <div style={{ background: getStatusColor(report.status), color: "white", padding: "6px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "bold" }}>
-              {report.status || (report.synced ? "REPORT" : "PENDING SYNC")}
+              {getTranslatedStatus(report.status)}
             </div>
           </div>
 
