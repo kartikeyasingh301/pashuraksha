@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+﻿import { useState, useCallback } from "react";
 import { WifiOff, CheckCircle, Save, AlertTriangle, Loader, MapPin, Send, Languages, ShieldAlert, Activity, Info, Mic, Square, FileText } from "lucide-react";
 import Layout from "../../components/Layout.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
@@ -295,7 +295,7 @@ export default function ReportForm() {
 
         
         <div style={{ display: "flex", background: "#f5f5f5", padding: "4px", borderRadius: "8px", marginBottom: "20px" }}>
-           <button onClick={() => setActiveTab("standard")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "standard" ? "white" : "transparent", fontWeight: activeTab === "standard" ? "700" : "500", color: activeTab === "standard" ? "#2E7D32" : "#666", boxShadow: activeTab === "standard" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}><div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><FileText size={16} /> Standard Report</div></button>
+           <button onClick={() => setActiveTab("standard")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "standard" ? "white" : "transparent", fontWeight: activeTab === "standard" ? "700" : "500", color: activeTab === "standard" ? "#2E7D32" : "#666", boxShadow: activeTab === "standard" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}><div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><FileText size={16} /> Fill a Form</div></button>
            <button onClick={() => setActiveTab("voice")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "voice" ? "white" : "transparent", fontWeight: activeTab === "voice" ? "700" : "500", color: activeTab === "voice" ? "#2E7D32" : "#666", boxShadow: activeTab === "voice" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}>🎙 Speak Your Problem</button>
         </div>
 
@@ -331,179 +331,6 @@ export default function ReportForm() {
         )}
 
         {(activeTab === "standard" || voiceState === "verify") && (
-           <>
-           {voiceState === "verify" && (
-             <div style={{ background: "#E3F2FD", border: "1px solid #90CAF9", borderRadius: "8px", padding: "16px", marginBottom: "20px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#1565C0", fontWeight: "700", marginBottom: "12px" }}>
-                   <Info size={18} /> Information Extracted
-                </div>
-                <p style={{ margin: "0 0 12px 0", fontSize: "14px", color: "#333", fontStyle: "italic", background: "white", padding: "10px", borderRadius: "4px" }}>
-  }
-
-  function handleSymptomToggle(symptom) {
-    setForm((prev) => {
-      const current = prev.symptoms;
-      if (current.includes(symptom)) return { ...prev, symptoms: current.filter((s) => s !== symptom) };
-      return { ...prev, symptoms: [...current, symptom] };
-    });
-  }
-
-  
-  function runTriage(f) {
-    const s = f.symptoms || [];
-    let risk = "LOW"; let condition = "Under Review"; let actions = ["Isolate animal", "Observe for 24h"];
-    if (s.includes("Sudden death")) { risk = "CRITICAL"; condition = "Suspected Anthrax"; actions = ["Do not open carcass", "Contact vet immediately", "Evacuate area"]; }
-    else if ((f.species === "Cattle" || f.species === "Buffalo") && s.includes("Fever") && (s.includes("Lameness") || s.includes("Blisters/Ulcers") || s.includes("Excessive Salivation"))) { risk = "HIGH"; condition = "Suspected FMD"; actions = ["Isolate sick animals", "Stop animal movement", "Disinfect premises"]; }
-    else if ((f.species === "Goat" || f.species === "Sheep") && s.includes("Fever") && s.includes("Diarrhea") && (s.includes("Respiratory distress") || s.includes("Nasal Discharge"))) { risk = "HIGH"; condition = "Suspected PPR"; actions = ["Isolate sick animals", "Provide hydration", "Stop grazing in common areas"]; }
-    else if (f.species === "Cattle" && s.includes("Fever") && s.includes("Skin Lesions")) { risk = "HIGH"; condition = "Suspected Lumpy Skin Disease"; actions = ["Isolate sick animal", "Control flies/mosquitoes"]; }
-    return { risk, condition, actions };
-  }
-
-  function validate() {
-    const newErrors = {};
-    if (!form.species) newErrors.species = t.reqSpecies;
-    if (!form.syndrome) newErrors.syndrome = t.reqSyndrome;
-    if (!form.village.trim()) newErrors.village = t.reqVillage;
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }
-
-  const buildReport = useCallback(() => {
-    const capturedAt = new Date().toISOString();
-    const uid = user?.id || user?.username || "u";
-    const localId = `${uid}_${Date.now()}_${form.species}_${form.village.trim()}`;
-    return {
-      localId, local_id: localId,
-      captured_at: capturedAt, capturedAt,
-      species: form.species,
-      syndrome: form.syndrome,
-      symptoms: form.symptoms,
-      mortality_count: parseInt(form.mortalityCount) || 0,
-      mortalityCount: parseInt(form.mortalityCount) || 0,
-      herd_id: form.animalId.trim() || null,
-      herd_size: parseInt(form.herdSize) || 0,
-      onset_date: form.onsetDate || null,
-      recent_movement: form.recentMovement,
-      new_animals: form.newAnimals,
-      contact_herds: form.contactHerds,
-      animalId: form.animalId.trim() || null,
-      village: form.village.trim(),
-      latitude: location.lat, longitude: location.lng,
-      lat: location.lat, lng: location.lng,
-      vaccination_status: form.vaccinationStatus.toLowerCase(),
-      vaccinationStatus: form.vaccinationStatus,
-      notes: form.notes.trim() || null,
-      source: form.source || (activeTab === "voice" ? "VOICE" : "APP"),
-    };
-  }, [form, location, user]);
-
-  
-  let timerInterval;
-  const handleStartRecording = () => {
-    setVoiceState("recording");
-    setRecordingTime(0);
-    timerInterval = setInterval(() => setRecordingTime(t => t + 1), 1000);
-    // simulate stopping after 5 sec
-    setTimeout(() => {
-       clearInterval(timerInterval);
-       handleStopRecording();
-    }, 5000);
-  };
-
-  const handleStopRecording = () => {
-    setVoiceState("processing");
-    setTimeout(() => {
-       // simulate extracted info
-       setForm(prev => ({
-           ...prev,
-           species: "Cattle",
-           symptoms: ["Fever", "Blisters/Ulcers", "Lameness"],
-           mortalityCount: "0",
-           notes: "My cow has fever and blisters. It is having difficulty walking. (Extracted via Voice)",
-           source: "VOICE"
-       }));
-       setVoiceState("verify");
-    }, 2000);
-  };
-  
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (!validate()) return;
-    setSubmitting(true);
-    setSuccess(null);
-    const report = buildReport();
-    if (isOnline) {
-      try {
-        const result = await apiPost("/reports", report);
-        setSuccess({ type: "online", id: result.id || result.reportId || result.report?.id || "submitted", triage: runTriage(form) });
-        setForm(initialForm);
-        await refresh();
-      } catch (err) {
-        await addToQueue(report);
-        await refresh();
-        setSuccess({ type: "offline_fallback", message: err.message });
-      }
-    } else {
-      try {
-        await addToQueue(report);
-        await refresh();
-        setSuccess({ type: "offline", triage: runTriage(form) });
-        setForm(initialForm);
-      } catch (err) {
-        setErrors({ submit: "Failed to save offline: " + err.message });
-      }
-    }
-    setSubmitting(false);
-  }
-
-  const headerControls = (
-    <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "16px" }}>
-      <div style={{ display: "flex", alignItems: "center", background: "white", padding: "5px 12px", borderRadius: "20px", gap: "6px", border: "1px solid #E0E0E0", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
-        <Languages size={16} color="#2E7D32" />
-        <select value={lang} onChange={(e) => setLang(e.target.value)} style={{ border: "none", background: "transparent", outline: "none", fontSize: "14px", fontWeight: "600", color: "#2E7D32" }}>
-          <option value="en">English</option>
-          <option value="hi">हिंदी</option>
-          <option value="mr">मराठी</option>
-        </select>
-      </div>
-    </div>
-  );
-
-  return (
-    <Layout title={t.title} showBack>
-      <div className="page-content">
-        {headerControls}
-
-        {!isOnline && (
-          <div className="alert alert-info" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <WifiOff size={18} /> {t.offlineMsg}
-          </div>
-        )}
-        {success && (
-          <div className="alert alert-success">
-            {success.type === "online" && <span style={{ display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle size={18} /> {t.successOnline} <strong>{success.id}</strong></span>}
-            {success.type === "offline" && <span style={{ display: "flex", alignItems: "center", gap: "8px" }}><Save size={18} /> {t.successOffline}</span>}
-            {success.type === "offline_fallback" && <span style={{ display: "flex", alignItems: "center", gap: "8px" }}><AlertTriangle size={18} /> {t.successError} {success.message})</span>}
-          </div>
-        )}
-        {errors.submit && <div className="alert alert-error">{errors.submit}</div>}
-
-        
-        <div style={{ display: "flex", background: "#f5f5f5", padding: "4px", borderRadius: "8px", marginBottom: "20px" }}>
-           <button onClick={() => setActiveTab("standard")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "standard" ? "white" : "transparent", fontWeight: activeTab === "standard" ? "700" : "500", color: activeTab === "standard" ? "#2E7D32" : "#666", boxShadow: activeTab === "standard" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}><div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><FileText size={16} /> Fill a Form</div></button>
-           <button onClick={() => setActiveTab("voice")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "voice" ? "white" : "transparent", fontWeight: activeTab === "voice" ? "700" : "500", color: activeTab === "voice" ? "#2E7D32" : "#666", boxShadow: activeTab === "voice" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}><div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><Mic size={16} /> Voice Assistant</div></button>
-        </div>
-
-        {activeTab === "voice" && voiceState !== "verify" ? (
-          <div className="card" style={{ padding: "32px 20px", textAlign: "center", background: "#E8F5E9", border: "2px solid #C8E6C9" }}>
-            <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "#4CAF50", color: "white", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px auto", boxShadow: "0 4px 12px rgba(76, 175, 80, 0.3)", animation: "pulse 2s infinite" }}>
-              <Mic size={40} />
-            </div>
-            <h3 style={{ fontSize: "20px", color: "#1B5E20", marginBottom: "12px" }}>{t.title || "Voice Assistant"}</h3>
-            <p style={{ color: "#2E7D32", marginBottom: "24px", lineHeight: "1.5" }}>Tap the microphone and tell us what's wrong with your animals. We will fill out the report automatically.</p>
-            <button onClick={handleStartRecording} className="btn btn-primary btn-block" style={{ padding: "16px", fontSize: "18px", borderRadius: "32px", display: "flex", justifyContent: "center", gap: "8px" }}><Mic size={24} /> Start Recording</button>
-          </div>
-        ) : (
            <>
            {voiceState === "verify" && (
              <div style={{ background: "#E3F2FD", border: "1px solid #90CAF9", borderRadius: "8px", padding: "16px", marginBottom: "20px" }}>
