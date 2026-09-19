@@ -154,7 +154,7 @@ const LABELS = {
 };
 
 export default function Advisory() {
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useLanguage();
   const [showVideo, setShowVideo] = useState(false);
   const t = LABELS[lang];
   const list = ADVISORIES[lang];

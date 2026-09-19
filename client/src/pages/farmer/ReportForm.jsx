@@ -1,4 +1,5 @@
 ﻿import { useState, useCallback } from "react";
+import { useLanguage } from '../../hooks/useLanguage.js';
 import { WifiOff, CheckCircle, Save, AlertTriangle, Loader, MapPin, Send, Languages, ShieldAlert, Activity, Info, Mic, Square, FileText } from "lucide-react";
 import Layout from "../../components/Layout.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
@@ -135,7 +136,7 @@ export default function ReportForm() {
   useCallback(() => {}, []);
   const [success, setSuccess] = useState(null);
   const [errors, setErrors] = useState({});
-  const [lang, setLang] = useState("en");
+  const [lang, setLang] = useLanguage();
 
   const t = TRANSLATIONS[lang];
 

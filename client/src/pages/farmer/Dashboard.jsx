@@ -1,5 +1,6 @@
 import { getKolkataHour, formatKolkataTime } from '../../utils/time.js';
 import { useState, useEffect } from "react";
+import { useLanguage } from '../../hooks/useLanguage.js';
 import { useNavigate } from "react-router-dom";
 import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone, FileText } from "lucide-react";
 import Layout from "../../components/Layout.jsx";
@@ -76,7 +77,7 @@ export default function FarmerDashboard() {
   const { pendingCount } = useSyncContext();
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [lang, setLang] = useState("en");
+  const [lang, setLang] = useLanguage();
   const [showIVR, setShowIVR] = useState(false);
   const [showMissedCall, setShowMissedCall] = useState(false);
 
