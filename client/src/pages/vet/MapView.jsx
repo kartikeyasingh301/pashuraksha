@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout.jsx';
 import LeafletMap from '../../components/LeafletMap.jsx';
 import { apiGet } from '../../api/client.js';
@@ -33,22 +33,57 @@ export default function MapView() {
     return filter === 'Other' ? !['FMD','PPR','Anthrax','Lumpy Skin Disease'].includes(syn) : syn === filter;
   });
 
+  useEffect(() => {
+    const main = document.querySelector('.app-main');
+    if (main) {
+      main.style.paddingTop = '0';
+      main.style.paddingLeft = '0';
+      main.style.paddingRight = '0';
+      if (window.innerWidth >= 1024) {
+        main.style.paddingBottom = '0';
+      }
+      main.style.maxWidth = '100%';
+    }
+    return () => {
+      if (main) {
+        main.style.paddingTop = '';
+        main.style.paddingLeft = '';
+        main.style.paddingRight = '';
+        main.style.paddingBottom = '';
+        main.style.maxWidth = '';
+      }
+    };
+  }, []);
+
   return (
     <Layout title='Map View' showBack>
-      <div className='map-page'>
-        <div className='map-filter-row'>
-          {FILTERS.map((f) => (
-            <button key={f} className={'filter-btn' + (filter === f ? ' filter-btn-active' : '')} onClick={() => setFilter(f)}>{f}</button>
-          ))}
+      <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: '#e5e7eb' }}>
+        
+        {/* Floating Glassmorphism Filters */}
+        <div style={{ position: 'absolute', top: '16px', left: '16px', right: '16px', zIndex: 1000, display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px', pointerEvents: 'none' }}>
+          <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', padding: '6px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', pointerEvents: 'auto', border: '1px solid rgba(255,255,255,0.4)' }}>
+            {FILTERS.map((f) => (
+              <button 
+                key={f} 
+                className={'filter-btn' + (filter === f ? ' filter-btn-active' : '')} 
+                onClick={() => setFilter(f)}
+                style={{ borderRadius: '8px', border: filter === f ? 'none' : '1px solid #e2e8f0', background: filter === f ? 'var(--brand-600)' : 'transparent', fontWeight: '700' }}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
         </div>
-        {error && <div className='alert alert-error'>{error}</div>}
+
+        {error && <div className='alert alert-error' style={{ margin: '80px 16px 16px 16px' }}>{error}</div>}
+        
         {loading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
-            <div className="skeleton" style={{ width: '100%', height: 'calc(100vh - 260px)', borderRadius: 'var(--radius-card)' }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+            <div style={{ color: 'var(--brand-600)', fontWeight: '700', background: 'white', padding: '12px 24px', borderRadius: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>Loading map intelligence...</div>
           </div>
         ) : !navigator.onLine ? (
-          <div className="card" style={{ margin: '16px', padding: '24px', textAlign: 'center' }}>
-            <div style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>Map tiles are unavailable while offline.</div>
+          <div className="card" style={{ margin: '80px 16px 16px 16px', padding: '24px', textAlign: 'center' }}>
+            <div style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontWeight: '600' }}>Live map is unavailable offline.</div>
             <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '400px', overflowY: 'auto' }}>
               {filtered.map((f, i) => (
                  <div key={i} style={{ padding: '12px', border: '1px solid var(--border)', borderRadius: '8px' }}>
@@ -58,17 +93,17 @@ export default function MapView() {
             </div>
           </div>
         ) : (
-          <div className='map-container-wrapper'>
-            <LeafletMap incidents={filtered} height='calc(100vh - 260px)' />
-            <div className='map-legend'>
-              <div className='legend-title'>Legend</div>
+          <div style={{ flex: 1, position: 'relative' }}>
+            <LeafletMap incidents={filtered} height='100%' filterStatus={filter !== 'All' && filter !== 'Other' ? undefined : undefined} />
+            <div className='map-legend' style={{ bottom: '46px', border: 'none', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(4px)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+              <div className='legend-title' style={{ fontSize: '13px', textTransform: 'uppercase' }}>Command Legend</div>
               {LEGEND.map((item) => (
-                <div key={item.label} className='legend-item'>
-                  <span className='legend-dot' style={{ background: item.color }} />
+                <div key={item.label} className='legend-item' style={{ fontSize: '12px', fontWeight: '600' }}>
+                  <span className='legend-dot' style={{ background: item.color, width: '12px', height: '12px' }} />
                   <span className='legend-label'>{item.label}</span>
                 </div>
               ))}
-              <div className='legend-count'>{filtered.length} incidents</div>
+              <div className='legend-count' style={{ fontWeight: '700' }}>{filtered.length} active signals</div>
             </div>
           </div>
         )}
