@@ -274,9 +274,10 @@ export default function FarmerDashboard() {
                     <span style={{ fontSize:"13px", color:"#666" }}>{report.village || "Unknown location"}</span>
                     <span style={{ fontSize:"13px", color:"#aaa", marginLeft:"8px" }}>— {report.species || "Animal"}</span>
                   </div>
-                  <div style={{ marginTop:"6px" }}>
-                    <span style={{ fontSize:"12px", color:"#aaa" }}>{formatKolkataTime(report.capturedAt || report.captured_at)}</span>
-                  </div>
+                  <div style={{ marginTop:"10px", display:"flex", justifyContent:"space-between", alignItems:"center", borderTop:"1px solid #f0f0f0", paddingTop:"10px" }}>
+                      <span style={{ fontSize:"12px", color:"#aaa" }}>{formatKolkataTime(report.capturedAt || report.captured_at)}</span>
+                      <span style={{ fontSize:"12px", color:"#1B5E20", fontWeight:"700", display:"flex", alignItems:"center" }}>{t.viewReport}</span>
+                    </div>
                 </div>
               ))}
             </div>
