@@ -141,7 +141,7 @@ export default function FarmerDashboard() {
         }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"12px" }}>
             <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:0 }}>My Herd</h3>
-            <span style={{ fontSize:"12px", color:"#888" }}>27 Animals</span>
+            <span style={{ fontSize:"12px", color:"#888" }}>20 Animals</span>
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:"8px" }}>
             <div style={{ textAlign:"center", padding:"10px 4px", background:"#F5F5F5", borderRadius:"10px" }}>
@@ -149,7 +149,7 @@ export default function FarmerDashboard() {
               <div style={{ fontSize:"10px", color:"#888", fontWeight:"600" }}>Total</div>
             </div>
             <div style={{ textAlign:"center", padding:"10px 4px", background:"#E8F5E9", borderRadius:"10px" }}>
-              <div style={{ fontSize:"20px", fontWeight:"800", color:"#2E7D32" }}>24</div>
+              <div style={{ fontSize:"20px", fontWeight:"800", color:"#2E7D32" }}>17</div>
               <div style={{ fontSize:"10px", color:"#2E7D32", fontWeight:"600" }}>Healthy</div>
             </div>
             <div style={{ textAlign:"center", padding:"10px 4px", background:"#FFF8E1", borderRadius:"10px" }}>
@@ -157,7 +157,7 @@ export default function FarmerDashboard() {
               <div style={{ fontSize:"10px", color:"#F57F17", fontWeight:"600" }}>Observing</div>
             </div>
             <div style={{ textAlign:"center", padding:"10px 4px", background:"#FFEBEE", borderRadius:"10px" }}>
-              <div style={{ fontSize:"20px", fontWeight:"800", color:"#C62828" }}>1</div>
+              <div style={{ fontSize:"20px", fontWeight:"800", color:"#C62828" }}>{reports.filter(r => r.status === "CASE" || r.status === "REPORT" || r.status === "SUSPECTED_OUTBREAK").length}</div>
               <div style={{ fontSize:"10px", color:"#C62828", fontWeight:"600" }}>Active Case</div>
             </div>
           </div>
@@ -165,10 +165,10 @@ export default function FarmerDashboard() {
           <div style={{ marginTop:"12px", paddingTop:"12px", borderTop:"1px solid #f0f0f0" }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"6px" }}>
               <span style={{ fontSize:"13px", fontWeight:"600", color:"#555" }}>Vaccination Coverage</span>
-              <span style={{ fontSize:"13px", fontWeight:"700", color:"#2E7D32" }}>78%</span>
+              <span style={{ fontSize:"13px", fontWeight:"700", color:"#2E7D32" }}>85%</span>
             </div>
             <div style={{ height:"6px", background:"#E0E0E0", borderRadius:"3px", overflow:"hidden" }}>
-              <div style={{ width:"78%", height:"100%", background:"linear-gradient(90deg, #2E7D32, #43A047)", borderRadius:"3px" }} />
+              <div style={{ width:"85%", height:"100%", background:"linear-gradient(90deg, #2E7D32, #43A047)", borderRadius:"3px" }} />
             </div>
           </div>
         </div>
