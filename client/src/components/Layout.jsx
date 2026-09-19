@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, LogOut, CheckCircle, WifiOff, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, Power, CheckCircle, WifiOff, RefreshCw, ArrowLeft } from 'lucide-react';
 import Logo from './Logo.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import StatusBar from './StatusBar.jsx';
@@ -92,7 +92,7 @@ export default function Layout({ children, title, hero, showBack = false, header
           <SyncIndicator isOnline={isOnline} pendingCount={pendingCount} isSyncing={isSyncing} />
         </div>
         <button className="sidebar-logout" onClick={confirmLogout}>
-          <LogOut size={18} /> Sign out
+          <Power size={18} /> Sign out
         </button>
       </div>
     </aside>
@@ -132,7 +132,7 @@ export default function Layout({ children, title, hero, showBack = false, header
             {headerActions}
             {role !== 'vet' && <SyncIndicator isOnline={isOnline} pendingCount={pendingCount} isSyncing={isSyncing} />}
             <button className="logout-btn" onClick={confirmLogout} title="Sign out" aria-label="Sign out">
-              <LogOut size={20} />
+              <Power size={20} />
             </button>
           </div>
         </header>
