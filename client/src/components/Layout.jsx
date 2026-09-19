@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, LogOut, CheckCircle, WifiOff, RefreshCw } from 'lucide-react';
 import Logo from './Logo.jsx';
@@ -131,11 +131,9 @@ export default function Layout({ children, title, hero, showBack = false, header
             )}
             {headerActions}
             {role !== 'vet' && <SyncIndicator isOnline={isOnline} pendingCount={pendingCount} isSyncing={isSyncing} />}
-            {role !== 'vet' && (
-              <button className="logout-btn" onClick={confirmLogout} title="Sign out" aria-label="Sign out">
-                <LogOut size={20} />
-              </button>
-            )}
+            <button className="logout-btn" onClick={confirmLogout} title="Sign out" aria-label="Sign out">
+              <LogOut size={20} />
+            </button>
           </div>
         </header>
 
