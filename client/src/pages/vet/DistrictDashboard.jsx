@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import { AlertTriangle, Activity, FlaskConical, Users, RefreshCw } from 'lucide-react';
 import Layout from '../../components/Layout.jsx';
@@ -47,7 +47,7 @@ export default function DistrictDashboard() {
       <div className="page-content" style={{ paddingBottom: "120px", maxWidth: "1200px" }}>
         
         {/* Header */}
-        <div style={{ ...cardStyle, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <div style={{ ...cardStyle, display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <select 
@@ -107,7 +107,7 @@ export default function DistrictDashboard() {
         </div>
 
         {/* Charts */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
           
           <div style={cardStyle}>
             <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#333", margin: "0 0 16px 0" }}>Epidemic Curve (7 Days)</h3>

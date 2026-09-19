@@ -114,7 +114,7 @@ export default function VetDashboard() {
         ) : (
           <>
             {/* COMPACT KPIs */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "12px", marginBottom: "32px" }}>
               <div style={{ background: "white", padding: "16px", borderRadius: "12px", border: "1px solid #eee", textAlign: "center" }}>
                 <div style={{ fontSize: "24px", fontWeight: "800", color: "#333" }}>{summary.totalCases}</div>
                 <div style={{ fontSize: "11px", fontWeight: "700", color: "#666", textTransform: "uppercase" }}>Reports</div>
