@@ -39,25 +39,25 @@ const VaccinationPassbook = () => {
               </div>
               <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#1B5E20' }}>Herd Vaccination Coverage</h2>
             </div>
-            <div style={{ fontSize: '24px', fontWeight: '800', color: '#2E7D32' }}>78%</div>
+            <div style={{ fontSize: '24px', fontWeight: '800', color: '#2E7D32' }}>85%</div>
           </div>
           
           <div style={{ height: '8px', background: '#E0E0E0', borderRadius: '4px', marginBottom: '16px', overflow: 'hidden' }}>
-            <div style={{ width: '78%', height: '100%', background: '#2E7D32', borderRadius: '4px' }}></div>
+            <div style={{ width: '85%', height: '100%', background: '#2E7D32', borderRadius: '4px' }}></div>
           </div>
           
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#555' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#2E7D32' }}></span>
-              Vaccinated: 21
+              Vaccinated: 17
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#F57F17' }}></span>
-              Due Soon: 4
+              Due Soon: 2
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C62828' }}></span>
-              Overdue: 2
+              Overdue: 1
             </div>
           </div>
         </div>
@@ -65,10 +65,10 @@ const VaccinationPassbook = () => {
         {/* Filters */}
         <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '20px', paddingBottom: '4px', msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
           {[
-            { id: 'all', label: 'All (27)' },
-            { id: 'vaccinated', label: 'Vaccinated (21)' },
-            { id: 'due_soon', label: 'Due Soon (4)' },
-            { id: 'overdue', label: 'Overdue (2)' }
+            { id: 'all', label: 'All (20)' },
+            { id: 'vaccinated', label: 'Vaccinated (17)' },
+            { id: 'due_soon', label: 'Due Soon (2)' },
+            { id: 'overdue', label: 'Overdue (1)' }
           ].map(f => (
             <button key={f.id} onClick={() => setFilter(f.id)} className={"chip " + (filter === f.id ? "active" : "")}>{f.label}</button>
           ))}
@@ -79,7 +79,7 @@ const VaccinationPassbook = () => {
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: '#FFEBEE', border: '1px solid #FFCDD2', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
             <AlertCircle size={20} color="#C62828" style={{ flexShrink: 0, marginTop: '2px' }} />
             <div style={{ fontSize: '14px', color: '#B71C1C', lineHeight: '1.4' }}>
-              <span style={{ fontWeight: '600' }}>2 vaccination(s) overdue.</span> Contact your field vet to schedule immediately.
+              <span style={{ fontWeight: '600' }}>1 vaccination(s) overdue.</span> Contact your field vet to schedule immediately.
             </div>
           </div>
         )}
