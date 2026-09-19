@@ -21,6 +21,7 @@ const mapRouter         = require('./routes/map');
 const vaccinationRouter = require('./routes/vaccination');
 const labRouter         = require('./routes/lab');
 const outbreaksRouter   = require('./routes/outbreaks');
+const chatRouter        = require('./routes/chat');
 
 const app  = express();
 const PORT = process.env.PORT || 3001;
@@ -45,6 +46,7 @@ app.use('/api/map',         mapRouter);
 app.use('/api/vaccination', vaccinationRouter);
 app.use('/api/lab',         labRouter);
 app.use('/api/outbreaks',   outbreaksRouter);
+app.use('/api/chat',        chatRouter);
 
 // ── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {
