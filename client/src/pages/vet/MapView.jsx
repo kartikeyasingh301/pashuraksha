@@ -43,6 +43,8 @@ export default function MapView() {
         main.style.paddingBottom = '0';
       }
       main.style.maxWidth = '100%';
+      main.style.display = 'flex';
+      main.style.flexDirection = 'column';
     }
     return () => {
       if (main) {
@@ -51,6 +53,8 @@ export default function MapView() {
         main.style.paddingRight = '';
         main.style.paddingBottom = '';
         main.style.maxWidth = '';
+        main.style.display = '';
+        main.style.flexDirection = '';
       }
     };
   }, []);

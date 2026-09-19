@@ -24,19 +24,19 @@ const TRANSLATIONS = {
     reqVillage: "Village is required",
     lblSpecies: "Species *",
     selSpecies: "-- Select species --",
-    lblSyndrome: "Syndrome / Condition *",
+    lblSyndrome: "Main Disease/Problem *",
     selSyndrome: "-- Select condition --",
     lblSymptoms: "Symptoms",
-    lblMortality: "Mortality Count",
-    lblAnimalId: "Animal / Herd ID (optional)",
+    lblMortality: "How many animals died? (if any)",
+    lblAnimalId: "Animal ID/Tag (optional)",
     phAnimalId: "e.g. TAG-001",
     lblVillage: "Village *",
     phVillage: "Enter your village name",
-    lblGps: "GPS Location",
+    lblGps: "Farm Location",
     btnLocLoading: "Getting location...",
     btnLocGet: "Get GPS Location",
-    lblVaccine: "Vaccination Status",
-    lblNotes: "Additional Notes (optional)",
+    lblVaccine: "Has this animal been vaccinated?",
+    lblNotes: "Any other details? (optional)",
     phNotes: "Any additional observations...",
     btnSubmitting: "Submitting...",
     btnSubmit: "Submit Report",
@@ -45,7 +45,7 @@ const TRANSLATIONS = {
     syndrome: { "FMD":"FMD", "PPR":"PPR", "BQ":"BQ", "Anthrax":"Anthrax", "Rabies":"Rabies", "Brucellosis":"Brucellosis", "Theileriosis":"Theileriosis", "Lumpy Skin Disease":"Lumpy Skin Disease", "HPAI":"HPAI", "Other":"Other" },
     symptoms: { "Fever":"Fever", "Lameness":"Lameness", "Blisters/Ulcers":"Blisters/Ulcers", "Respiratory distress":"Respiratory distress", "Neurological signs":"Neurological signs", "Diarrhea":"Diarrhea", "Sudden death":"Sudden death", "Abortion":"Abortion", "Swelling":"Swelling", "Loss of appetite":"Loss of appetite" },
     vaccine: { "Vaccinated":"Vaccinated", "Unvaccinated":"Unvaccinated", "Unknown":"Unknown" },
-    lblHerdSize: "Herd Size",
+    lblHerdSize: "Total Animals (Herd Size)",
     lblOnsetDate: "Onset Date",
     lblRecentMovement: "Recent animal movement?",
     lblNewAnimals: "New animals added recently?",
@@ -296,7 +296,7 @@ export default function ReportForm() {
         
         <div style={{ display: "flex", background: "#f5f5f5", padding: "4px", borderRadius: "8px", marginBottom: "20px" }}>
            <button onClick={() => setActiveTab("standard")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "standard" ? "white" : "transparent", fontWeight: activeTab === "standard" ? "700" : "500", color: activeTab === "standard" ? "#2E7D32" : "#666", boxShadow: activeTab === "standard" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}><div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><FileText size={16} /> Fill a Form</div></button>
-           <button onClick={() => setActiveTab("voice")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "voice" ? "white" : "transparent", fontWeight: activeTab === "voice" ? "700" : "500", color: activeTab === "voice" ? "#2E7D32" : "#666", boxShadow: activeTab === "voice" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}>🎙 Speak Your Problem</button>
+           <button onClick={() => setActiveTab("voice")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "voice" ? "white" : "transparent", fontWeight: activeTab === "voice" ? "700" : "500", color: activeTab === "voice" ? "#2E7D32" : "#666", boxShadow: activeTab === "voice" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}><div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><Mic size={16} /> Voice Assistant</div></button>
         </div>
 
         {activeTab === "voice" && voiceState !== "verify" && (
