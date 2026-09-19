@@ -22,7 +22,7 @@ const ANIMALS = [
   { id:"G-003", tagId:"MH-NK-4880", species:"Goat", breed:"Surti", sex:"Female", age:"3 yrs", village:"Malegaon", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
 ];
 
-const SUMMARY = { total: 27, healthy: 24, observation: 2, vacDue: 4 };
+const SUMMARY = { total: 10, healthy: 8, observation: 2, vacDue: 2 };
 const FILTERS = ["All", "Cattle", "Buffalo", "Goat", "Sheep"];
 
 

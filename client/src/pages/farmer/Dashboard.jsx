@@ -12,7 +12,7 @@ import IVRSimulation from "../../components/IVRSimulation.jsx";
 
 const TRANSLATIONS = {
   en: {
-    sub: "How are your animals doing today?",
+    sub: "How are your animals doing today•,
     report: "Report Animal Health Issue",
     recent: "Your Recent Reports",
     noReports: "No reports yet. Submit your first report!",
@@ -29,7 +29,7 @@ const TRANSLATIONS = {
     morning: "Good morning", afternoon: "Good afternoon", evening: "Good evening", loading: "Loading...",
   },
   hi: {
-    sub: "आज आपके पशु कैसे हैं?",
+    sub: "आज आपके पशु कैसे हैं•,
     report: "पशु स्वास्थ्य समस्या की रिपोर्ट करें",
     recent: "आपकी हालिया रिपोर्ट",
     noReports: "अभी तक कोई रिपोर्ट नहीं।",
@@ -46,7 +46,7 @@ const TRANSLATIONS = {
     morning: "शुभ प्रभात", afternoon: "शुभ दोपहर", evening: "शुभ संध्या", loading: "लोड हो रहा है...",
   },
   mr: {
-    sub: "आज तुमचे प्राणी कसे आहेत?",
+    sub: "आज तुमचे प्राणी कसे आहेत•,
     report: "प्राण्यांच्या आरोग्य समस्येची नोंद करा",
     recent: "तुमचे अलीकडील अहवाल",
     noReports: "अद्याप कोणतेही अहवाल नाहीत.",
@@ -191,7 +191,7 @@ export default function FarmerDashboard() {
               <ClipboardList size={16} color="#1565C0" />
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:"13px", fontWeight:"600", color:"#333" }}>Follow-up Required</div>
-                <div style={{ fontSize:"11px", color:"#888" }}>GJ-RJ-4831 under observation</div>
+                <div style={{ fontSize:"11px", color:"#888" }}>MH-NK-4821 under observation</div>
               </div>
             </div>
             <div style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#FFEBEE", borderRadius:"10px", borderLeft:"3px solid #C62828" }}>
