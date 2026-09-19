@@ -193,6 +193,23 @@ export default function Layout({ children, title, hero, showBack = false, header
                 >
                   <Info size={20} /> {translate('About PashuSuraksha')}
                 </NavLink>
+
+                <div style={{ height:'1px', background:'#eee', margin:'16px 0' }} />
+
+                {/* Sign Out */}
+                <button
+                  onClick={() => { setIsDrawerOpen(false); confirmLogout(); }}
+                  style={{
+                    display:'flex', alignItems:'center', gap:'16px',
+                    width:'100%', padding:'16px 24px',
+                    background:'transparent', border:'none', cursor:'pointer',
+                    fontSize:'15px', fontWeight:'600', color:'#C62828',
+                    textAlign:'left'
+                  }}
+                >
+                  <Power size={20} color="#C62828" />
+                  {lang === 'hi' ? 'साइन आउट करें' : lang === 'mr' ? 'साइन आउट करा' : 'Sign Out'}
+                </button>
               </div>
             </div>
           </>
