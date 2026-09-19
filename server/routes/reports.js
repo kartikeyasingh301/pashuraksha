@@ -146,7 +146,7 @@ router.get('/', authenticateToken, (req, res) => {
 
 // GET /api/reports/:id
 router.get('/:id', authenticateToken, (req, res) => {
-  const report = db.prepare('SELECT * FROM reports WHERE id = ?').get(req.params.id);
+  const report = db.prepare('SELECT * FROM reports WHERE id = ? OR local_id = ?').get(req.params.id, req.params.id);
   if (!report) {
     return res.status(404).json({ error: 'Report not found' });
   }

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Clock, MapPin, AlertCircle, FileText, Activity, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage.js';
 import { apiGet } from '../../api/client.js';
+import { db } from '../../db/db.js';
 
 function formatKolkataTime(isoString) {
   if (!isoString) return "Unknown Date";
@@ -63,10 +64,23 @@ export default function ReportDetail() {
   useEffect(() => {
     async function fetchReport() {
       try {
+        // Try server first
         const data = await apiGet(`/reports/${id}`);
         setReport(data.report || data);
       } catch (err) {
-        console.error("Failed to load report", err);
+        // Fallback to local IndexedDB if offline or server fails
+        try {
+          const localReport = await db.reports.get(id);
+          if (localReport) {
+             setReport(localReport);
+          } else {
+             // Also search by local_id in case the route passed local_id
+             const byLocalId = await db.reports.where('local_id').equals(id).first();
+             if (byLocalId) setReport(byLocalId);
+          }
+        } catch (dbErr) {
+          console.error("Local DB fetch failed", dbErr);
+        }
       } finally {
         setLoading(false);
       }
@@ -102,10 +116,10 @@ export default function ReportDetail() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px", paddingBottom: "16px", borderBottom: "1px solid #eee" }}>
             <div>
               <div style={{ fontSize: "14px", color: "#666", marginBottom: "4px" }}>{t.syndrome}</div>
-              <strong style={{ fontSize: "20px", color: "#111" }}>{report.syndrome}</strong>
+              <strong style={{ fontSize: "20px", color: "#111" }}>{report.syndrome || report.disease}</strong>
             </div>
             <div style={{ background: getStatusColor(report.status), color: "white", padding: "6px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "bold" }}>
-              {report.status || "REPORT"}
+              {report.status || (report.synced ? "REPORT" : "PENDING SYNC")}
             </div>
           </div>
 
@@ -147,7 +161,7 @@ export default function ReportDetail() {
               </div>
               <div>
                 <div style={{ fontSize: "13px", color: "#666" }}>{t.date}</div>
-                <div style={{ fontSize: "15px", fontWeight: "600" }}>{formatKolkataTime(report.captured_at)}</div>
+                <div style={{ fontSize: "15px", fontWeight: "600" }}>{formatKolkataTime(report.captured_at || report.capturedAt)}</div>
               </div>
             </div>
 
