@@ -1,5 +1,5 @@
 ﻿import { useState, useCallback } from "react";
-import { WifiOff, CheckCircle, Save, AlertTriangle, Loader, MapPin, Send, Languages, ShieldAlert, Activity, Info, Mic, Square } from "lucide-react";
+import { WifiOff, CheckCircle, Save, AlertTriangle, Loader, MapPin, Send, Languages, ShieldAlert, Activity, Info, Mic, Square, FileText } from "lucide-react";
 import Layout from "../../components/Layout.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useSyncContext } from "../../contexts/SyncContext.jsx";
@@ -295,7 +295,7 @@ export default function ReportForm() {
 
         
         <div style={{ display: "flex", background: "#f5f5f5", padding: "4px", borderRadius: "8px", marginBottom: "20px" }}>
-           <button onClick={() => setActiveTab("standard")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "standard" ? "white" : "transparent", fontWeight: activeTab === "standard" ? "700" : "500", color: activeTab === "standard" ? "#2E7D32" : "#666", boxShadow: activeTab === "standard" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}>📝 Standard Report</button>
+           <button onClick={() => setActiveTab("standard")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "standard" ? "white" : "transparent", fontWeight: activeTab === "standard" ? "700" : "500", color: activeTab === "standard" ? "#2E7D32" : "#666", boxShadow: activeTab === "standard" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}><div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><FileText size={16} /> Standard Report</div></button>
            <button onClick={() => setActiveTab("voice")} style={{ flex: 1, padding: "10px", border: "none", borderRadius: "6px", background: activeTab === "voice" ? "white" : "transparent", fontWeight: activeTab === "voice" ? "700" : "500", color: activeTab === "voice" ? "#2E7D32" : "#666", boxShadow: activeTab === "voice" ? "0 2px 4px rgba(0,0,0,0.05)" : "none", cursor: "pointer" }}>🎙 Speak Your Problem</button>
         </div>
 
