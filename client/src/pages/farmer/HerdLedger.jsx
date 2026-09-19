@@ -20,9 +20,20 @@ const ANIMALS = [
   { id:"S-001", tagId:"MH-NK-4860", species:"Sheep", breed:"Marwari", sex:"Male", age:"2 yrs", village:"Baglan", status:"healthy", vaccinated:true, lastVaccine:"PPR — Nov 2025", vaccines:[{name:"PPR",date:"20 Nov 2025",batch:"VB-PPR-2025-205",vet:"Dr. R. Patil",status:"Valid"}], treatments:[], events:[{date:"20 Nov 2025",text:"PPR Vaccination administered"}] },
   { id:"C-004", tagId:"MH-NK-4870", species:"Cattle", breed:"Gir", sex:"Male", age:"5 yrs", village:"Satana", status:"under_observation", vaccinated:true, lastVaccine:"FMD — Apr 2026", vaccines:[{name:"FMD",date:"08 Apr 2026",batch:"VB-FMD-2026-443",vet:"Dr. Priya Sharma",status:"Valid"}], treatments:[{drug:"Meloxicam 0.5mg/kg",date:"17 Sep 2026",withdrawal:"01 Oct 2026"}], events:[{date:"18 Sep 2026",text:"Lameness reported"},{date:"17 Sep 2026",text:"Meloxicam administered"},{date:"08 Apr 2026",text:"FMD Vaccination administered"}] },
   { id:"G-003", tagId:"MH-NK-4880", species:"Goat", breed:"Surti", sex:"Female", age:"3 yrs", village:"Malegaon", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
+
+  { id:"C-005", tagId:"MH-NK-4890", species:"Cattle", breed:"Gir", sex:"Female", age:"2 yrs", village:"Malegaon", status:"healthy", vaccinated:true, lastVaccine:"FMD - Apr 2026", vaccines:[], treatments:[], events:[] },
+  { id:"B-003", tagId:"MH-NK-4891", species:"Buffalo", breed:"Murrah", sex:"Female", age:"4 yrs", village:"Satana", status:"healthy", vaccinated:true, lastVaccine:"HS - Jan 2026", vaccines:[], treatments:[], events:[] },
+  { id:"G-004", tagId:"MH-NK-4892", species:"Goat", breed:"Osmanabadi", sex:"Male", age:"1 yr", village:"Malegaon", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
+  { id:"S-002", tagId:"MH-NK-4893", species:"Sheep", breed:"Deccani", sex:"Female", age:"3 yrs", village:"Baglan", status:"healthy", vaccinated:true, lastVaccine:"PPR - Nov 2025", vaccines:[], treatments:[], events:[] },
+  { id:"C-006", tagId:"MH-NK-4894", species:"Cattle", breed:"Jersey Cross", sex:"Female", age:"5 yrs", village:"Malegaon", status:"healthy", vaccinated:true, lastVaccine:"FMD - Apr 2026", vaccines:[], treatments:[], events:[] },
+  { id:"B-004", tagId:"MH-NK-4895", species:"Buffalo", breed:"Jafarabadi", sex:"Male", age:"2 yrs", village:"Malegaon", status:"healthy", vaccinated:true, lastVaccine:"HS - Jan 2026", vaccines:[], treatments:[], events:[] },
+  { id:"G-005", tagId:"MH-NK-4896", species:"Goat", breed:"Sirohi", sex:"Female", age:"2 yrs", village:"Satana", status:"healthy", vaccinated:true, lastVaccine:"PPR - Nov 2025", vaccines:[], treatments:[], events:[] },
+  { id:"C-007", tagId:"MH-NK-4897", species:"Cattle", breed:"Khillar", sex:"Male", age:"4 yrs", village:"Baglan", status:"healthy", vaccinated:true, lastVaccine:"FMD - Apr 2026", vaccines:[], treatments:[], events:[] },
+  { id:"G-006", tagId:"MH-NK-4898", species:"Goat", breed:"Osmanabadi", sex:"Female", age:"3 yrs", village:"Malegaon", status:"healthy", vaccinated:true, lastVaccine:"PPR - Nov 2025", vaccines:[], treatments:[], events:[] },
+  { id:"B-005", tagId:"MH-NK-4899", species:"Buffalo", breed:"Murrah", sex:"Female", age:"6 yrs", village:"Satana", status:"healthy", vaccinated:false, lastVaccine:"None", vaccines:[], treatments:[], events:[] },
 ];
 
-const SUMMARY = { total: 10, healthy: 8, observation: 2, vacDue: 2 };
+const SUMMARY = { total: 20, healthy: 17, observation: 2, vacDue: 4 };
 const FILTERS = ["All", "Cattle", "Buffalo", "Goat", "Sheep"];
 
 
