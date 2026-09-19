@@ -7,6 +7,7 @@ import ReportForm from './pages/farmer/ReportForm.jsx';
 import Advisory from './pages/farmer/Advisory.jsx';
 import HerdLedger from './pages/farmer/HerdLedger.jsx';
 import VaccinationPassbook from './pages/farmer/VaccinationPassbook.jsx';
+import ReportDetail from './pages/farmer/ReportDetail.jsx';
 import VetDashboard from './pages/vet/Dashboard.jsx';
 import CriticalAlerts from './pages/vet/CriticalAlerts.jsx';
 import EmergingClusters from './pages/vet/EmergingClusters.jsx';
@@ -49,6 +50,7 @@ function AppRoutes() {
       {/* Farmer Routes */}
       <Route path='/farmer' element={<PrivateRoute role='farmer'><FarmerDashboard /></PrivateRoute>} />
       <Route path='/farmer/report' element={<PrivateRoute role='farmer'><ReportForm /></PrivateRoute>} />
+      <Route path='/farmer/report/:id' element={<PrivateRoute role='farmer'><ReportDetail /></PrivateRoute>} />
       <Route path='/farmer/advisory' element={<PrivateRoute role='farmer'><Advisory /></PrivateRoute>} />
       <Route path='/farmer/herd' element={<PrivateRoute role='farmer'><HerdLedger /></PrivateRoute>} />
       <Route path='/farmer/passbook' element={<PrivateRoute role='farmer'><VaccinationPassbook /></PrivateRoute>} />
