@@ -126,22 +126,24 @@ export default function DistrictDashboard() {
 
           <div style={cardStyle}>
             <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#333", margin: "0 0 16px 0" }}>Species Affected</h3>
-            <div style={{ height: "250px" }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={MOCK_SPECIES_DATA} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
-                    {MOCK_SPECIES_DATA.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "12px" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ height: "220px", width: "100%" }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={MOCK_SPECIES_DATA} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+                      {MOCK_SPECIES_DATA.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "16px", marginTop: "16px" }}>
                 {MOCK_SPECIES_DATA.map((entry, index) => (
                   <div key={entry.name} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: COLORS[index % COLORS.length] }}></div>
-                    <span style={{ fontSize: "12px", color: "#555", fontWeight: "600" }}>{entry.name}</span>
+                    <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: COLORS[index % COLORS.length] }}></div>
+                    <span style={{ fontSize: "13px", color: "#555", fontWeight: "600" }}>{entry.name}</span>
                   </div>
                 ))}
               </div>
