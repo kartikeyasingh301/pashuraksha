@@ -226,7 +226,7 @@ export default function FarmerDashboard() {
         </div>
 
         </div>
-          <div className="farmer-side-col">
+          <div className="side-col">
           {/* Quick Tips */}
         <section style={{ marginBottom:"20px" }}>
           <h3 style={{ fontSize:"16px", fontWeight:"700", marginBottom:"12px", color:"#1B5E20" }}>{t.tipTitle}</h3>

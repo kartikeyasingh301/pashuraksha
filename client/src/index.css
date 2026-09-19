@@ -326,7 +326,7 @@ code{background:var(--border);padding:2px 6px;border-radius:4px;font-size:0.8em}
   .stats-row, .summary-grid { grid-template-columns: repeat(4, 1fr); }
   .nav-cards-grid { grid-template-columns: repeat(3, 1fr); }
 }
-@media (min-width: 10var(--space-4)) {
+@media (min-width: 1024px) {
   .nav-cards-grid { grid-template-columns: repeat(4, 1fr); }
   .page-content { max-width: 780px; }
 }
@@ -367,7 +367,7 @@ code{background:var(--border);padding:2px 6px;border-radius:4px;font-size:0.8em}
     flex-direction: column;
   }
   
-  .farmer-desktop-grid {
+  .desktop-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
@@ -377,7 +377,7 @@ code{background:var(--border);padding:2px 6px;border-radius:4px;font-size:0.8em}
   }
   
   @media (min-width: 1024px) {
-    .farmer-desktop-grid {
+    .desktop-grid {
       grid-template-columns: 2fr 1fr;
       align-items: start;
     }

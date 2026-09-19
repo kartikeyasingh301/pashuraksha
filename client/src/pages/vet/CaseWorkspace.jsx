@@ -90,7 +90,9 @@ export default function CaseWorkspace() {
            </div>
         </div>
 
-        {/* TIMELINE */}
+        <div className="desktop-grid">
+<div className="main-col">
+{/* TIMELINE */}
         <div style={cardStyle}>
           <h3 style={{ fontSize: "14px", fontWeight: "800", color: "#333", margin: "0 0 16px 0", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "8px" }}><Clock size={18}/> Case Timeline</h3>
           
@@ -169,7 +171,9 @@ export default function CaseWorkspace() {
         )}
 
 
-        {/* WHY FLAGGED */}
+        </div>
+<div className="side-col">
+{/* WHY FLAGGED */}
         <div style={cardStyle}>
           <h3 style={{ fontSize: "14px", fontWeight: "800", color: "#333", margin: "0 0 12px 0", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "8px" }}><Activity size={18}/> Outbreak Context</h3>
           <ul style={{ margin: 0, paddingLeft: "20px", color: "#333", fontSize: "14px", display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -206,6 +210,9 @@ export default function CaseWorkspace() {
         </div>
 
       </div>
+</div>
+</div>
+
     </Layout>
   );
 }
