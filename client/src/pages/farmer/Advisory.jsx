@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '../../components/Layout.jsx';
+import { useLanguage } from '../../hooks/useLanguage.js';
 import { Target, Skull, Activity, PhoneCall, Languages, AlertTriangle } from 'lucide-react';
 
 // Direct YouTube video embeds (Search-based embeds are no longer supported by YouTube)
