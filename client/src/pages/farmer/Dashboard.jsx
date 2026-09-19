@@ -2,7 +2,7 @@ import { getKolkataHour, formatKolkataTime } from '../../utils/time.js';
 import { useState, useEffect } from "react";
 import { useLanguage } from '../../hooks/useLanguage.js';
 import { useNavigate } from "react-router-dom";
-import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone, FileText } from "lucide-react";
+import { ClipboardList, MapPin, BookOpen, Languages, Thermometer, Syringe, ShieldAlert, Phone, FileText, ChevronRight } from "lucide-react";
 import Layout from "../../components/Layout.jsx";
 import PipelineTag from "../../components/PipelineTag.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
@@ -183,26 +183,29 @@ export default function FarmerDashboard() {
         }}>
           <h3 style={{ fontSize:"15px", fontWeight:"700", color:"#1B5E20", margin:"0 0 12px 0" }}>Upcoming Actions</h3>
           <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
-            <div style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#FFF8E1", borderRadius:"10px", borderLeft:"3px solid #F57F17" }}>
+            <div onClick={() => navigate("/farmer/passbook")} style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#FFF8E1", borderRadius:"10px", borderLeft:"3px solid #F57F17", cursor:"pointer" }}>
               <Syringe size={16} color="#F57F17" />
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:"13px", fontWeight:"600", color:"#333" }}>FMD Vaccination Due</div>
                 <div style={{ fontSize:"11px", color:"#888" }}>4 animals due by Oct 2026</div>
-              </div>
+                </div>
+                <ChevronRight size={18} color="#F57F17" />
             </div>
-            <div style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#E3F2FD", borderRadius:"10px", borderLeft:"3px solid #1565C0" }}>
+            <div onClick={() => navigate("/farmer/herd")} style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#E3F2FD", borderRadius:"10px", borderLeft:"3px solid #1565C0", cursor:"pointer" }}>
               <ClipboardList size={16} color="#1565C0" />
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:"13px", fontWeight:"600", color:"#333" }}>Follow-up Required</div>
                 <div style={{ fontSize:"11px", color:"#888" }}>MH-NK-4821 under observation</div>
-              </div>
+                </div>
+                <ChevronRight size={18} color="#1565C0" />
             </div>
-            <div style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#FFEBEE", borderRadius:"10px", borderLeft:"3px solid #C62828" }}>
+            <div onClick={() => navigate("/farmer/advisory")} style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", background:"#FFEBEE", borderRadius:"10px", borderLeft:"3px solid #C62828", cursor:"pointer" }}>
               <ShieldAlert size={16} color="#C62828" />
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:"13px", fontWeight:"600", color:"#333" }}>FMD Advisory Active</div>
                 <div style={{ fontSize:"11px", color:"#888" }}>Elevated risk near your area</div>
-              </div>
+                </div>
+                <ChevronRight size={18} color="#C62828" />
             </div>
           </div>
         </div>
