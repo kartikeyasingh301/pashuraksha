@@ -1,4 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿const fs = require('fs');
+const path = require('path');
+const file = path.join(__dirname, 'src/components/Chatbot.jsx');
+
+const newCode = `import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageSquare, X, Send, Mic, Activity, Syringe, Users, PhoneCall, AlertTriangle, ChevronRight, CheckCircle, FileText } from 'lucide-react';
 import './Chatbot.css';
@@ -26,28 +30,28 @@ const QUICK_ACTIONS = {
 
 const BOT_RESPONSES = {
   en: {
-    fmd: "Fever and loss of appetite can have several causes.\nPlease check whether the animal also has difficulty walking, mouth lesions, diarrhea, breathing difficulty or other unusual symptoms.\n\nWHAT YOU CAN DO NOW\nKeep the animal under observation. Contact a veterinarian if symptoms worsen or multiple animals are affected.",
-    lumpy: "Skin nodules and fever could indicate Lumpy Skin Disease (LSD). \n\nWHAT YOU CAN DO NOW\nUse insect repellents, isolate the animal, and consult a vet.",
-    ppr: "Fever, nasal discharge and diarrhea in goats/sheep could be PPR. \n\nWHAT YOU CAN DO NOW\nHighly contagious - isolate immediately.",
-    anthrax: "CRITICAL ⚠️ Sudden death with dark blood = suspect Anthrax. \n\nWHAT YOU CAN DO NOW\nDo NOT open the carcass. Burn or bury deep. Call 1962 immediately.",
+    fmd: "Fever and loss of appetite can have several causes.\\nPlease check whether the animal also has difficulty walking, mouth lesions, diarrhea, breathing difficulty or other unusual symptoms.\\n\\nWHAT YOU CAN DO NOW\\nKeep the animal under observation. Contact a veterinarian if symptoms worsen or multiple animals are affected.",
+    lumpy: "Skin nodules and fever could indicate Lumpy Skin Disease (LSD). \\n\\nWHAT YOU CAN DO NOW\\nUse insect repellents, isolate the animal, and consult a vet.",
+    ppr: "Fever, nasal discharge and diarrhea in goats/sheep could be PPR. \\n\\nWHAT YOU CAN DO NOW\\nHighly contagious - isolate immediately.",
+    anthrax: "CRITICAL ⚠️ Sudden death with dark blood = suspect Anthrax. \\n\\nWHAT YOU CAN DO NOW\\nDo NOT open the carcass. Burn or bury deep. Call 1962 immediately.",
     vaccine: "For vaccination details and schedules, please check your Vaccine Passbook. The national animal health helpline is 1962 (Toll Free).",
     helpline: "The national animal health helpline is 1962 (Toll Free). Available 24/7 for disease emergencies.",
     default: "I understand your concern. Please submit a health report using the Report button so our veterinarians can investigate. For urgent help, call 1962."
   },
   hi: {
-    fmd: "बुखार और भूख न लगना कई कारणों से हो सकता है।\nकृपया जांचें कि क्या जानवर को चलने में कठिनाई, मुंह में घाव, दस्त आदि हैं।\n\nआप अभी क्या कर सकते हैं\nजानवर को निगरानी में रखें। लक्षण बिगड़ने पर पशु चिकित्सक से संपर्क करें।",
-    lumpy: "त्वचा पर गांठें और बुखार लंपी त्वचा रोग (LSD) का संकेत हो सकते हैं। \n\nआप अभी क्या कर सकते हैं\nकीट विकर्षक का उपयोग करें, जानवर को अलग करें।",
-    ppr: "बकरी/भेड़ में बुखार, नाक से स्राव और दस्त पीपीआर हो सकता है। \n\nआप अभी क्या कर सकते हैं\nअत्यधिक संक्रामक - तुरंत अलग करें।",
-    anthrax: "गंभीर ⚠️ गहरे खून के साथ अचानक मौत = एंथ्रेक्स का संदेह। \n\nआप अभी क्या कर सकते हैं\nशव को न खोलें। गहराई में दफनाएं। तुरंत 1962 पर कॉल करें।",
+    fmd: "बुखार और भूख न लगना कई कारणों से हो सकता है।\\nकृपया जांचें कि क्या जानवर को चलने में कठिनाई, मुंह में घाव, दस्त आदि हैं।\\n\\nआप अभी क्या कर सकते हैं\\nजानवर को निगरानी में रखें। लक्षण बिगड़ने पर पशु चिकित्सक से संपर्क करें।",
+    lumpy: "त्वचा पर गांठें और बुखार लंपी त्वचा रोग (LSD) का संकेत हो सकते हैं। \\n\\nआप अभी क्या कर सकते हैं\\nकीट विकर्षक का उपयोग करें, जानवर को अलग करें।",
+    ppr: "बकरी/भेड़ में बुखार, नाक से स्राव और दस्त पीपीआर हो सकता है। \\n\\nआप अभी क्या कर सकते हैं\\nअत्यधिक संक्रामक - तुरंत अलग करें।",
+    anthrax: "गंभीर ⚠️ गहरे खून के साथ अचानक मौत = एंथ्रेक्स का संदेह। \\n\\nआप अभी क्या कर सकते हैं\\nशव को न खोलें। गहराई में दफनाएं। तुरंत 1962 पर कॉल करें।",
     vaccine: "टीकाकरण विवरण और कार्यक्रम के लिए, कृपया अपनी वैक्सीन पासबुक देखें।",
     helpline: "राष्ट्रीय पशु स्वास्थ्य हेल्पलाइन 1962 (टोल फ्री) है।",
     default: "मैं आपकी चिंता समझता हूं। कृपया एक स्वास्थ्य रिपोर्ट प्रस्तुत करें ताकि हमारे पशु चिकित्सक जांच कर सकें।"
   },
   mr: {
-    fmd: "ताप आणि भूक न लागण्याची अनेक कारणे असू शकतात.\nकृपया प्राण्याला चालण्यास त्रास, तोंडात फोड, जुलाब इ. आहेत का ते तपासा.\n\nतुम्ही आता काय करू शकता\nप्राण्याला निरीक्षणाखाली ठेवा. लक्षणे वाढल्यास पशुवैद्याशी संपर्क साधा.",
-    lumpy: "त्वचेवर गाठी आणि ताप हे लंपी त्वचा रोग (LSD) दर्शवू शकतात. \n\nतुम्ही आता काय करू शकता\nकीटकनाशकांचा वापर करा, प्राण्याला वेगळे करा.",
-    ppr: "शेळ्या/मेंढ्यांमध्ये ताप, नाकातून स्त्राव आणि जुलाब हे पीपीआर असू शकते. \n\nतुम्ही आता काय करू शकता\nअत्यंत संसर्गजन्य - त्वरित वेगळे करा.",
-    anthrax: "गंभीर ⚠️ गडद रक्तासह अचानक मृत्यू = अँथ्रॅक्सचा संशय. \n\nतुम्ही आता काय करू शकता\nमृतदेह उघडू नका. खोल पुराव. त्वरित 1962 वर कॉल करा.",
+    fmd: "ताप आणि भूक न लागण्याची अनेक कारणे असू शकतात.\\nकृपया प्राण्याला चालण्यास त्रास, तोंडात फोड, जुलाब इ. आहेत का ते तपासा.\\n\\nतुम्ही आता काय करू शकता\\nप्राण्याला निरीक्षणाखाली ठेवा. लक्षणे वाढल्यास पशुवैद्याशी संपर्क साधा.",
+    lumpy: "त्वचेवर गाठी आणि ताप हे लंपी त्वचा रोग (LSD) दर्शवू शकतात. \\n\\nतुम्ही आता काय करू शकता\\nकीटकनाशकांचा वापर करा, प्राण्याला वेगळे करा.",
+    ppr: "शेळ्या/मेंढ्यांमध्ये ताप, नाकातून स्त्राव आणि जुलाब हे पीपीआर असू शकते. \\n\\nतुम्ही आता काय करू शकता\\nअत्यंत संसर्गजन्य - त्वरित वेगळे करा.",
+    anthrax: "गंभीर ⚠️ गडद रक्तासह अचानक मृत्यू = अँथ्रॅक्सचा संशय. \\n\\nतुम्ही आता काय करू शकता\\nमृतदेह उघडू नका. खोल पुराव. त्वरित 1962 वर कॉल करा.",
     vaccine: "लसीकरण तपशील आणि वेळापत्रकासाठी, कृपया तुमचे लस पासबुक तपासा.",
     helpline: "राष्ट्रीय पशु आरोग्य हेल्पलाइन 1962 (टोल फ्री) आहे.",
     default: "मला तुमची चिंता समजते. कृपया आरोग्य अहवाल सबमिट करा जेणेकरून आमचे पशुवैद्य तपास करू शकतील."
@@ -175,13 +179,13 @@ export default function Chatbot() {
             <div className="chatbot-messages">
               {messages.map(msg => (
                 <div key={msg.id} style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div className={`chat-bubble ${msg.sender}`} style={{ whiteSpace: 'pre-line' }}>
+                  <div className={\`chat-bubble \${msg.sender}\`} style={{ whiteSpace: 'pre-line' }}>
                     {msg.text}
                   </div>
                   {msg.actions && (
                     <div className="bot-actions-container">
                       {msg.actions.map(act => (
-                        <button key={act.id} className={`bot-action-btn ${act.primary ? 'primary' : ''}`} onClick={() => handleAction(act.id)}>
+                        <button key={act.id} className={\`bot-action-btn \${act.primary ? 'primary' : ''}\`} onClick={() => handleAction(act.id)}>
                           {act.id === 'report' ? <FileText size={16}/> : <PhoneCall size={16}/>}
                           {act.label}
                         </button>
@@ -220,3 +224,7 @@ export default function Chatbot() {
     </>
   );
 }
+`;
+
+fs.writeFileSync(file, newCode, 'utf8');
+console.log('Chatbot thoroughly fixed.');
