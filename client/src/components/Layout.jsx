@@ -108,7 +108,7 @@ export default function Layout({ children, title, hero, showBack = false, header
           <div className="header-left">
             {showBack && (
               <button className="back-btn" onClick={() => navigate(-1)} aria-label="Go back">
-                &#8592;
+                <ArrowLeft size={20} />
               </button>
             )}
             <div className="header-brand">

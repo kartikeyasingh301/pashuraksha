@@ -61,7 +61,7 @@ export default function MapView() {
 
   return (
     <Layout title='Map View' showBack>
-      <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: '#e5e7eb' }}>
+      <div style={{ position: 'relative', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', background: '#e5e7eb' }}>
         
         {/* Floating Glassmorphism Filters */}
         <div style={{ position: 'absolute', top: '16px', left: '16px', right: '16px', zIndex: 1000, display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px', pointerEvents: 'none' }}>
@@ -97,7 +97,7 @@ export default function MapView() {
             </div>
           </div>
         ) : (
-          <div style={{ flex: 1, position: 'relative' }}>
+          <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column' }}>
             <LeafletMap incidents={filtered} height='100%' filterStatus={filter !== 'All' && filter !== 'Other' ? undefined : undefined} />
             <div className='map-legend' style={{ bottom: '24px', left: '16px', background: 'white', padding: '16px', borderRadius: '16px', border: '1px solid #f0f0f0', boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
               <div className='legend-title' style={{ fontSize: '14px', fontWeight: '800', color: '#333', marginBottom: '12px' }}>Map Legend</div>
