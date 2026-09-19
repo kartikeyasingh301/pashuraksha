@@ -44,6 +44,7 @@ const transactionSeed = db.transaction(() => {
   // 1. Users
   const insUser = db.prepare('INSERT INTO users (id, username, password, role, name, district) VALUES (?, ?, ?, ?, ?, ?)');
   insUser.run(1, 'farmer1', bcrypt.hashSync('farmer123', 10), 'farmer', 'Raju Kumar', 'Nashik');
+    insUser.run(3, 'farmer2', bcrypt.hashSync('farmer123', 10), 'farmer', 'Suresh Patel', 'Pune');
   insUser.run(2, 'vet1', bcrypt.hashSync('vet123', 10), 'vet', 'Dr. Priya Sharma', 'Nashik');
 
   // 2. Cases
@@ -71,19 +72,18 @@ const transactionSeed = db.transaction(() => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?)
   `);
   const rps = [
-    // Malegaon FMD Reports (Farmer 1) -> Case 101, Cluster 201
-    { i: uuidv4(), l:'LOC-1', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness, Excessive Salivation', m:0, h:'MH-NK-4821', v:'Malegaon', d:'Nashik', la:20.5540, ln:74.5260, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Multiple animals affected in same herd' },
-    { i: uuidv4(), l:'LOC-2', u:1, sp:'Cattle', syn:'FMD', sym:'Fever, Skin Lesions, Loss of appetite', m:0, h:'MH-NK-4822', v:'Malegaon', d:'Nashik', la:20.5561, ln:74.5282, vx:'unvaccinated', cap:daysAgo(4), st:'SUSPECTED_OUTBREAK', cid:101, n:'Neighbours herd showing similar signs' },
-    { source: 'VOICE', i: uuidv4(), l:'LOC-3', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:1, h:'MH-NK-4850', v:'Malegaon', d:'Nashik', la:20.5555, ln:74.5210, vx:'unvaccinated', cap:daysAgo(3), st:'SUSPECTED_OUTBREAK', cid:101, n:'One calf died overnight' },
-    // Satana FMD Reports (Farmer 1) -> Cluster 201
-    { source: 'IVR', i: uuidv4(), l:'LOC-4', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness', m:0, h:'MH-NK-4870', v:'Satana', d:'Nashik', la:20.5931, ln:74.2037, vx:'unvaccinated', cap:daysAgo(6), st:'SUSPECTED_OUTBREAK', cid:101, n:'Possibly same strain as Malegaon reports' },
-    { source: 'VOICE', i: uuidv4(), l:'LOC-5', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:2, h:'MH-NK-4888', v:'Satana', d:'Nashik', la:20.5948, ln:74.2052, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Two deaths - elderly cows' },
-    // Sangamner PPR Reports (Unknown farmer) -> Case 102
-    { i: uuidv4(), l:'LOC-6', u:1, sp:'Goat', syn:'PPR', sym:'Diarrhea, Respiratory distress', m:3, h:'MH-AN-11', v:'Sangamner', d:'Ahilyanagar', la:19.5783, ln:74.2041, vx:'unvaccinated', cap:daysAgo(10), st:'CASE', cid:102, n:'Severe flock outbreak' },
-    { i: uuidv4(), l:'LOC-7', u:1, sp:'Goat', syn:'PPR', sym:'Fever, Nasal Discharge', m:5, h:'MH-AN-12', v:'Sangamner', d:'Ahilyanagar', la:19.5700, ln:74.2050, vx:'unvaccinated', cap:daysAgo(9), st:'CASE', cid:102, n:'Spreading fast' },
-    // Baramati BQ Report (Unknown farmer) -> Case 103
-    { i: uuidv4(), l:'LOC-8', u:1, sp:'Buffalo', syn:'BQ', sym:'Swelling, Sudden death', m:2, h:'MH-PN-99', v:'Baramati', d:'Pune', la:18.1565, ln:74.5851, vx:'unknown', cap:daysAgo(2), st:'CASE', cid:103, n:'Sudden collapse in field' }
-  ];
+      // Raju Kumar (Farmer 1) in Malegaon - Mix of diseases
+      { i: uuidv4(), l:'LOC-1', u:1, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness, Excessive Salivation', m:0, h:'MH-NK-4821', v:'Malegaon', d:'Nashik', la:20.5540, ln:74.5260, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Multiple animals affected in same herd' },
+      { i: uuidv4(), l:'LOC-2', u:1, sp:'Buffalo', syn:'Lumpy Skin Disease', sym:'Skin Nodules, Fever, Loss of appetite', m:0, h:'MH-NK-4822', v:'Malegaon', d:'Nashik', la:20.5561, ln:74.5282, vx:'unvaccinated', cap:daysAgo(2), st:'REPORT', cid:null, n:'Noticed lumps on neck and back' },
+      { source: 'VOICE', i: uuidv4(), l:'LOC-3', u:1, sp:'Goat', syn:'PPR', sym:'Diarrhea, Nasal Discharge', m:1, h:'MH-NK-4850', v:'Malegaon', d:'Nashik', la:20.5555, ln:74.5210, vx:'unvaccinated', cap:daysAgo(1), st:'REPORT', cid:null, n:'One young goat died' },
+      
+      // Suresh Patel (Farmer 2) in Satana/Sangamner/Baramati - For the Vet to see
+      { source: 'IVR', i: uuidv4(), l:'LOC-4', u:3, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Lameness', m:0, h:'MH-NK-4870', v:'Satana', d:'Nashik', la:20.5931, ln:74.2037, vx:'unvaccinated', cap:daysAgo(6), st:'SUSPECTED_OUTBREAK', cid:101, n:'Possibly same strain as Malegaon reports' },
+      { source: 'VOICE', i: uuidv4(), l:'LOC-5', u:3, sp:'Cattle', syn:'FMD', sym:'Blisters/Ulcers, Fever', m:2, h:'MH-NK-4888', v:'Satana', d:'Nashik', la:20.5948, ln:74.2052, vx:'unvaccinated', cap:daysAgo(5), st:'SUSPECTED_OUTBREAK', cid:101, n:'Two deaths - elderly cows' },
+      { i: uuidv4(), l:'LOC-6', u:3, sp:'Goat', syn:'PPR', sym:'Diarrhea, Respiratory distress', m:3, h:'MH-AN-11', v:'Sangamner', d:'Ahilyanagar', la:19.5783, ln:74.2041, vx:'unvaccinated', cap:daysAgo(10), st:'CASE', cid:102, n:'Severe flock outbreak' },
+      { i: uuidv4(), l:'LOC-7', u:3, sp:'Goat', syn:'PPR', sym:'Fever, Nasal Discharge', m:5, h:'MH-AN-12', v:'Sangamner', d:'Ahilyanagar', la:19.5700, ln:74.2050, vx:'unvaccinated', cap:daysAgo(9), st:'CASE', cid:102, n:'Spreading fast' },
+      { i: uuidv4(), l:'LOC-8', u:3, sp:'Buffalo', syn:'BQ', sym:'Swelling, Sudden death', m:2, h:'MH-PN-99', v:'Baramati', d:'Pune', la:18.1565, ln:74.5851, vx:'unknown', cap:daysAgo(2), st:'CASE', cid:103, n:'Sudden collapse in field' }
+    ];
   
   rps.forEach(r => insRep.run(r.i, r.l, r.u, r.sp, r.syn, r.sym, r.m, r.h, r.v, r.d, r.la, r.ln, r.vx, r.cap, r.st, r.cid, r.n, r.source || 'APP'));
 
