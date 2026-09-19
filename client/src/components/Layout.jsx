@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, LogOut, CheckCircle, WifiOff, RefreshCw } from 'lucide-react';
+import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, LogOut, CheckCircle, WifiOff, RefreshCw, ArrowLeft } from 'lucide-react';
 import Logo from './Logo.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import StatusBar from './StatusBar.jsx';
