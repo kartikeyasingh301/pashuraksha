@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, Power, CheckCircle, WifiOff, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, Power, CheckCircle, WifiOff, RefreshCw, ArrowLeft, Menu, X, FileText, Syringe, Info, Heart } from 'lucide-react';
 import Logo from './Logo.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import StatusBar from './StatusBar.jsx';
@@ -51,7 +51,33 @@ export default function Layout({ children, title, hero, showBack = false, header
   const navigate = useNavigate();
   const role = user?.role;
   const navItems = role === 'vet' ? VET_NAV : FARMER_NAV;
+
+  const translate = (enText) => {
+    if (lang === 'hi') {
+      if (enText === 'MAIN MENU') return 'मुख्य मेनू';
+      if (enText === 'Dashboard') return 'डैशबोर्ड';
+      if (enText === 'Report Health Issue') return 'बीमारी की रिपोर्ट करें';
+      if (enText === 'My Herd Ledger') return 'मेरा पशु लेजर';
+      if (enText === 'Vaccine Passbook') return 'टीकाकरण पासबुक';
+      if (enText === 'Health Advisories') return 'स्वास्थ्य सलाह';
+      if (enText === 'HELP & SETTINGS') return 'सहायता एवं सेटिंग्स';
+      if (enText === 'About PashuSuraksha') return 'पशुसुरक्षा के बारे में';
+    }
+    if (lang === 'mr') {
+      if (enText === 'MAIN MENU') return 'मुख्य मेनू';
+      if (enText === 'Dashboard') return 'डॅशबोर्ड';
+      if (enText === 'Report Health Issue') return 'आजाराची नोंद करा';
+      if (enText === 'My Herd Ledger') return 'माझे पशु खाते';
+      if (enText === 'Vaccine Passbook') return 'लसीकरण पासबुक';
+      if (enText === 'Health Advisories') return 'आरोग्य सल्ला';
+      if (enText === 'HELP & SETTINGS') return 'मदत आणि सेटिंग्ज';
+      if (enText === 'About PashuSuraksha') return 'पशुसुरक्षा बद्दल';
+    }
+    return enText;
+  };
+
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const confirmLogout = () => {
     if (window.confirm("Are you sure you want to sign out?")) {
@@ -104,6 +130,47 @@ export default function Layout({ children, title, hero, showBack = false, header
       {role === 'vet' && <Sidebar />}
 
       <div className="layout-content-wrapper">
+        
+        {/* Mobile Drawer */}
+        {role !== 'vet' && (
+          <>
+            {isDrawerOpen && <div className="drawer-overlay" onClick={() => setIsDrawerOpen(false)} />}
+            <div className={`drawer ${isDrawerOpen ? 'open' : ''}`}>
+              <div className="drawer-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <Logo size={28} color="white" />
+                  <div style={{ fontSize: '18px', fontWeight: '800' }}>PashuSuraksha</div>
+                </div>
+                <button onClick={() => setIsDrawerOpen(false)} style={{ background: 'transparent', border: 'none', color: 'white' }}><X size={24} /></button>
+              </div>
+              <div className="drawer-links">
+                <div style={{ padding: '0 24px 8px 24px', fontSize: '12px', fontWeight: 'bold', color: '#888', textTransform: 'uppercase', letterSpacing: '1px' }}>MAIN MENU</div>
+                <NavLink to="/farmer" className={({ isActive }) => "drawer-link" + (isActive ? " active" : "")} end onClick={() => setIsDrawerOpen(false)}>
+                  <Home size={20} /> {translate('Dashboard')}
+                </NavLink>
+                <NavLink to="/farmer/report" className={({ isActive }) => "drawer-link" + (isActive ? " active" : "")} onClick={() => setIsDrawerOpen(false)}>
+                  <Heart size={20} /> {translate('Report Health Issue')}
+                </NavLink>
+                <NavLink to="/farmer/herd" className={({ isActive }) => "drawer-link" + (isActive ? " active" : "")} onClick={() => setIsDrawerOpen(false)}>
+                  <FileText size={20} /> {translate('My Herd Ledger')}
+                </NavLink>
+                <NavLink to="/farmer/passbook" className={({ isActive }) => "drawer-link" + (isActive ? " active" : "")} onClick={() => setIsDrawerOpen(false)}>
+                  <Syringe size={20} /> {translate('Vaccine Passbook')}
+                </NavLink>
+                <NavLink to="/farmer/advisory" className={({ isActive }) => "drawer-link" + (isActive ? " active" : "")} onClick={() => setIsDrawerOpen(false)}>
+                  <BookOpen size={20} /> {translate('Health Advisories')}
+                </NavLink>
+                
+                <div style={{ height: '1px', background: '#eee', margin: '16px 0' }}></div>
+                <div style={{ padding: '0 24px 8px 24px', fontSize: '12px', fontWeight: 'bold', color: '#888', textTransform: 'uppercase', letterSpacing: '1px' }}>HELP & SETTINGS</div>
+                <NavLink to="/farmer/about" className={({ isActive }) => "drawer-link" + (isActive ? " active" : "")} onClick={() => setIsDrawerOpen(false)}>
+                  <Info size={20} /> {translate('About PashuSuraksha')}
+                </NavLink>
+              </div>
+            </div>
+          </>
+        )}
+
         <header className="app-header">
           <div className="header-left">
             {showBack && (
