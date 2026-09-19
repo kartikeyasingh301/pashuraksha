@@ -145,7 +145,7 @@ export default function FarmerDashboard() {
           </div>
           <div style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:"8px" }}>
             <div style={{ textAlign:"center", padding:"10px 4px", background:"#F5F5F5", borderRadius:"10px" }}>
-              <div style={{ fontSize:"20px", fontWeight:"800", color:"#333" }}>27</div>
+              <div style={{ fontSize:"20px", fontWeight:"800", color:"#333" }}>20</div>
               <div style={{ fontSize:"10px", color:"#888", fontWeight:"600" }}>Total</div>
             </div>
             <div style={{ textAlign:"center", padding:"10px 4px", background:"#E8F5E9", borderRadius:"10px" }}>
