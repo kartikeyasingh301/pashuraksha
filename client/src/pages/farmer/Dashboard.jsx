@@ -21,7 +21,7 @@ const TRANSLATIONS = {
     tipTitle: "Quick Tips for Healthy Livestock",
     tips: [
       { icon: "syringe",      text: "Vaccinate cattle every 6 months for FMD" },
-      { icon: "thermometer",  text: "Check body temp daily — normal is 38–39.5°C" },
+      { icon: "thermometer",  text: "Check body temp daily - normal is 38-39.5 °C" },
       { icon: "shield",       text: "Isolate any sick animal immediately" },
       { icon: "phone",        text: "Call helpline 1962 for free vet advice" },
     ],
