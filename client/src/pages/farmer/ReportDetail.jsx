@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Clock, MapPin, AlertCircle, FileText, Activity, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage.js';
 import { apiGet } from '../../api/client.js';
-import { db } from '../../db/db.js';
+import db from '../../db/dexie.js';
 
 function formatKolkataTime(isoString) {
   if (!isoString) return "Unknown Date";
@@ -75,7 +75,7 @@ export default function ReportDetail() {
              setReport(localReport);
           } else {
              // Also search by local_id in case the route passed local_id
-             const byLocalId = await db.reports.where('local_id').equals(id).first();
+             const byLocalId = await db.offlineQueue.where('localId').equals(id).first();
              if (byLocalId) setReport(byLocalId);
           }
         } catch (dbErr) {
