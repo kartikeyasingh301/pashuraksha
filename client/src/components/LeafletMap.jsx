@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { formatKolkataTime } from '../utils/time.js';
@@ -65,7 +65,8 @@ export default function LeafletMap({ incidents = [], height = '400px', filterSta
 
   return (
     <div style={{ height, width: '100%', borderRadius: 'var(--radius-card)', overflow: 'hidden', position: 'relative' }}>
-      <MapContainer center={[19.5, 75.0]} zoom={6} style={{ height: '100%', width: '100%' }} zoomControl={true}>
+      <MapContainer center={[19.5, 75.0]} zoom={6} style={{ height: '100%', width: '100%' }} zoomControl={false}>
+        <ZoomControl position="bottomright" />
         <TileLayer
           attribution='&copy; OpenStreetMap'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
