@@ -47,9 +47,9 @@ export default function DistrictDashboard() {
       <div className="page-content" style={{ paddingBottom: "120px", maxWidth: "1200px" }}>
         
         {/* Header */}
-        <div style={{ ...cardStyle, display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ ...cardStyle, display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: "16px", marginBottom: "20px" }}>
+          <div style={{ display: "flex", flexDirection: "column", flex: "1 1 250px", minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <select 
                 value={selectedDistrict}
                 onChange={(e) => {
@@ -57,9 +57,9 @@ export default function DistrictDashboard() {
                   refreshData();
                 }}
                 style={{ 
-                  margin: 0, fontSize: "20px", fontWeight: "800", color: "#1B5E20", 
+                  margin: 0, fontSize: "1.2rem", fontWeight: "800", color: "#1B5E20", 
                   border: "none", background: "transparent", outline: "none", cursor: "pointer",
-                  WebkitAppearance: "none", paddingRight: "16px",
+                  WebkitAppearance: "none", paddingRight: "20px", maxWidth: "100%", textOverflow: "ellipsis",
                   backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%231B5E20%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')",
                   backgroundRepeat: "no-repeat", backgroundPosition: "right center"
                 }}
@@ -69,16 +69,17 @@ export default function DistrictDashboard() {
                 ))}
               </select>
             </div>
-            <p style={{ margin: "2px 0 0 0", fontSize: "13px", color: "#666", fontWeight: "600" }}>Maharashtra Veterinary Command</p>
+            <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#666", fontWeight: "600" }}>Maharashtra Veterinary Command</p>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap", background: "#f8f9fa", padding: "8px 12px", borderRadius: "10px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#4CAF50" }}></div>
-              <span style={{ fontSize: "13px", fontWeight: "600", color: "#555" }}>Online</span>
+              <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#4CAF50", boxShadow: "0 0 4px #4CAF50" }}></div>
+              <span style={{ fontSize: "12px", fontWeight: "700", color: "#2E7D32", textTransform: "uppercase" }}>Online</span>
             </div>
-            <div style={{ fontSize: "15px", fontWeight: "700", fontFamily: "monospace" }}>{time}</div>
-            <button onClick={refreshData} style={{ background: "#E3F2FD", color: "#1565C0", border: "none", padding: "8px", borderRadius: "8px", cursor: "pointer", display: "flex" }}>
-              <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+            <div style={{ width: "1px", height: "16px", background: "#ddd" }}></div>
+            <div style={{ fontSize: "13px", fontWeight: "700", fontFamily: "monospace", color: "#555" }}>{time}</div>
+            <button onClick={refreshData} style={{ background: "white", color: "#1565C0", border: "1px solid #BBDEFB", padding: "6px", borderRadius: "6px", cursor: "pointer", display: "flex", marginLeft: "4px" }}>
+              <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
             </button>
           </div>
         </div>
