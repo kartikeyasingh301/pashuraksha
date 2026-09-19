@@ -64,8 +64,8 @@ export default function LeafletMap({ incidents = [], height = '400px', filterSta
     : incidents;
 
   return (
-    <div style={{ height, width: '100%', borderRadius: 'var(--radius-card)', overflow: 'hidden', position: 'relative' }}>
-      <MapContainer center={[19.5, 75.0]} zoom={6} style={{ height: '100%', width: '100%' }} zoomControl={false}>
+    <div style={{ height: height === '100%' ? undefined : height, flex: height === '100%' ? 1 : 'none', width: '100%', borderRadius: 'var(--radius-card)', overflow: 'hidden', position: 'relative' }}>
+      <MapContainer center={[19.5, 75.0]} zoom={6} style={{ height: '100%', width: '100%', position: 'absolute', inset: 0 }} zoomControl={false}>
         <ZoomControl position="bottomright" />
         <TileLayer
           attribution='&copy; OpenStreetMap'
