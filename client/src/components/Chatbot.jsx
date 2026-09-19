@@ -1,6 +1,6 @@
 ﻿import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageSquare, X, Send, Activity, Syringe, Users, PhoneCall } from 'lucide-react';
+import { MessageSquare, X, Send, Activity, Syringe, Users, PhoneCall, Mic, MicOff } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage.js';
 import { apiPost } from '../api/client.js';
 import './Chatbot.css';
@@ -31,9 +31,56 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
   const [lang] = useLanguage();
+
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    // Initialize SpeechRecognition if available
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      
+      recognitionRef.current.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInput(transcript);
+        setIsListening(false);
+        // We do not auto-send so they can review the text first.
+      };
+      
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, []);
+
+  const toggleListen = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    } else {
+      if (recognitionRef.current) {
+        // Set language based on app state
+        recognitionRef.current.lang = lang === 'hi' ? 'hi-IN' : (lang === 'mr' ? 'mr-IN' : 'en-IN');
+        recognitionRef.current.start();
+        setIsListening(true);
+      } else {
+        alert(lang === 'hi' ? 'आपका ब्राउज़र वॉयस टाइपिंग का समर्थन नहीं करता है।' : 
+              lang === 'mr' ? 'तुमचा ब्राउझर व्हॉइस टायपिंगला समर्थन देत नाही.' : 
+              'Your browser does not support voice typing.');
+      }
+    }
+  };
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -151,9 +198,33 @@ export default function Chatbot() {
           )}
 
           <div className="chatbot-input">
+            <button 
+              onClick={toggleListen} 
+              className={`mic-btn ${isListening ? 'listening' : ''}`}
+              title={lang === 'hi' ? 'बोलकर टाइप करें' : lang === 'mr' ? 'बोलून टाइप करा' : 'Voice Typing'}
+              style={{
+                background: isListening ? '#ffebee' : '#f5f5f5',
+                color: isListening ? '#d32f2f' : '#666',
+                border: 'none',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              {isListening ? <MicOff size={20} className="pulse-anim" /> : <Mic size={20} />}
+            </button>
             <input 
               type="text" 
-              placeholder={lang === 'hi' ? 'अपनी समस्या यहाँ लिखें...' : (lang === 'mr' ? 'तुमची समस्या येथे लिहा...' : 'Type your problem here...')}
+              placeholder={
+                isListening 
+                  ? (lang === 'hi' ? 'सुन रहा हूँ...' : lang === 'mr' ? 'ऐकत आहे...' : 'Listening...')
+                  : (lang === 'hi' ? 'अपनी समस्या यहाँ लिखें...' : lang === 'mr' ? 'तुमची समस्या येथे लिहा...' : 'Type your problem here...')
+              }
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
@@ -164,6 +235,14 @@ export default function Chatbot() {
           </div>
         </div>
       )}
+      <style dangerouslySetInnerHTML={{__html: `
+        .pulse-anim { animation: pulse-red 1.5s infinite; }
+        @keyframes pulse-red {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.1); opacity: 0.7; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+      `}} />
     </>
   );
 }
