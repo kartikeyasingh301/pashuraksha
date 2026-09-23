@@ -6,6 +6,8 @@
   },
   "engines": {
     "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "isomorphic-git": "^1.42.2"
   }
 }
-

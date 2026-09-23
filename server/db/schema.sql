@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   username    TEXT UNIQUE NOT NULL,
   password    TEXT NOT NULL,
-  role        TEXT CHECK(role IN ('farmer','vet')) NOT NULL,
+  role        TEXT CHECK(role IN ('farmer','vet','lab','govt')) NOT NULL,
   name        TEXT,
   district    TEXT,
   created_at  TEXT DEFAULT (datetime('now'))
@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS cases (
   status        TEXT DEFAULT 'CASE',
   severity      TEXT DEFAULT 'LOW',
   report_count  INTEGER DEFAULT 0,
+  signal_score  INTEGER DEFAULT 0,
+  sla_deadline  TEXT,
   created_at    TEXT DEFAULT (datetime('now'))
 );
 
@@ -64,6 +66,8 @@ CREATE TABLE IF NOT EXISTS suspected_outbreaks (
   confirmed_at  TEXT,
   confirmed_by  INTEGER REFERENCES users(id),
   status        TEXT DEFAULT 'SUSPECTED',
+  signal_score  INTEGER DEFAULT 0,
+  sla_deadline  TEXT,
   notes         TEXT
 );
 
@@ -101,3 +105,4 @@ CREATE INDEX IF NOT EXISTS idx_reports_captured  ON reports(captured_at);
 CREATE INDEX IF NOT EXISTS idx_reports_status    ON reports(status);
 CREATE INDEX IF NOT EXISTS idx_cases_status      ON cases(status);
 CREATE INDEX IF NOT EXISTS idx_clusters_case     ON clusters(case_id);
+

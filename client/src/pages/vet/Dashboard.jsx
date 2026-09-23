@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, Activity, Map as MapIcon, Dna, Timer, ShieldAlert, ChevronRight, FileText, CheckCircle, BarChart2, FlaskConical, MapPin } from 'lucide-react';
 import Layout from '../../components/Layout.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
-import { apiGet } from '../../api/client.js';
+import { apiGet, apiPost } from '../../api/client.js';
 
 export default function VetDashboard() {
   const { user } = useAuth();
@@ -98,6 +98,17 @@ export default function VetDashboard() {
 
   
   const greeting = getGreeting().toUpperCase();
+
+  const handleSimulateOutbreak = async () => {
+    if(!window.confirm('Simulate a high-risk outbreak cluster?')) return;
+    try {
+      const res = await apiPost('/demo/simulate-outbreak');
+      if(res.success) {
+        alert('Outbreak Simulated. Refreshing data...');
+        window.location.reload();
+      }
+    } catch(e) { alert('Simulation failed'); }
+  };
 
   return (
     <Layout title="Operations Center">
@@ -232,3 +243,4 @@ export default function VetDashboard() {
     </Layout>
   );
 }
+

@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 const { DatabaseSync } = require('node:sqlite');
 const path = require('path');
 const fs = require('fs');
@@ -46,6 +46,8 @@ const transactionSeed = db.transaction(() => {
   insUser.run(1, 'farmer1', bcrypt.hashSync('farmer123', 10), 'farmer', 'Raju Kumar', 'Nashik');
     insUser.run(3, 'farmer2', bcrypt.hashSync('farmer123', 10), 'farmer', 'Suresh Patel', 'Pune');
   insUser.run(2, 'vet1', bcrypt.hashSync('vet123', 10), 'vet', 'Dr. Priya Sharma', 'Nashik');
+  insUser.run(4, 'lab1', bcrypt.hashSync('lab123', 10), 'lab', 'Dr. Sanjay Gupta (CDDL)', 'Pune');
+  insUser.run(5, 'govt1', bcrypt.hashSync('govt123', 10), 'govt', 'Directorate of Animal Husbandry', 'Mumbai');
 
   // 2. Cases
   const insCase = db.prepare(`INSERT INTO cases (id, syndrome, species, district, village, started_at, status, severity, report_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
@@ -97,3 +99,4 @@ const transactionSeed = db.transaction(() => {
 transactionSeed();
 console.log('[DB] Fully Deterministic Demo Data Seeded for SIH.');
 module.exports = db;
+

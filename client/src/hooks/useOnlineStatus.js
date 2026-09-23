@@ -23,6 +23,7 @@ export function useOnlineStatus() {
   const [isOnline, setIsOnline] = useState(true); // optimistic — fix immediately on first ping
 
   const check = useCallback(async () => {
+    if (localStorage.getItem('SIMULATE_OFFLINE') === 'true') { setIsOnline(false); return; }
     const result = await pingBackend();
     setIsOnline(result);
   }, []);

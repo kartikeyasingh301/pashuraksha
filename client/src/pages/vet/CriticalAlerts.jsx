@@ -1,4 +1,4 @@
-ï»¿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout.jsx';
 
@@ -15,7 +15,7 @@ import { ShieldAlert, Activity, Filter, MapPin, ChevronRight, ActivitySquare, Sh
 
 function OutbreakDNAModal({ item, onClose, onAction }) {
   if (!item) return null;
-  const dna = item.sentinel?.outbreak_dna || { clinical: 50, temporal: 50, spatial: 50, preventive: 50, movement: 50, historical: 50 };
+  const dna = item.sentinel?.outbreak_dna || { clinical: 50, temporal: 50, spatial: 50, preventive: 50, historical: 50, mortality: 0, weather: 50 };
   const actions = item.sentinel?.next_best_actions || [];
   useEffect(() => {
     const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
@@ -31,7 +31,7 @@ function OutbreakDNAModal({ item, onClose, onAction }) {
         <div style={{ padding: "20px", background: item.sentinel?.risk_level === 'CRITICAL' ? "#D32F2F" : "#F57C00", color: "white", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
            <div>
              <div style={{ fontSize: "11px", fontWeight: "800", letterSpacing: "1px", opacity: 0.9, textTransform: "uppercase" }}>PASHURAKSHA SENTINEL</div>
-             <h2 style={{ margin: "4px 0 0 0", fontSize: "22px", fontWeight: "800" }}>{item.syndrome} â€” {item.district || 'Location'}</h2>
+             <h2 style={{ margin: "4px 0 0 0", fontSize: "22px", fontWeight: "800" }}>{item.syndrome} — {item.district || 'Location'}</h2>
              <p style={{ margin: "4px 0 0 0", fontSize: "14px", opacity: 0.9 }}>Early Signal Score: {item.sentinel?.signal_score}/100 | Risk: {item.sentinel?.risk_level}</p>
            </div>
            <button onClick={onClose} style={{ background: "rgba(255,255,255,0.2)", border: "none", color: "white", width: "32px", height: "32px", borderRadius: "16px", fontSize: "18px", cursor: "pointer" }}>&times;</button>
@@ -47,7 +47,8 @@ function OutbreakDNAModal({ item, onClose, onAction }) {
               { label: "Rapid Case Growth", val: dna.temporal },
               { label: "Spatial Clustering", val: dna.spatial },
               { label: "Vaccination Gap", val: dna.preventive },
-              { label: "Movement/Exposure Link", val: dna.movement },
+              { label: "Mortality Signal", val: dna.mortality },
+              { label: "Weather/Environmental Risk", val: dna.weather },
               { label: "Historical Similarity", val: dna.historical }
             ].map(row => (
                <div key={row.label} style={{ marginBottom: "12px" }}>
@@ -172,7 +173,7 @@ export default function CriticalAlerts() {
                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
                             <div>
                                <div style={{ fontSize: "11px", fontWeight: "800", color: isCrit ? '#D32F2F' : '#F57C00', letterSpacing: "1px", marginBottom: "4px" }}>{isCrit ? 'CRITICAL PRIORITY' : 'HIGH PRIORITY'}</div>
-                               <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "800", color: "#333" }}>{item.syndrome} â€” {item.species || 'Animals'}</h3>
+                               <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "800", color: "#333" }}>{item.syndrome} — {item.species || 'Animals'}</h3>
                                <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#666", display: "flex", alignItems: "center", gap: "4px" }}><MapPin size={14}/> {item.cluster_label || item.village || ''} {item.district}</p>
                             </div>
                             <div style={{ textAlign: "right" }}>
@@ -218,3 +219,4 @@ export default function CriticalAlerts() {
     </Layout>
   );
 }
+

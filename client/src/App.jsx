@@ -22,6 +22,7 @@ import DistrictDashboard from './pages/vet/DistrictDashboard.jsx';
 import AdvisoryBroadcast from './pages/vet/AdvisoryBroadcast.jsx';
 import ParaVetDashboard from './pages/paravet/ParaVetDashboard.jsx';
 import GovtCommandCenter from './pages/govt/GovtCommandCenter.jsx';
+import LabDashboard from './pages/lab/LabDashboard.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import SplashScreen from './components/SplashScreen.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
@@ -76,6 +77,7 @@ function AppRoutes() {
 
       {/* Govt Admin Routes */}
       <Route path='/govt' element={<GovtCommandCenter />} />
+      <Route path='/lab' element={<PrivateRoute role='lab'><LabDashboard /></PrivateRoute>} />
 
       <Route path='*' element={<Navigate to='/' replace />} />
     </Routes>
@@ -96,3 +98,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout.jsx';
 
@@ -67,7 +67,7 @@ export default function CaseWorkspace() {
         <div style={{ ...cardStyle, borderLeft: `6px solid ${isCrit ? '#D32F2F' : '#F57C00'}`, background: isCrit ? '#FFEBEE' : '#FFF8E1', borderColor: isCrit ? '#FFCDD2' : '#FFECB3' }}>
            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
               <div>
-                <h2 style={{ margin: 0, fontSize: "20px", fontWeight: "800", color: "#333" }}>{c.syndrome} — Suspected</h2>
+                <h2 style={{ margin: 0, fontSize: "20px", fontWeight: "800", color: "#333" }}>{c.syndrome} � Suspected</h2>
                 <p style={{ margin: "4px 0 0 0", fontSize: "14px", color: "#555", display: "flex", alignItems: "center", gap: "6px" }}>
                   <MapPin size={16}/> {c.village}, {c.district}
                 </p>
@@ -193,7 +193,18 @@ export default function CaseWorkspace() {
         <div style={{ ...cardStyle, border: "2px solid #1B5E20" }}>
           <h3 style={{ fontSize: "14px", fontWeight: "800", color: "#1B5E20", margin: "0 0 16px 0", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "8px" }}><Crosshair size={18}/> Recommended Actions</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            {c.sentinel?.next_best_actions?.map((act, i) => (
+            <div style={{ padding: '16px', background: '#FFF3E0', borderRadius: '8px', border: '1px solid #FFE0B2', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <strong style={{ fontSize: '15px', color: '#E65100' }}>1. Collect Diagnostic Sample</strong>
+                    <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>Laboratory confirmation required to confirm {c.syndrome} outbreak.</div>
+                  </div>
+                  <button onClick={() => { alert('Sample #SMP-'+Math.floor(Math.random()*1000)+' collected and referred to Central Diagnostic Lab.'); navigate('/vet'); }} style={{ padding: '8px 16px', background: '#E65100', color: 'white', border: 'none', borderRadius: '6px', fontWeight: '700', fontSize: '12px', cursor: 'pointer' }}>
+                    REFER TO LAB
+                  </button>
+                </div>
+              </div>
+              {c.sentinel?.next_best_actions?.map((act, i) => (
               <div key={i} style={{ padding: "16px", background: i === 0 ? "#E8F5E9" : "#f8f9fa", borderRadius: "8px", border: i === 0 ? "1px solid #C8E6C9" : "1px solid #eee" }}>
                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                    <div>
@@ -216,3 +227,4 @@ export default function CaseWorkspace() {
     </Layout>
   );
 }
+

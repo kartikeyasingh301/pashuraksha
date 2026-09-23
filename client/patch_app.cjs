@@ -1,18 +1,16 @@
 ﻿const fs = require('fs');
-const path = require('path');
+const file = 'C:/Users/KARTIKEYA/.gemini/antigravity/scratch/pashusuraksha/client/src/App.jsx';
+let code = fs.readFileSync(file, 'utf8');
 
-const appFile = path.join(__dirname, 'src/App.jsx');
-let appCode = fs.readFileSync(appFile, 'utf8');
+code = code.replace(
+  "import ReportDetail from './pages/farmer/ReportDetail.jsx';",
+  "import ReportDetail from './pages/farmer/ReportDetail.jsx';\nimport About from './pages/farmer/About.jsx';"
+);
 
-if(!appCode.includes('CaseWorkspace')) {
-    appCode = appCode.replace(
-        "import ResponseQueue from './pages/vet/ResponseQueue.jsx';",
-        "import ResponseQueue from './pages/vet/ResponseQueue.jsx';\nimport CaseWorkspace from './pages/vet/CaseWorkspace.jsx';"
-    );
-    appCode = appCode.replace(
-        "<Route path='/vet/queue' element={<PrivateRoute role='vet'><ResponseQueue /></PrivateRoute>} />",
-        "<Route path='/vet/queue' element={<PrivateRoute role='vet'><ResponseQueue /></PrivateRoute>} />\n      <Route path='/vet/case/:id' element={<PrivateRoute role='vet'><CaseWorkspace /></PrivateRoute>} />"
-    );
-    fs.writeFileSync(appFile, appCode, 'utf8');
-}
-console.log("App.jsx patched with CaseWorkspace route.");
+code = code.replace(
+  "<Route path='/farmer/passbook' element={<PrivateRoute role='farmer'><VaccinationPassbook /></PrivateRoute>} />",
+  "<Route path='/farmer/passbook' element={<PrivateRoute role='farmer'><VaccinationPassbook /></PrivateRoute>} />\n        <Route path='/farmer/about' element={<PrivateRoute role='farmer'><About /></PrivateRoute>} />"
+);
+
+fs.writeFileSync(file, code);
+console.log("App routing patched");

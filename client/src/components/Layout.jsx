@@ -34,6 +34,13 @@ const VET_DRAWER_NAV = [
 ];
 
 function SyncIndicator({ isOnline, pendingCount, isSyncing }) {
+  const [simOffline, setSimOffline] = useState(localStorage.getItem('SIMULATE_OFFLINE') === 'true');
+  const toggleOffline = () => {
+    const next = !simOffline;
+    setSimOffline(next);
+    localStorage.setItem('SIMULATE_OFFLINE', next ? 'true' : 'false');
+    window.location.reload();
+  };
   if (!isOnline) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--warning-bg)', color: 'var(--warning-text)', padding: '6px 12px', borderRadius: 'var(--radius-pill)', fontSize: '12px', fontWeight: '700', border: '1px solid var(--warning-text)' }}>
@@ -49,8 +56,11 @@ function SyncIndicator({ isOnline, pendingCount, isSyncing }) {
     );
   }
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--success-text)', fontSize: '12px', fontWeight: '700' }}>
-      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--success-text)' }}></div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <button onClick={toggleOffline} style={{ background: simOffline ? '#D32F2F' : '#eee', color: simOffline ? 'white' : '#666', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer', fontWeight: 'bold' }}>{simOffline ? 'OFFLINE SIMULATOR ON' : 'SIMULATE OFFLINE'}</button>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--success-text)', fontSize: '12px', fontWeight: '700' }}>
+        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--success-text)' }}></div>
+      </div>
     </div>
   );
 }
@@ -307,3 +317,5 @@ export default function Layout({ children, title, hero, showBack = false, header
     </div>
   );
 }
+
+
