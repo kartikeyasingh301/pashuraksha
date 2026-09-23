@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const BASE_URL = import.meta.env.PROD ? 'https://pashuraksha-production.up.railway.app/api' : '/api';
 
 function getToken() {
   return localStorage.getItem('pasu_token');
