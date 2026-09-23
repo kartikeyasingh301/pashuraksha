@@ -45,6 +45,7 @@ function SyncIndicator({ isOnline, pendingCount, isSyncing }) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--warning-bg)', color: 'var(--warning-text)', padding: '6px 12px', borderRadius: 'var(--radius-pill)', fontSize: '12px', fontWeight: '700', border: '1px solid var(--warning-text)' }}>
         <WifiOff size={14} /> Offline {pendingCount > 0 && `(${pendingCount})`}
+        <button onClick={toggleOffline} style={{ marginLeft: '8px', background: '#fff', color: '#D32F2F', border: 'none', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', cursor: 'pointer', fontWeight: 'bold' }}>GO ONLINE</button>
       </div>
     );
   }
