@@ -24,6 +24,7 @@ import ParaVetDashboard from './pages/paravet/ParaVetDashboard.jsx';
 import GovtCommandCenter from './pages/govt/GovtCommandCenter.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import SplashScreen from './components/SplashScreen.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 
 function PrivateRoute({ children, role }) {
   const { isAuthenticated, user, loading } = useAuth();
@@ -84,6 +85,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <ErrorBoundary>
     <AuthProvider>
         <SyncProvider>
