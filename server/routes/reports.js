@@ -41,7 +41,7 @@ function insertReport(body, userId) {
     userId,
     body.species,
     body.syndrome,
-    body.symptoms    || null,
+    Array.isArray(body.symptoms) ? body.symptoms.join(', ') : (body.symptoms || null),
     body.mortality_count || 0,
     body.herd_id     || null,
     body.animal_id   || null,
