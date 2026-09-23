@@ -39,7 +39,7 @@ export default function VetDashboard() {
         const voicePct = Math.round((voiceCount / total) * 100);
         const ivrPct = Math.round((ivrCount / total) * 100);
 
-        // Build Attention Required Queue
+        // Build Emerging Risk Watchlist Queue
         let attentionQueue = [];
         
         outbreaks.forEach(o => {
@@ -172,10 +172,10 @@ export default function VetDashboard() {
                 </div>
               </div>
 
-              {/* ATTENTION REQUIRED ZONE */}
+              {/* Emerging Risk Watchlist ZONE */}
             <div style={{ marginBottom: "32px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#333", margin: 0, textTransform: "uppercase" }}>Attention Required</h3>
+                <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#333", margin: 0, textTransform: "uppercase" }}>Emerging Risk Watchlist</h3>
                 <span style={{ fontSize: "12px", color: "#666", fontWeight: "600", cursor: "pointer" }} onClick={() => navigate('/vet/queue')}>View Queue &rarr;</span>
               </div>
               
@@ -243,4 +243,6 @@ export default function VetDashboard() {
     </Layout>
   );
 }
+
+
 

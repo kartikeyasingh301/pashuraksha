@@ -191,7 +191,7 @@ export default function CaseWorkspace() {
 
         {/* NEXT BEST ACTIONS */}
         <div style={{ ...cardStyle, border: "2px solid #1B5E20" }}>
-          <h3 style={{ fontSize: "14px", fontWeight: "800", color: "#1B5E20", margin: "0 0 16px 0", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "8px" }}><Crosshair size={18}/> Recommended Actions</h3>
+          <h3 style={{ fontSize: "14px", fontWeight: "800", color: "#1B5E20", margin: "0 0 16px 0", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "8px" }}><Crosshair size={18}/> Response Playbook</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <div style={{ padding: '16px', background: '#FFF3E0', borderRadius: '8px', border: '1px solid #FFE0B2', marginBottom: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -227,4 +227,6 @@ export default function CaseWorkspace() {
     </Layout>
   );
 }
+
+
 

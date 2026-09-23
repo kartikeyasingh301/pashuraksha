@@ -108,7 +108,10 @@ function OutbreakDNAModal({ item, onClose, onAction }) {
         
         {/* Footer Actions */}
         <div style={{ padding: "16px 20px", background: "white", borderTop: "1px solid #eee", display: "flex", gap: "12px" }}>
-           <button onClick={() => onAction(item.case_id || item.id)} style={{ flex: 1, padding: "14px", background: "#1B5E20", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", fontSize: "15px", cursor: "pointer" }}>Open Case Workspace</button>
+           <div style={{ flex: 1, padding: '10px', background: '#E8F5E9', borderRadius: '8px', border: '1px solid #A5D6A7', fontSize: '11px', color: '#1B5E20', fontWeight: '600' }}>
+            <CheckCircle size={14} style={{ marginBottom: '-2px', marginRight: '4px' }}/> Human Verification Required
+          </div>
+          <button onClick={() => onAction(item.case_id || item.id)} style={{ padding: "14px 24px", background: "#1B5E20", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", fontSize: "15px", cursor: "pointer" }}>Open Case Workspace</button>
         </div>
       </div>
     </div>
@@ -219,4 +222,5 @@ export default function CriticalAlerts() {
     </Layout>
   );
 }
+
 
