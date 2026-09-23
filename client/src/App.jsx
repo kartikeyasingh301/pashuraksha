@@ -22,7 +22,6 @@ import DistrictDashboard from './pages/vet/DistrictDashboard.jsx';
 import AdvisoryBroadcast from './pages/vet/AdvisoryBroadcast.jsx';
 import ParaVetDashboard from './pages/paravet/ParaVetDashboard.jsx';
 import GovtCommandCenter from './pages/govt/GovtCommandCenter.jsx';
-import LabDashboard from './pages/lab/LabDashboard.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import SplashScreen from './components/SplashScreen.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
@@ -32,8 +31,7 @@ function PrivateRoute({ children, role }) {
   if (loading) return <SplashScreen />;
   if (!isAuthenticated) return <Navigate to='/login' replace />;
   if (role && user?.role !== role) {
-    if (user?.role === 'lab') return <Navigate to='/lab' replace />;
-    if (user?.role === 'govt') return <Navigate to='/govt' replace />;
+    
     return <Navigate to={user?.role === 'vet' ? '/vet' : '/farmer'} replace />;
   }
   return children;
@@ -43,8 +41,7 @@ function RootRedirect() {
   const { isAuthenticated, user, loading } = useAuth();
   if (loading) return <SplashScreen />;
   if (!isAuthenticated) return <Navigate to='/login' replace />;
-  if (user?.role === 'lab') return <Navigate to='/lab' replace />;
-    if (user?.role === 'govt') return <Navigate to='/govt' replace />;
+  
     return <Navigate to={user?.role === 'vet' ? '/vet' : '/farmer'} replace />;
 }
 
@@ -81,7 +78,6 @@ function AppRoutes() {
 
       {/* Govt Admin Routes */}
       <Route path='/govt' element={<GovtCommandCenter />} />
-      <Route path='/lab' element={<PrivateRoute role='lab'><LabDashboard /></PrivateRoute>} />
 
       <Route path='*' element={<Navigate to='/' replace />} />
     </Routes>
@@ -102,6 +98,7 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
 
 
 

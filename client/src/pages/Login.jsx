@@ -26,8 +26,7 @@ export default function Login() {
     
     if (success) {
       if (username.startsWith('vet') || username === 'admin') { navigate('/vet'); }
-      else if (username.startsWith('lab')) { navigate('/lab'); }
-      else if (username.startsWith('govt')) { navigate('/govt'); }
+      
       else { navigate('/farmer'); }
     }
   };
@@ -35,8 +34,7 @@ export default function Login() {
   const handleDemoFill = (role) => {
     if (role === 'farmer') { setUsername('farmer1'); setPassword('farmer123'); }
     else if (role === 'vet') { setUsername('vet1'); setPassword('vet123'); }
-    else if (role === 'lab') { setUsername('lab1'); setPassword('lab123'); }
-    else if (role === 'govt') { setUsername('govt1'); setPassword('govt123'); }
+    
   };
 
   return (
@@ -161,7 +159,7 @@ export default function Login() {
               One-Click Demo Access
             </div>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <button type="button" onClick={() => handleDemoFill('farmer')} className="demo-btn">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}>
                   <User size={16} color="var(--brand-600, #047857)" /> FARMER
@@ -175,18 +173,7 @@ export default function Login() {
                 </div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Surveillance Ops</div>
               </button>
-              <button type="button" onClick={() => handleDemoFill('lab')} className="demo-btn">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}>
-                  <FlaskConical size={16} color="var(--brand-600, #047857)" /> LAB
-                </div>
-                <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Diagnostics</div>
-              </button>
-              <button type="button" onClick={() => handleDemoFill('govt')} className="demo-btn">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}>
-                  <Shield size={16} color="var(--brand-600, #047857)" /> GOVT
-                </div>
-                <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>State Admin</div>
-              </button>
+
             </div>
           </div>
         </div>
@@ -199,5 +186,6 @@ export default function Login() {
     </div>
   );
 }
+
 
 
