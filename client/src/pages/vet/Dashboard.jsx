@@ -116,7 +116,7 @@ export default function VetDashboard() {
         
         {/* HEADER */}
         <div style={{ marginBottom: "20px" }}>
-          <h2 style={{ fontSize: "12px", letterSpacing: "1px", color: "#666", margin: "0 0 4px 0" }}>{greeting}, DR. {user?.name?.toUpperCase() || 'VET'}</h2>
+          <h2 style={{ fontSize: "12px", letterSpacing: "1px", color: "#666", margin: "0 0 4px 0" }}>{greeting}, {user?.name?.toUpperCase() || 'VET'}</h2>
           <h1 style={{ fontSize: "22px", fontWeight: "800", color: "#1B5E20", margin: 0 }}>Animal Health Surveillance</h1>
         </div>
 
@@ -261,6 +261,7 @@ export default function VetDashboard() {
     </Layout>
   );
 }
+
 
 
 
