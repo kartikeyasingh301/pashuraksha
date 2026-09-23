@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, Power, WifiOff, RefreshCw, ArrowLeft, Menu, X, FileText, Syringe, Info, Heart } from 'lucide-react';
+import { Home, ClipboardList, BookOpen, LayoutDashboard, AlertTriangle, Map as MapIcon, Power, WifiOff, RefreshCw, ArrowLeft, Menu, X, FileText, Syringe, Info, Heart, ShieldAlert, Radio } from 'lucide-react';
 import Logo from './Logo.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import StatusBar from './StatusBar.jsx';
@@ -20,6 +20,17 @@ const VET_NAV = [
   { to: '/vet/alerts', icon: <AlertTriangle size={24} />, label: 'Outbreak Alerts' },
   { to: '/vet/map', icon: <MapIcon size={24} />, label: 'Disease Map' },
   { to: '/vet/queue', icon: <ClipboardList size={24} />, label: 'Pending Cases' },
+];
+
+const VET_DRAWER_NAV = [
+  { to: '/vet', icon: <LayoutDashboard size={24} />, label: 'Dashboard' },
+  { to: '/vet/alerts', icon: <AlertTriangle size={24} />, label: 'Outbreak Alerts' },
+  { to: '/vet/map', icon: <MapIcon size={24} />, label: 'Disease Map' },
+  { to: '/vet/queue', icon: <ClipboardList size={24} />, label: 'Pending Cases' },
+  { to: '/vet/district', icon: <FileText size={24} />, label: 'District Analytics' },
+  { to: '/vet/vaccination', icon: <Syringe size={24} />, label: 'Vaccination Gaps' },
+  { to: '/vet/zoonotic', icon: <ShieldAlert size={24} />, label: 'Zoonotic Monitoring' },
+  { to: '/vet/broadcast', icon: <Radio size={24} />, label: 'Broadcast Advisory' },
 ];
 
 function SyncIndicator({ isOnline, pendingCount, isSyncing }) {
@@ -53,9 +64,10 @@ export default function Layout({ children, title, hero, showBack = false, header
   const { isOnline, pendingCount, isSyncing } = useSyncContext();
   const navigate = useNavigate();
   const role = user?.role;
+  
   // Note: bottom nav only uses the first 3 or 4 items due to space constraints on farmer
   const navItems = role === 'vet' ? VET_NAV : FARMER_NAV.filter(n => ['Dashboard', 'Report Health Issue', 'Health Advisories'].includes(n.label));
-  const drawerItems = role === 'vet' ? VET_NAV : FARMER_NAV;
+  const drawerItems = role === 'vet' ? VET_DRAWER_NAV : FARMER_NAV;
   
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -67,7 +79,9 @@ export default function Layout({ children, title, hero, showBack = false, header
         'Report Health Issue': 'बीमारी की रिपोर्ट करें', 'My Herd Ledger': 'मेरा पशु लेजर',
         'Vaccine Passbook': 'टीकाकरण पासबुक', 'Health Advisories': 'स्वास्थ्य सलाह',
         'HELP & SETTINGS': 'सहायता एवं सेटिंग्स', 'About PashuSuraksha': 'पशुसुरक्षा के बारे में',
-        'Outbreak Alerts': 'प्रकोप अलर्ट', 'Disease Map': 'बीमारी का नक्शा', 'Pending Cases': 'लंबित मामले'
+        'Outbreak Alerts': 'प्रकोप अलर्ट', 'Disease Map': 'बीमारी का नक्शा', 'Pending Cases': 'लंबित मामले',
+        'District Analytics': 'जिला एनालिटिक्स', 'Vaccination Gaps': 'टीकाकरण अंतराल',
+        'Zoonotic Monitoring': 'जूनोटिक निगरानी', 'Broadcast Advisory': 'एडवाइजरी प्रसारित करें'
       };
       return map[enText] || enText;
     }
@@ -77,7 +91,9 @@ export default function Layout({ children, title, hero, showBack = false, header
         'Report Health Issue': 'आजाराची नोंद करा', 'My Herd Ledger': 'माझे पशु खाते',
         'Vaccine Passbook': 'लसीकरण पासबुक', 'Health Advisories': 'आरोग्य सल्ला',
         'HELP & SETTINGS': 'मदत आणि सेटिंग्ज', 'About PashuSuraksha': 'पशुसुरक्षा बद्दल',
-        'Outbreak Alerts': 'प्रकोप इशारे', 'Disease Map': 'रोग नकाशा', 'Pending Cases': 'प्रलंबित प्रकरणे'
+        'Outbreak Alerts': 'प्रकोप इशारे', 'Disease Map': 'रोग नकाशा', 'Pending Cases': 'प्रलंबित प्रकरणे',
+        'District Analytics': 'जिल्हा विश्लेषण', 'Vaccination Gaps': 'लसीकरण अंतर',
+        'Zoonotic Monitoring': 'झुनोटिक मॉनिटरिंग', 'Broadcast Advisory': 'सल्लागार प्रसारित करा'
       };
       return map[enText] || enText;
     }
@@ -99,7 +115,7 @@ export default function Layout({ children, title, hero, showBack = false, header
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Veterinary Command</div>
         </div>
       </div>
-      <nav className="sidebar-nav">
+      <nav className="sidebar-nav" style={{ overflowY: 'auto' }}>
         {drawerItems.map((item) => (
           <NavLink
             key={item.to}
@@ -147,9 +163,9 @@ export default function Layout({ children, title, hero, showBack = false, header
 
           {/* Drawer panel */}
           <div style={{
-            position: 'fixed', top: 0, left: 0, bottom: 0, width: '280px',
-            background: 'white', zIndex: 10000, boxShadow: '2px 0 12px rgba(0,0,0,0.15)',
-            transform: isDrawerOpen ? 'translateX(0)' : 'translateX(-100%)',
+            position: 'fixed', top: 0, right: 0, bottom: 0, width: '280px',
+            background: 'white', zIndex: 10000, boxShadow: '-2px 0 12px rgba(0,0,0,0.15)',
+            transform: isDrawerOpen ? 'translateX(0)' : 'translateX(100%)',
             transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1)',
             display: 'flex', flexDirection: 'column'
           }}>
@@ -220,26 +236,15 @@ export default function Layout({ children, title, hero, showBack = false, header
         {/* ── App Header ── */}
         <header className="app-header">
           <div className="header-left">
-            {/* Hamburger – on both farmer and vet mobile pages, when not in a sub-page */}
-            {!showBack && (
-              <button
-                onClick={() => setIsDrawerOpen(true)}
-                aria-label="Open Menu"
-                className="hamburger-btn"
-                style={{ background:'transparent', border:'none', color:'white', cursor:'pointer', display:'flex', alignItems:'center', padding:'4px', marginRight:'6px' }}
-              >
-                <Menu size={26} />
-              </button>
-            )}
             {showBack && (
               <button className="back-btn" onClick={() => navigate(-1)} aria-label="Go back">
                 <ArrowLeft size={20} />
               </button>
             )}
             <div className="header-brand">
-              <span className="header-logo"><Logo size={24} color="white" /></span>
+              {!showBack && <span className="header-logo"><Logo size={24} color="white" /></span>}
               <div>
-                <div className="header-app-name">Pashuraksha</div>
+                {!showBack && <div className="header-app-name">Pashuraksha</div>}
                 {title && <div className="header-title">{title}</div>}
               </div>
             </div>
@@ -257,8 +262,15 @@ export default function Layout({ children, title, hero, showBack = false, header
             )}
             {headerActions}
             {role !== 'vet' && <SyncIndicator isOnline={isOnline} pendingCount={pendingCount} isSyncing={isSyncing} />}
-            <button className="logout-btn" onClick={confirmLogout} title="Sign out" aria-label="Sign out">
-              <Power size={20} />
+            
+            {/* Always visible Hamburger Menu */}
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              aria-label="Open Menu"
+              className="hamburger-btn"
+              style={{ background:'rgba(255,255,255,0.15)', border:'none', color:'white', cursor:'pointer', display:'flex', alignItems:'center', padding:'6px', borderRadius:'50%' }}
+            >
+              <Menu size={20} />
             </button>
           </div>
         </header>
