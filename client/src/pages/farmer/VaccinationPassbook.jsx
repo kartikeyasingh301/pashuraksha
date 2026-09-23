@@ -150,13 +150,7 @@ const VaccinationPassbook = () => {
                     display: 'flex', 
                     alignItems: 'center', 
                     gap: '4px', 
-                    background: 'none', 
-                    border: 'none', 
-                    color: '#2E7D32', 
-                    fontSize: '13px', 
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    padding: 0
+                    background: '#E8F5E9', border: '1px solid #C8E6C9', color: '#2E7D32', fontSize: '13px', fontWeight: '700', cursor: 'pointer', padding: '6px 12px', borderRadius: '6px'
                   }}>
                     <Download size={14} /> Certificate
                   </button>
