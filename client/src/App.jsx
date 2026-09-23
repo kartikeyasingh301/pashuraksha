@@ -32,6 +32,8 @@ function PrivateRoute({ children, role }) {
   if (loading) return <SplashScreen />;
   if (!isAuthenticated) return <Navigate to='/login' replace />;
   if (role && user?.role !== role) {
+    if (user?.role === 'lab') return <Navigate to='/lab' replace />;
+    if (user?.role === 'govt') return <Navigate to='/govt' replace />;
     return <Navigate to={user?.role === 'vet' ? '/vet' : '/farmer'} replace />;
   }
   return children;
@@ -41,7 +43,9 @@ function RootRedirect() {
   const { isAuthenticated, user, loading } = useAuth();
   if (loading) return <SplashScreen />;
   if (!isAuthenticated) return <Navigate to='/login' replace />;
-  return <Navigate to={user?.role === 'vet' ? '/vet' : '/farmer'} replace />;
+  if (user?.role === 'lab') return <Navigate to='/lab' replace />;
+    if (user?.role === 'govt') return <Navigate to='/govt' replace />;
+    return <Navigate to={user?.role === 'vet' ? '/vet' : '/farmer'} replace />;
 }
 
 function AppRoutes() {
@@ -98,4 +102,6 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
+
 
