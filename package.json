@@ -1,14 +1,8 @@
 {
-  "name": "Pashuraksha-root",
+  "name": "pashuraksha-root",
   "private": true,
   "scripts": {
-    "build": "echo \"Built root\"",
-    "postinstall": "cd server && npm install"
-  },
-  "engines": {
-    "node": ">=22.5.0"
-  },
-  "dependencies": {
-    "isomorphic-git": "^1.42.2"
+    "build": "echo Built root",
+    "postinstall": "cd server && npm install --production"
   }
 }
