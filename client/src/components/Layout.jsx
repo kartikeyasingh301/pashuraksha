@@ -8,16 +8,18 @@ import { useSyncContext } from '../contexts/SyncContext.jsx';
 import Chatbot from './Chatbot.jsx';
 
 const FARMER_NAV = [
-  { to: '/farmer', icon: <Home size={24} />, label: 'Home' },
-  { to: '/farmer/report', icon: <ClipboardList size={24} />, label: 'Report' },
-  { to: '/farmer/advisory', icon: <BookOpen size={24} />, label: 'Advisory' },
+  { to: '/farmer', icon: <Home size={24} />, label: 'Dashboard' },
+  { to: '/farmer/report', icon: <Heart size={24} />, label: 'Report Health Issue' },
+  { to: '/farmer/herd', icon: <FileText size={24} />, label: 'My Herd Ledger' },
+  { to: '/farmer/passbook', icon: <Syringe size={24} />, label: 'Vaccine Passbook' },
+  { to: '/farmer/advisory', icon: <BookOpen size={24} />, label: 'Health Advisories' },
 ];
 
 const VET_NAV = [
   { to: '/vet', icon: <LayoutDashboard size={24} />, label: 'Dashboard' },
-  { to: '/vet/alerts', icon: <AlertTriangle size={24} />, label: 'Alerts' },
-  { to: '/vet/map', icon: <MapIcon size={24} />, label: 'Map' },
-  { to: '/vet/queue', icon: <ClipboardList size={24} />, label: 'Queue' },
+  { to: '/vet/alerts', icon: <AlertTriangle size={24} />, label: 'Outbreak Alerts' },
+  { to: '/vet/map', icon: <MapIcon size={24} />, label: 'Disease Map' },
+  { to: '/vet/queue', icon: <ClipboardList size={24} />, label: 'Pending Cases' },
 ];
 
 function SyncIndicator({ isOnline, pendingCount, isSyncing }) {
@@ -51,7 +53,10 @@ export default function Layout({ children, title, hero, showBack = false, header
   const { isOnline, pendingCount, isSyncing } = useSyncContext();
   const navigate = useNavigate();
   const role = user?.role;
-  const navItems = role === 'vet' ? VET_NAV : FARMER_NAV;
+  // Note: bottom nav only uses the first 3 or 4 items due to space constraints on farmer
+  const navItems = role === 'vet' ? VET_NAV : FARMER_NAV.filter(n => ['Dashboard', 'Report Health Issue', 'Health Advisories'].includes(n.label));
+  const drawerItems = role === 'vet' ? VET_NAV : FARMER_NAV;
+  
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -61,7 +66,8 @@ export default function Layout({ children, title, hero, showBack = false, header
         'MAIN MENU': 'मुख्य मेनू', 'Dashboard': 'डैशबोर्ड',
         'Report Health Issue': 'बीमारी की रिपोर्ट करें', 'My Herd Ledger': 'मेरा पशु लेजर',
         'Vaccine Passbook': 'टीकाकरण पासबुक', 'Health Advisories': 'स्वास्थ्य सलाह',
-        'HELP & SETTINGS': 'सहायता एवं सेटिंग्स', 'About PashuSuraksha': 'पशुसुरक्षा के बारे में'
+        'HELP & SETTINGS': 'सहायता एवं सेटिंग्स', 'About PashuSuraksha': 'पशुसुरक्षा के बारे में',
+        'Outbreak Alerts': 'प्रकोप अलर्ट', 'Disease Map': 'बीमारी का नक्शा', 'Pending Cases': 'लंबित मामले'
       };
       return map[enText] || enText;
     }
@@ -70,7 +76,8 @@ export default function Layout({ children, title, hero, showBack = false, header
         'MAIN MENU': 'मुख्य मेनू', 'Dashboard': 'डॅशबोर्ड',
         'Report Health Issue': 'आजाराची नोंद करा', 'My Herd Ledger': 'माझे पशु खाते',
         'Vaccine Passbook': 'लसीकरण पासबुक', 'Health Advisories': 'आरोग्य सल्ला',
-        'HELP & SETTINGS': 'मदत आणि सेटिंग्ज', 'About PashuSuraksha': 'पशुसुरक्षा बद्दल'
+        'HELP & SETTINGS': 'मदत आणि सेटिंग्ज', 'About PashuSuraksha': 'पशुसुरक्षा बद्दल',
+        'Outbreak Alerts': 'प्रकोप इशारे', 'Disease Map': 'रोग नकाशा', 'Pending Cases': 'प्रलंबित प्रकरणे'
       };
       return map[enText] || enText;
     }
@@ -93,7 +100,7 @@ export default function Layout({ children, title, hero, showBack = false, header
         </div>
       </div>
       <nav className="sidebar-nav">
-        {navItems.map((item) => (
+        {drawerItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -105,7 +112,7 @@ export default function Layout({ children, title, hero, showBack = false, header
                 <span className="sidebar-icon">
                   {React.cloneElement(item.icon, { fill: isActive ? "currentColor" : "none", strokeWidth: isActive ? 2 : 2 })}
                 </span>
-                <span className="sidebar-label">{item.label}</span>
+                <span className="sidebar-label">{translate(item.label)}</span>
               </>
             )}
           </NavLink>
@@ -128,64 +135,59 @@ export default function Layout({ children, title, hero, showBack = false, header
 
       <div className="layout-content-wrapper">
 
-        {/* ── Sliding Drawer (Farmer only) ── */}
-        {role !== 'vet' && (
-          <>
-            {/* Dark overlay */}
-            {isDrawerOpen && (
-              <div
-                onClick={() => setIsDrawerOpen(false)}
-                style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:9999 }}
-              />
-            )}
+        {/* ── Sliding Drawer ── */}
+        <>
+          {/* Dark overlay */}
+          {isDrawerOpen && (
+            <div
+              onClick={() => setIsDrawerOpen(false)}
+              style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:9999 }}
+            />
+          )}
 
-            {/* Drawer panel */}
-            <div style={{
-              position: 'fixed', top: 0, left: 0, bottom: 0, width: '280px',
-              background: 'white', zIndex: 10000, boxShadow: '2px 0 12px rgba(0,0,0,0.15)',
-              transform: isDrawerOpen ? 'translateX(0)' : 'translateX(-100%)',
-              transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1)',
-              display: 'flex', flexDirection: 'column'
-            }}>
-              {/* Drawer header */}
-              <div style={{ padding:'20px', background:'#1B5E20', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-                <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
-                  <Logo size={28} color="white" />
-                  <div style={{ fontSize:'18px', fontWeight:'800', color:'white' }}>PashuSuraksha</div>
-                </div>
-                <button onClick={() => setIsDrawerOpen(false)} style={{ background:'transparent', border:'none', color:'white', cursor:'pointer' }}>
-                  <X size={24} />
-                </button>
+          {/* Drawer panel */}
+          <div style={{
+            position: 'fixed', top: 0, left: 0, bottom: 0, width: '280px',
+            background: 'white', zIndex: 10000, boxShadow: '2px 0 12px rgba(0,0,0,0.15)',
+            transform: isDrawerOpen ? 'translateX(0)' : 'translateX(-100%)',
+            transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1)',
+            display: 'flex', flexDirection: 'column'
+          }}>
+            {/* Drawer header */}
+            <div style={{ padding:'20px', background:'#1B5E20', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+                <Logo size={28} color="white" />
+                <div style={{ fontSize:'18px', fontWeight:'800', color:'white' }}>PashuSuraksha</div>
               </div>
+              <button onClick={() => setIsDrawerOpen(false)} style={{ background:'transparent', border:'none', color:'white', cursor:'pointer' }}>
+                <X size={24} />
+              </button>
+            </div>
 
-              {/* Drawer links */}
-              <div style={{ flex:1, overflowY:'auto', paddingTop:'8px' }}>
-                <div style={{ padding:'12px 24px 6px', fontSize:'11px', fontWeight:'700', color:'#aaa', textTransform:'uppercase', letterSpacing:'1.5px' }}>
-                  {translate('MAIN MENU')}
-                </div>
-                {[
-                  { to:'/farmer', icon:<Home size={20}/>, label:'Dashboard', end:true },
-                  { to:'/farmer/report', icon:<Heart size={20}/>, label:'Report Health Issue' },
-                  { to:'/farmer/herd', icon:<FileText size={20}/>, label:'My Herd Ledger' },
-                  { to:'/farmer/passbook', icon:<Syringe size={20}/>, label:'Vaccine Passbook' },
-                  { to:'/farmer/advisory', icon:<BookOpen size={20}/>, label:'Health Advisories' },
-                ].map(item => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    end={item.end}
-                    onClick={() => setIsDrawerOpen(false)}
-                    className={({ isActive }) => isActive ? 'drawer-link active' : 'drawer-link'}
-                  >
-                    {item.icon} {translate(item.label)}
-                  </NavLink>
-                ))}
+            {/* Drawer links */}
+            <div style={{ flex:1, overflowY:'auto', paddingTop:'8px' }}>
+              <div style={{ padding:'12px 24px 6px', fontSize:'11px', fontWeight:'700', color:'#aaa', textTransform:'uppercase', letterSpacing:'1.5px' }}>
+                {translate('MAIN MENU')}
+              </div>
+              
+              {drawerItems.map(item => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/farmer' || item.to === '/vet'}
+                  onClick={() => setIsDrawerOpen(false)}
+                  className={({ isActive }) => isActive ? 'drawer-link active' : 'drawer-link'}
+                >
+                  {React.cloneElement(item.icon, { size: 20 })} {translate(item.label)}
+                </NavLink>
+              ))}
 
-                <div style={{ height:'1px', background:'#eee', margin:'16px 0' }} />
+              <div style={{ height:'1px', background:'#eee', margin:'16px 0' }} />
 
-                <div style={{ padding:'0 24px 6px', fontSize:'11px', fontWeight:'700', color:'#aaa', textTransform:'uppercase', letterSpacing:'1.5px' }}>
-                  {translate('HELP & SETTINGS')}
-                </div>
+              <div style={{ padding:'0 24px 6px', fontSize:'11px', fontWeight:'700', color:'#aaa', textTransform:'uppercase', letterSpacing:'1.5px' }}>
+                {translate('HELP & SETTINGS')}
+              </div>
+              {role === 'farmer' && (
                 <NavLink
                   to="/farmer/about"
                   onClick={() => setIsDrawerOpen(false)}
@@ -193,36 +195,37 @@ export default function Layout({ children, title, hero, showBack = false, header
                 >
                   <Info size={20} /> {translate('About PashuSuraksha')}
                 </NavLink>
+              )}
 
-                <div style={{ height:'1px', background:'#eee', margin:'16px 0' }} />
+              {role === 'farmer' && <div style={{ height:'1px', background:'#eee', margin:'16px 0' }} />}
 
-                {/* Sign Out */}
-                <button
-                  onClick={() => { setIsDrawerOpen(false); confirmLogout(); }}
-                  style={{
-                    display:'flex', alignItems:'center', gap:'16px',
-                    width:'100%', padding:'16px 24px',
-                    background:'transparent', border:'none', cursor:'pointer',
-                    fontSize:'15px', fontWeight:'600', color:'#C62828',
-                    textAlign:'left'
-                  }}
-                >
-                  <Power size={20} color="#C62828" />
-                  {lang === 'hi' ? 'साइन आउट करें' : lang === 'mr' ? 'साइन आउट करा' : 'Sign Out'}
-                </button>
-              </div>
+              {/* Sign Out */}
+              <button
+                onClick={() => { setIsDrawerOpen(false); confirmLogout(); }}
+                style={{
+                  display:'flex', alignItems:'center', gap:'16px',
+                  width:'100%', padding:'16px 24px',
+                  background:'transparent', border:'none', cursor:'pointer',
+                  fontSize:'15px', fontWeight:'600', color:'#C62828',
+                  textAlign:'left'
+                }}
+              >
+                <Power size={20} color="#C62828" />
+                {lang === 'hi' ? 'साइन आउट करें' : lang === 'mr' ? 'साइन आउट करा' : 'Sign Out'}
+              </button>
             </div>
-          </>
-        )}
+          </div>
+        </>
 
         {/* ── App Header ── */}
         <header className="app-header">
           <div className="header-left">
-            {/* Hamburger – only on farmer pages, only when not in a sub-page (back button shown) */}
-            {role !== 'vet' && !showBack && (
+            {/* Hamburger – on both farmer and vet mobile pages, when not in a sub-page */}
+            {!showBack && (
               <button
                 onClick={() => setIsDrawerOpen(true)}
                 aria-label="Open Menu"
+                className="hamburger-btn"
                 style={{ background:'transparent', border:'none', color:'white', cursor:'pointer', display:'flex', alignItems:'center', padding:'4px', marginRight:'6px' }}
               >
                 <Menu size={26} />
@@ -234,9 +237,9 @@ export default function Layout({ children, title, hero, showBack = false, header
               </button>
             )}
             <div className="header-brand">
-              {role !== 'vet' && <span className="header-logo"><Logo size={24} color="white" /></span>}
+              <span className="header-logo"><Logo size={24} color="white" /></span>
               <div>
-                {role !== 'vet' && <div className="header-app-name">Pashuraksha</div>}
+                <div className="header-app-name">Pashuraksha</div>
                 {title && <div className="header-title">{title}</div>}
               </div>
             </div>
@@ -279,7 +282,7 @@ export default function Layout({ children, title, hero, showBack = false, header
                   <span className="nav-icon">
                     {React.cloneElement(item.icon, { fill: isActive ? "currentColor" : "none", strokeWidth: isActive ? 2 : 2 })}
                   </span>
-                  <span className="nav-label">{item.label}</span>
+                  <span className="nav-label">{translate(item.label)}</span>
                 </>
               )}
             </NavLink>
