@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 /**
  * Pashuraksha Sentinel Engine
@@ -56,7 +56,7 @@ function calculateRiskSignal(incident) {
   }
 
   // Calculate Operational Priority & SLA
-  const timeBasis = incident.suspected_at || incident.detected_at || incident.created_at || new Date().toISOString();
+  const timeBasis = incident.suspected_at || incident.detected_at || incident.started_at || incident.created_at || new Date().toISOString();
   const hoursSince = (new Date() - new Date(timeBasis)) / 3600000;
   
   let slaTotal = 24;
