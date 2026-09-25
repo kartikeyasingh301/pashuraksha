@@ -11,7 +11,7 @@ function formatSLA(hours) {
 
 import { apiGet } from '../../api/client.js';
 import { formatKolkataTime } from '../../utils/time.js';
-import { ShieldAlert, Activity, Filter, MapPin, ChevronRight, ActivitySquare, Shield, Clock } from 'lucide-react';
+import { ShieldAlert, Activity, Filter, MapPin, ChevronRight, ActivitySquare, Shield, Clock, CheckCircle } from 'lucide-react';
 
 function OutbreakDNAModal({ item, onClose, onAction }) {
   if (!item) return null;
@@ -222,5 +222,6 @@ export default function CriticalAlerts() {
     </Layout>
   );
 }
+
 
 
