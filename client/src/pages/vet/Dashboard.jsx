@@ -1,5 +1,5 @@
 import { getGreeting } from '../../utils/time.js';
-﻿import { useState, useEffect } from 'react';
+-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, Activity, Map as MapIcon, Dna, Timer, ShieldAlert, ChevronRight, FileText, CheckCircle, BarChart2, FlaskConical, MapPin } from 'lucide-react';
 import Layout from '../../components/Layout.jsx';
@@ -45,7 +45,7 @@ export default function VetDashboard() {
         outbreaks.forEach(o => {
           attentionQueue.push({
             id: o.case_id || o.id, type: 'OUTBREAK',
-            title: `${o.syndrome || 'Disease'} — ${o.species || 'Animals'}`,
+            title: `${o.syndrome || 'Disease'} - ${o.species || 'Animals'}`,
             location: `${o.cluster_label || o.district || 'Unknown Location'}`,
             stats: `${o.report_count || 5} reports | Cluster Detected`,
             reason: o.sentinel?.reasons?.[0] || 'Critical outbreak threshold met',
@@ -57,7 +57,7 @@ export default function VetDashboard() {
           if(c.sentinel?.risk_level === 'CRITICAL' || c.sentinel?.risk_level === 'HIGH') {
             attentionQueue.push({
               id: c.id, type: 'EMERGING',
-              title: `${c.syndrome} — ${c.species}`,
+              title: `${c.syndrome} - ${c.species}`,
               location: `${c.village || ''}, ${c.district || ''}`,
               stats: `${c.report_count || 1} reports`,
               reason: c.sentinel?.reasons?.[0] || 'Emerging risk signal detected',
