@@ -80,10 +80,11 @@ export default function VetDashboard() {
 
         const slaAtRisk = cases.filter(c => c.sentinel?.sla_state === 'AT RISK' || c.sentinel?.sla_state === 'BREACHED').length;
 
+        const criticalIds = new Set([...outbreaks.map(o => o.case_id || o.id), ...cases.filter(c => c.sentinel?.risk_level === 'CRITICAL').map(c => c.id)]);
         setSummary({
           totalReports: reports.length,
-          critical: new Set([...outbreaks.map(o => o.case_id || o.id), ...cases.filter(c => c.sentinel?.risk_level === 'CRITICAL').map(c => c.id)]).size,
-          highRisk: cases.filter(c => c.sentinel?.risk_level === 'HIGH').length,
+          critical: criticalIds.size,
+          highRisk: cases.filter(c => c.sentinel?.risk_level === 'HIGH' && !criticalIds.has(c.id)).length,
           activeCases: cases.filter(c => c.status === 'CASE' || c.status === 'CLUSTER').length,
           pendingLab: samples.filter(s => s.status === 'PENDING').length,
           slaAtRisk,
